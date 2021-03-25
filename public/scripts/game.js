@@ -3,7 +3,7 @@
  * copyright Dvir Berlowitz 2020
  */
 
-const canvas = $("#game")[0];
+const canvas = $("canvas#game")[0];
 const ctx = canvas.getContext("2d");
 
 // -------------------- websocket --------------------  
