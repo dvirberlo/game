@@ -1,12 +1,8 @@
-/**
- * scripts for the game
- * copyright Dvir Berlowitz 2020
- */
+'use strict';
 
 const canvas = $("canvas#game")[0];
-const ctx = canvas.getContext("2d");
+const wsPath = "ws://" + window.location.host;
 
-// -------------------- websocket --------------------  
-let ws = new WebSocket("ws://" + window.location.host);
-
-// -------------------- draws --------------------
+$.getScript("/scripts/dataManger.js");
+$.getScript("/scripts/connectManger.js");
+$.getScript("/scripts/canvasManger.js");

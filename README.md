@@ -19,8 +19,10 @@ npm start
 Auto update the main branch on [Heroku](https://magic-bamba.herokuapp.com).
 
 ## Langauges
+English.
+I'm joking...
 - server side code:
-    + Node.js (express)
+    + Node.js ES6 (express)
     + MongoDB
     + ejs engine
 - client side code:
