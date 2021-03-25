@@ -5,7 +5,7 @@
   </head>
   <body>
     <%- include("partials/nav", {page: "game"}) %>
-    <div class="container pt-3">
+    <div id="allButCanvas" class="container pt-3">
       <div class="progress">
         <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 1%">1%</div>
       </div>
@@ -25,7 +25,8 @@
             <input type="checkbox" name="remember" id="remember">
             <label for="remember" class="form-check-label">Remember me</label>
           </div>
-          <button type="button" class="btn btn-primary">Login</button>
+          <button id="login" type="button" class="btn btn-primary">Login</button>
+          <small id="formError" class="form-text text-danger"></small>
         </form>
       </div>
     </div>
