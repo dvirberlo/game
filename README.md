@@ -12,10 +12,10 @@ Auto update the main branch on [Heroku](https://magic-bamba.herokuapp.com).
 ## Langauges:
 - server side code:
     + Node.js (express)
-    + MongoDB database
+    + MongoDB
     + ejs engine
 - client side code:
-    + html
+    + html (ejs)
     + css
     + Bootstrap 3
     + javascript
