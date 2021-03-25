@@ -7,4 +7,4 @@ You can be really helpfull.
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 ## Preview
-Auto update master branch on [Heroku](https://magic-bamba.herokuapp.com)
+Auto update the main branch on [Heroku](https://magic-bamba.herokuapp.com)
