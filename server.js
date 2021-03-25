@@ -1,7 +1,7 @@
 'use strict';
 
-const { dirname } = require("path");
-const { setPriority } = require("os");
+const dirname = require("path");
+const setPriority = require("os");
 
 const express  = require("express"),
       path = require("path"),
@@ -21,6 +21,7 @@ process.on("exit", (code)=>console.log(`About to exit with code ${code}`));
 
 // ---------------------------------------- the game ----------------------------------------
 const maxMsg = 50;
+const idLength = 8;
 
 // -------------------- websocket --------------------
 const wss = new SocketServer({server});

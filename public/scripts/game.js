@@ -1,17 +1,37 @@
 'use strict';
 
+// -------------------- constants --------------------
 const canvas = $("canvas#game")[0];
 const wsPath = "ws://" + window.location.host;
+const statusView = $("span#status");
 
-$.getScript("/scripts/dataManger.js", loadingData);
+// -------------------- load game --------------------
+updateStatus("Loading code");
+$.getScript("/scripts/dataManager.js", loadingData);
+
 function loadingData(){
-    console.log("loading data");
-    $.getScript("/scripts/connectManger.js", connecting);
+    updateStatus("Loading data");
+    dataManager.load(loadingDraws);
+}
+function loadingDraws(){
+    updateStatus("Loading Draws");
+    $.getScript("/scripts/canvasManager.js", function(){
+        canvasManager.load(connecting);
+    });
 }
 function connecting(){
-    console.log("connecting");
-    $.getScript("/scripts/canvasManger.js", canvasing);
+    $.getScript("/scripts/connectManager.js", function() {
+        updateStatus("Connecting");
+        connectManager.connect(startGame);
+    });
 }
-function canvasing(){
-    console.log("canvasing");
+
+function updateStatus(newStatus){
+    statusView.text(newStatus + "...");
+}
+
+// -------------------- start game --------------------
+function startGame(){
+    updateStatus("staring");
+
 }
