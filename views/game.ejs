@@ -5,17 +5,31 @@
   </head>
   <body>
     <%- include("partials/nav", {page: "game"}) %>
-    <div class="container">
-      <div id="login">
-        <form action="" id="login">
-          <input type="text" name="username" id="username" >
-          <input type="password" name="password" id="password" >
+    <div class="container pt-3">
+      <div class="progress">
+        <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 1%">1%</div>
+      </div>
+      <p id="status" class="text-center"></p>
+
+      <div id="login" class="container p-3 border border-primary rounded">
+        <form id="login">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" type="text" name="username" id="username" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input class="form-control" type="password" name="password" id="password" placeholder="Password">
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" name="remember" id="remember">
+            <label for="remember" class="form-check-label">Remember me</label>
+          </div>
+          <button type="button" class="btn btn-primary">Login</button>
         </form>
       </div>
-      <span id="status"></span>
-      <canvas id="game"></canvas>
-
     </div>
+    <canvas id="game"></canvas>
     <script src="/scripts/game.js"></script>
   </body>
 </html>

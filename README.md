@@ -22,13 +22,13 @@ Auto update the main branch on [Heroku](https://magic-bamba.herokuapp.com).
 English.
 I'm joking...
 - server side code:
-    + Node.js ES6 (express)
+    + Node.js (express)
     + MongoDB
     + ejs engine
 - client side code:
     + html (ejs)
     + css
-    + Bootstrap 3
-    + javascript
+    + Bootstrap 4
+    + javascript ES6
     + jQuery
     + WebSocket
