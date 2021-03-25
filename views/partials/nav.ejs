@@ -1,16 +1,14 @@
-<nav class="navbar navbar-default navbar-static-top navbar-inverse">
-  <div class="container">
-    <ul class="nav navbar-nav">
-      <li class="<% if(page == "home"){ %> active <% } %> " >
-        <a href="/"><span class="glyphicon glyphicon-home"></span> Home</a>
+<nav class="navbar sticky-top navbar-expand navbar-dark bg-dark">
+  <div class="collapse navbar-collapse">
+    <ul class="mr-auto navbar-nav">
+      <li class="nav-item <% if(page == "home"){ %> active <% } %> " >
+        <a class="nav-link" href="/"><i class="bi bi-house"></i> Home</a>
       </li>
-      <li class="<% if(page == "game"){ %> active <% } %> " >
-        <a href="/game"><span class="glyphicon glyphicon-play-circle"></span> Game</a>
+      <li class="nav-item <% if(page == "game"){ %> active <% } %> " >
+        <a href="/game" class="nav-link"><i class="bi bi-play-circle"></i> Game</a>
       </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="navbar-right">
-        <a href="https://github.com/dvirberlo/magic-bamba" target="_blank"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
+      <li class="nav-item">
+        <a class="nav-link" href="https://github.com/dvirberlo/magic-bamba" target="_blank"><i class="bi bi-cloud-download"></i> Source on GitHub</a>
       </li>
     </ul>
   </div>
