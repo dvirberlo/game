@@ -1,7 +1,7 @@
 {
   "name": "a",
   "version": "0.3.0",
-  "description": "A strategy game",
+  "description": "An adventure game",
   "engines": {
     "node": "12.x"
   },
@@ -15,9 +15,9 @@
     "ejs": "^3.0.0"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "websocket"
+    "magic",
+    "bamba",
+    "game"
   ],
   "license": ""
 }
