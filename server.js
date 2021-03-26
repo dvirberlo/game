@@ -1,8 +1,5 @@
 'use strict';
 
-const dirname = require("path");
-const setPriority = require("os");
-
 const express  = require("express"),
       path = require("path"),
       SocketServer = require("ws").Server,
@@ -21,7 +18,6 @@ process.on("exit", (code)=>console.log(`About to exit with code ${code}`));
 
 // ---------------------------------------- the game ----------------------------------------
 const maxMsg = 50;
-const idLength = 8;
 
 // -------------------- websocket --------------------
 const wss = new SocketServer({server});
@@ -46,5 +42,14 @@ function getId(len = idLength){
 function validName(msg){
     //NEXT
     if(msg.length > 1) return true;
+    return false;
+}
+
+
+// -------------------- database --------------------
+function newUsername(username, password){
+    return true;
+}
+function checkUser(username, password){
     return false;
 }

@@ -1,45 +1,38 @@
 'use strict';
-const codes = {"loggedIn": 0}
+const codes = {"loggedIn": 0};
+var ws;
 window.connectManager = {
-    connect: function(wsPath, loginInputs, canvasManager, callback, coockies=true, errors = 0){
+    connect: function(callback, coockies=true, errors = 0){
+        ws = new WebSocket(connectManager.wsPath);
         if(coockies && readCookie("username") && readCookie("password")){
-            $.ajax({url:"/check" , data:{"username":readCookie("username"),"password":readCookie("password")} })
-            .done(function(result){
-                if(result == 0) return this.connect(wsPath, loginInputs, canvasManager, callback, false);
-                connectManager.login(wsPath, readCookie("username"), readCookie("password"), callback);
-                
-            })
-            .fail(function(e){
-                console.log("ERROR: " + e.toString());
-                if(errors > 3) return connectManager.connect(wsPath, loginInputs, canvasManager, callback, false);
-                setTimeout(function(){
-                    connectManager.connect(wsPath, loginInputs, canvasManager, callback, true, errors+1);
-                }, 1000);
-            });
+            connectManager.login(readCookie("username"), readCookie("password"), false, callback);
         }
         else{
-            loginInputs.login[0].addEventListener("click", function(){
-                const username = loginInputs.username[0].value;
-                const password = loginInputs.password[0].value;
-                if(username.length > 0 && password.length > 0) connectManager.login(wsPath, username, password, callback);
-                else loginInputs.error.text("Please enter valid username and password");
-            });
+            return callback(false);
         }
-        console.log("connect");
     },
-    login: function(wsPath, username, password, callback){
-        this.userData.username = username;
-        var ws = new WebSocket(wsPath);
-        ws.addEventListener("open", function() {
-           ws.send(connectManager.wsStringify({"username":username, "password":password}));
-        });
-        ws.addEventListener("message", function(event) {
+    login: function(username, password, remember, callback){
+        connectManager.userData.username = username;
+
+        // TODO think: eventListener/onFunc
+        var timeout;
+        timeout = setTimeout(function(){ws.onmessage = null;return callback(false, true)}, connectManager.pongTime);
+        if(ws.readyState == WebSocket.OPEN) ws.send(connectManager.wsStringify({"username":username, "password":password}));
+        else{
+            connectionError(callback);
+        }
+        ws.onmessage = function(event){
             switch (connectManager.wsParse(event.data).code){
                 case codes.loggedIn:
-                    callback();
+                    clearTimeout(timeout);
+                    if(remember){
+                        writeCookie("username", username, coockiesExpire);
+                        writeCookie("password", password, coockiesExpire);
+                    }
+                    callback(true);
                     break;
             }
-        });
+        };
     },
     wsStringify: function(obj){
         return JSON.stringify(obj);
@@ -50,10 +43,17 @@ window.connectManager = {
     userData: {
         username: "",
         gameState:{ }
-    }
+    },
+    "coockiesExpire": 2000
 };
 
+function connectionError(){
+    console.log("connection error");
+    // TODO
+    callback(false);
+}
 
+// ----- coockies -----
 function writeCookie(cname, cvalue, days) {
     var d = new Date();
     d.setTime(d.getTime() + (days*24*60*60*1000));

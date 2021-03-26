@@ -11,3 +11,13 @@
 .jumbotron .lang-logo img{
   max-width: 100%;
 }
+
+button:disabled {
+  cursor: not-allowed;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+input[type*=check], input[type*=check] + label {
+  cursor: pointer;
+}
