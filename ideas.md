@@ -6,6 +6,22 @@ just to consider later.
 
 ---
 s
+## database side
+
+how should a document be?
+- _id
+- username
+- password
+- game data:
+    + xp
+    + owned spells (equipped/not)
+    + owned clothes (equipped/not)
+    + magic type
+    + resources
+    + ? current mission state and id
+
+---
+s
 ## server side
 
 right now, i am using ejs engine, but the real usage of it is small.

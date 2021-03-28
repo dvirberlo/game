@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "express": "^4.15.2",
-    "ws": "^3.0.0",
-    "ejs": "^3.0.0"
+    "ws": "^3.3.0",
+    "ejs": "^3.0.0",
+    "mongodb": "^3.6.0"
   },
   "keywords": [
     "magic",
