@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <%- include('partials/header') %>
-</head>
+  <head>
+    <%- include('partials/header') %>
+  </head>
+  <body>
+    <%- include('partials/nav', {page: "home"}) %>
 
-<body>
-
-  <%- include('partials/nav', {page: "home"}) %>
-
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/images/icon_big.png">
-    </a>
-    <h1>Magic Bamba Game</h1>
-    <p>This is the beloved nostalgic adventures game.</p>
-    <a type="button" class="btn btn-lg btn-primary" href="/game"><i class="bi bi-play-circle"></i> Take me to the game! </a>
-    <a type="button" class="btn btn-lg btn-secondary" href="https://github.com/dvirberlo/magic-bamba" target="_blank"><i class="bi bi-cloud-download"></i> Source on GitHub</a>
-  </div>
-</div>
-</div>
-
-
-</body>
+    <div class="jumbotron text-center">
+      <div class="container">
+        <a href="/" class="lang-logo">
+          <img src="/images/icon_big.png">
+        </a>
+        <h1>Magic Bamba Game</h1>
+        <p>This is the beloved nostalgic adventures game.</p>
+        <a type="button" class="btn btn-lg btn-primary" href="/game"><i class="bi bi-play-circle"></i> Take me to the game! </a>
+        <a type="button" class="btn btn-lg btn-secondary" href="https://github.com/dvirberlo/magic-bamba" target="_blank"><i class="bi bi-cloud-download"></i> Source on GitHub</a>
+      </div>
+    </div>
+  </body>
 </html>

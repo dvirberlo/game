@@ -5,29 +5,52 @@
   </head>
   <body>
     <%- include("partials/nav", {page: "game"}) %>
-    <div id="allButCanvas" class="container pt-3">
-      <div class="progress">
-        <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 1%">1%</div>
+    <div class="container pt-1 pt-md-5 pt-sm-3 pt-md-5">
+      <div id="loadingMenu">
+        <div class="progress">
+          <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 1%">1%</div>
+        </div>
+        <p id="status" class="text-center"></p>
       </div>
-      <p id="status" class="text-center"></p>
 
-      <div id="login" class="container p-3 border border-primary rounded">
-        <form id="login">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input class="form-control" type="text" name="username" id="username" placeholder="Username">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input class="form-control" type="password" name="password" id="password" placeholder="Password">
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" name="remember" id="remember" checked>
-            <label for="remember" class="form-check-label">Remember me</label>
-          </div>
-          <button id="loginBtn" type="button" class="btn btn-primary">Login</button>
-          <small id="formError" class="form-text text-danger"></small>
-        </form>
+      <div class="row">
+        <!--login-->
+        <div id="loginMenu" class="col-sm container m-1 p-3 p-lg-4 border border-primary rounded">
+          <form id="login">
+            <p>Log In</p>
+            <div class="form-group">
+              <label for="loginUsername">Username</label>
+              <input class="form-control" type="text" id="loginUsername" placeholder="Username">
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input class="form-control" type="password" id="loginPassword" placeholder="Password">
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" id="loginRemember" checked>
+              <label for="loginRemember" class="form-check-label">Remember me</label>
+            </div>
+            <button id="loginBtn" type="button" class="btn btn-primary">Login</button>
+            <small id="loginFormError" class="form-text text-danger"></small>
+          </form>
+        </div>
+
+        <!--signup-->
+        <div id="signupMenu" class="col-sm container m-1 p-3 p-lg-4 border border-primary rounded">
+          <form id="signup">
+            <p>Sign Up</p>
+            <div class="form-group">
+              <label for="signupUsername">Username</label>
+              <input class="form-control" type="text" id="signupUsername" placeholder="Username">
+              <small id="signupUsernameStatus" class="form-text"></small>
+            </div>
+            <div class="form-group">
+              <label for="signupPassword">Password</label>
+              <input class="form-control" type="password" id="signupPassword" placeholder="Password">
+            </div>
+            <button id="signupBtn" type="button" class="btn btn-outline-primary">Sign Up</button>
+          </form>
+        </div>
       </div>
     </div>
     <canvas id="game"></canvas>
