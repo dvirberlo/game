@@ -1,59 +1,122 @@
 'use strict';
-const codes = {"loggedIn": 0};
+/**
+ * all code should be unreachable to browser's debugger console:
+ * !function{}(...game.js:varible = connectManager;...);
+ * it is just development right now, so it is not like that.
+ */
+ const codes = {
+    error:-1,
+    login: {request:0, success:1, fail: 2},
+    signup: {request:10, success:11, fail:12},
+    usernameCheck: {exist:21, unexist:22}
+};
 var ws;
 window.connectManager = {
-    connect: function(callback, coockies=true, errors = 0){
+    createWS: function() {
         ws = new WebSocket(connectManager.wsPath);
-        if(coockies && readCookie("username") && readCookie("password")){
-            connectManager.login(readCookie("username"), readCookie("password"), false, callback);
-        }
-        else{
-            return callback(false);
-        }
+    },
+    tryCoockiesLogin: function(callback){
+        const username = readCookie("username");
+        connectManager.login(username, readCookie("password"), false, function(result){
+            if(result) callback(username);
+            else callback(null);
+        });
     },
     login: function(username, password, remember, callback){
-        connectManager.userData.username = username;
-
-        // TODO think: eventListener/onFunc
+        // set timeout(connectManager.pongTime): if there is no positive respone- callbacks a failure
         var timeout;
-        timeout = setTimeout(function(){ws.onmessage = null;return callback(false, true)}, connectManager.pongTime);
-        if(ws.readyState == WebSocket.OPEN) ws.send(connectManager.wsStringify({"username":username, "password":password}));
-        else{
-            connectionError(callback);
-        }
+        function failed(){
+            ws.onmessage = null;
+            callback(false);
+        };
+        timeout = setTimeout(failed, connectManager.pongTime);
+
+        wsSend({code:codes.login.request, username:username, password:password});
         ws.onmessage = function(event){
-            switch (connectManager.wsParse(event.data).code){
-                case codes.loggedIn:
+            switch(wsParse(event.data).code){
+                case codes.login.success:
                     clearTimeout(timeout);
+                    ws.onmessage = null;
                     if(remember){
-                        writeCookie("username", username, coockiesExpire);
-                        writeCookie("password", password, coockiesExpire);
+                        writeCookie("username", username, connectManager.coockiesExpire);
+                        writeCookie("password", password, connectManager.coockiesExpire);
                     }
                     callback(true);
+                    break;
+                case codes.login.fail:
+                    clearTimeout(timeout);
+                    failed();
                     break;
             }
         };
     },
-    wsStringify: function(obj){
-        return JSON.stringify(obj);
+    checkUsernameAvailable: function(username, callback){
+        $.ajax({
+            method: "GET",
+            url: "/usernameCheck",
+            data: { username: username }
+        })
+        .done(msg=>{
+            if(msg == codes.usernameCheck.unexist) callback(true);
+            else callback(false);
+        })
+        .fail(err=> {
+            console.log("error: ");
+            console.log(err);
+            callback(true);
+        });
     },
-    wsParse: function(obj){
-        return JSON.parse(obj);
+    signup: function(username, password, callback){
+        // set timeout(connectManager.pongTime): if there is no positive respone- callbacks a failure
+        var timeout;
+        function failed(){
+            ws.onmessage = null;
+            callback(false);
+        };
+        timeout = setTimeout(failed, connectManager.pongTime);
+        wsSend({code:codes.signup.request, username:username, password:password});
+        ws.onmessage = function(event){
+            switch(wsParse(event.data).code){
+                case codes.signup.success:
+                    clearTimeout(timeout);
+                    ws.onmessage = null;
+                    writeCookie("username", username, connectManager.coockiesExpire);
+                    writeCookie("password", password, connectManager.coockiesExpire);
+                    callback(true);
+                    break;
+                case codes.signup.fail:
+                    clearTimeout(timeout);
+                    failed();
+                    break;
+            }
+        };
     },
-    userData: {
-        username: "",
-        gameState:{ }
-    },
-    "coockiesExpire": 2000
+
+    coockiesExpire: 2000,
+    pongTime: 10000
 };
 
+function wsSend(obj){
+    // TODO: handle network issues
+    if(ws.readyState === WebSocket.OPEN) ws.send(wsStringify(obj));
+    else{
+        // TODO
+    }
+}
+
+function wsStringify(obj){
+    return JSON.stringify(obj);
+}
+function wsParse(data){
+    return JSON.parse(data);
+}
 function connectionError(){
     console.log("connection error");
     // TODO
     callback(false);
 }
 
-// ----- coockies -----
+// ----- coockies functions -----
 function writeCookie(cname, cvalue, days) {
     var d = new Date();
     d.setTime(d.getTime() + (days*24*60*60*1000));
