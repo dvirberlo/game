@@ -1,6 +1,6 @@
 'use strict';
 // database
-const MongoClient = require('mongodb').MongoClient;
+const MongoDB = require('mongodb');
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB ="magicbamba";
 const MONGODB_COLLECTION = "herokutest";
@@ -35,6 +35,9 @@ const server = express()
 process.on("exit", code=> console.log(`About to exit with code ${code}`));
 
 function usernameCheck(req, res){
+    // invalid username act as unavailable
+    if(!usernameValid(req.query.username)) return res.json(codes.exist);
+
     readByUsername(req.query.username, result=> res.json(result? codes.usernameCheck.exist: codes.usernameCheck.unexist));
 }
 
@@ -42,9 +45,10 @@ function usernameCheck(req, res){
 // ----- start websocket -----
 const wss = new WebSocket.Server({server});
 wss.on("connection", (ws, req, client)=>{
-    //on connection
+    let wsActive = true;
 
     ws.on("message", (msg)=>{
+        if(!wsActive) return false;
         var message = msg.toString();
         if(message.length > maxMsgLenght){
             wsSend({code:codes.error}, ws);
@@ -53,16 +57,28 @@ wss.on("connection", (ws, req, client)=>{
         message = wsParse(message);
         switch(message.code){
             case codes.login.request:
+                wsActive = false;
                 loginCheck(message.username, message.password, result=> {
                     if(result) wsSend({code:codes.logged.success}, ws);
                     else wsSend({code:codes.login.fail}, ws);
+                    wsActive = true;
                 });
                 break;
             case codes.signup.request:
+                // if invalid- send fail
+                if(!inputsValid(message.username, message.password)){
+                    wsSend({code:codes.signup.fail} ,ws);
+                    break;
+                }
+                wsActive = false;
+                // LOGDEV
+                console.log("signup request: " + JSON.stringify({username:message.username, password:message.password}));
                 newUser(message.username, message.password, result=> {
                     if(result) wsSend({code:codes.signup.success}, ws);
                     else wsSend({code:codes.signup.fail}, ws);
+                    wsActive = true;
                 });
+                break;
         }
     });
     ws.on("close", ()=>{
@@ -82,64 +98,75 @@ function wsStringify(obj){
 function wsParse(data){
     return JSON.parse(data);
 }
+// --- validation functions: ---
+function inputsValid(username, password){
+    return usernameValid(username) && passwordValid(password);
+}
+function usernameValid(username){
+    return username.length > 0 && username.length < 50;
+}
+function passwordValid(password){
+    return password.length > 0 && password.length < 50;
+}
 
 
 // ----- database functions -----
-function loginCheck(username, password, callback){
-    const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+var dbCollection = null;
+function connectDB(){
+    const client = new MongoDB.MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     client.connect(err => {
         if(err) throw err;
         const collection = client.db(MONGODB_DB).collection(MONGODB_COLLECTION);
-        collection.findOne({username:username, password:password}, function(err, result){
-            if(err) throw err;
-            client.close();
-            callback(!!result._id);
-        });
+        dbCollection = collection;
+
+    });
+}
+connectDB();
+
+function loginCheck(username, password, callback){
+    if(!dbCollection) throw "dbCollection is not defined";
+
+    dbCollection.findOne({username:username, password:password}, function(err, result){
+        if(err) throw err;
+        callback(!!result._id);
     });
 }
 function newUser(username, password, callback){
     readByUsername(username, result=>{
         if(result) callback(false);
         else{
-            const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-            client.connect(err => {
+            var obj = startedDocument;
+            obj.username = username;
+            obj.password = password;
+            obj._id = new MongoDB.ObjectID();
+
+            if(!dbCollection) throw "dbCollection is not defined";
+            dbCollection.insertOne(obj, function(err, res){
                 if(err) throw err;
-                const collection = client.db(MONGODB_DB).collection(MONGODB_COLLECTION);
-                var obj = startedDocument;
-                obj.username = username;
-                obj.password = password;
-                collection.insertOne(obj, function(err, res){
-                    if(err) throw err;
-                    client.close();
-                    callback(true);
-                });
+                // LOGDEV
+                console.log("newUser: " + JSON.stringify({username:username, password:password, res:res}));
+                callback(true);
             });
         }
     });
 }
 function readByUsername(username, callback){
-    const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    client.connect(err => {
+    if(!dbCollection) throw "dbCollection is not defined";
+
+    dbCollection.findOne({username:username}, function(err, result){
         if(err) throw err;
-        const collection = client.db(MONGODB_DB).collection(MONGODB_COLLECTION);
-        collection.findOne({username:username}, function(err, result){
-            if(err) throw err;
-            client.close();
-            callback(result);
-        });
+        // LOGDEV
+        console.log("readByUsername: " + JSON.stringify({username:username, result:result}));
+        callback(result);
     });
 }
 function updateByUsername(username, key, value, callback){
-    const client = new MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-    client.connect(err => {
+    const query = {username: username};
+    const update = { $set: {[key]: value} };
+
+    if(!dbCollection) throw "dbCollection is not defined";
+    dbCollection.updateOne(query, update, function(err, res) {
         if(err) throw err;
-        const collection = client.db(MONGODB_DB).collection(MONGODB_COLLECTION);
-        const query = {username: username};
-        const update = { $set: {[key]: value} };
-        collection.updateOne(query, update, function(err, res) {
-            if(err) throw err;
-            client.close();
-            callback(true);
-        });
+        callback(true);
     });
 }
