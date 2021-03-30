@@ -10,11 +10,12 @@
 const wsPath = "ws" + window.location.protocol.slice(4) + "//" + window.location.host;
 
 // design
-const loadingMenu = $("#loadingMenu");
-const loginMenu = $("#loginMenu");
-const signupMenu = $("#signupMenu");
-const canvas = $("canvas#game");
-const allMenus = [loadingMenu, loginMenu, signupMenu, canvas];
+const menus = {
+    loadingMenu: $("#loadingMenu"),
+    loginMenu: $("#loginMenu"),
+    signupMenu: $("#signupMenu"),
+    canvas: $("canvas#game")
+};
 
 const progressBar = $("#progress");
 const statusView = $("#status");
@@ -129,6 +130,7 @@ function saveUsername(username){
 }
 function startGame(){
     updateLoadingState("starting", 0);
+    // LOGDEV
     console.log("game started");
     setView("game");
     // TODO canvasManager.start(connectManager);
@@ -160,23 +162,23 @@ function setView(view){
     switch (view){
         case "loading":
             hideAll();
-            loadingMenu.show();
+            menus.loadingMenu.show();
             break;
         case "login_signup":
             hideAll();
-            loginMenu.show();
-            signupMenu.show();
+            menus.loginMenu.show();
+            menus.signupMenu.show();
             loginSetup();
             signupSetup();
             break;
         case "game":
             hideAll();
-            canvas.show();
+            menus.canvas.show();
             break;
     }
 }
-function hideAll(arr = allMenus){
-    arr.forEach(function(menu){menu.hide()});
+function hideAll(obj = menus){
+    for(let key in obj) obj[key].hide();
 }
 function loginSetup(){
     loginInputs.btn.click(function(){
@@ -191,7 +193,6 @@ function signupSetup(){
     [signupInputs.btn, signupInputs.username, signupInputs.password].forEach(input=> input.prop("disabled", false));
     // signup btn
     signupInputs.btn.click(function(){
-        console.log(this);
         if($(this).prop("disabled")) return false;
         [signupInputs.btn, signupInputs.username, signupInputs.password].forEach(input=> input.prop("disabled", true));
         const username = signupInputs.username.val();
@@ -215,8 +216,6 @@ function showUsernameAvailability(username, isAva){
 function singupUsernameStatusUpdate(status, username){
     // do not show if username have already changed
     if(username != signupInputs.username.val()) return false;
-
-    console.log({got:username, is:signupInputs.username.val()});
 
     signupInputs.btn.prop("disabled", false);
 

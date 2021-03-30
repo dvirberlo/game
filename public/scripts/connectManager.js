@@ -17,10 +17,13 @@ window.connectManager = {
     },
     tryCoockiesLogin: function(callback){
         const username = readCookie("username");
-        connectManager.login(username, readCookie("password"), false, function(result){
-            if(result) callback(username);
-            else callback(null);
-        });
+        const password = readCookie("password");
+        ws.onopen = function(){
+            connectManager.login(username, password, false, function(result){
+                if(result) callback(username);
+                else callback(null);
+            });
+        };
     },
     login: function(username, password, remember, callback){
         // set timeout(connectManager.pongTime): if there is no positive respone- callbacks a failure
@@ -101,6 +104,8 @@ function wsSend(obj){
     if(ws.readyState === WebSocket.OPEN) ws.send(wsStringify(obj));
     else{
         // TODO
+        // LOGDEV
+        console.log("wsSend error");
     }
 }
 
