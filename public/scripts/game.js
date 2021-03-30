@@ -4,12 +4,17 @@
  * !function{}(...code...);
  * it is just development right now, so it is not like that.
  */
-
+// alert("NOTE: game is under development");
 // -------------------- constants --------------------
 // websocket
-const wsPath = "ws" + window.location.protocol.slice(4) + "//" + window.location.host;
+const paths = {
+    ws: "ws" + window.location.protocol.slice(4) + "//" + window.location.host,
+    canvasManager: "/scripts/canvasManager.js",
+    connectManager: "/scripts/connectManager.js"
+};
 
 // design
+const navbar = $("#navbar");
 const menus = {
     loadingMenu: $("#loadingMenu"),
     loginMenu: $("#loginMenu"),
@@ -50,49 +55,68 @@ const signupUsernameMsg = {
     error: {iconClass: ["bi", "bi-bug"], msg: "- Sign up failed. please try again", textClass: ["text-danger", "form-text"]}
 };
 
+//game
+const resources = {
+    a:$("#resA"),
+    b:$("#resb"),
+    c:$("#resC")
+};
+let gameData = {
+    username:false,
+    password:false,
+    magicType:false,
+    xp:false,
+    resources:false,
+    ownedSpells:false,
+    ownedClothes:false,
+    mission:false
+};
+
 
 // -------------------- game preperations --------------------
 setView("loading")
 
-updateLoadingState("Loading code");
-
-// some vars it will be needed
-var gameData = {};
+updateLoadingStatus("Loading code");
 
 // load canvasManager.js
-$.ajax({async: false, url: "/scripts/canvasManager.js", dataType: "script"});
-updateLoadingState("Loading Draws");
+$.ajax({async: false, url: paths.canvasManager, dataType: "script"});
+updateLoadingStatus("Loading Draws");
 
 canvasManager.load();
 
 // load connectManager.js
-$.ajax({async: false, url: "/scripts/connectManager.js", dataType: "script"});
-updateLoadingState("Connecting");
+$.ajax({async: false, url: paths.connectManager, dataType: "script"});
+updateLoadingStatus("Connecting");
 
-// set a connect manager
+// set connect manager variables
 connectManager.pongTime = 5000;// [ms]
-connectManager.wsPath = wsPath;
-connectManager.canvasManager = canvasManager;
+connectManager.wsPath = paths.ws;
 connectManager.coockiesExpire = 365*100;
-connectManager.createWS();
-connectManager.tryCoockiesLogin(tryCoockiesLoginCallback);
+connectManager.createWS(function(){
+    connectManager.tryCoockiesLogin(tryCoockiesLoginCallback);
+});
 
 
 //---------- main functions ----------
 // login functions:
-function tryCoockiesLoginCallback(username){
-    if(username){
-        saveUsername(username);
+function tryCoockiesLoginCallback(username, password, result){
+    if(result){
+        gameData.username = username;
+        gameData.password = password;
         startGame();
     }
     else setView("login_signup");
 }
-function loginPressed(password, username, remember){
+function loginPressed(username, password, remember){
     if(validForm(username, password)) connectManager.login(username, password, remember, loginCallback);
     else loginShowError();
 }
-function loginCallback(result){
-    if(result) startGame();
+function loginCallback(username, password, result){
+    if(result){
+        gameData.username = username;
+        gameData.password = password;
+        startGame();
+    }
     else loginShowError(true);
 }
 
@@ -100,10 +124,11 @@ function loginCallback(result){
 function signupPressed(username, password){
     connectManager.signup(username, password, signupCallback);
 }
-function signupCallback(username, result){
+function signupCallback(username, password, result){
     if(result){
+        gameData.username = username;
+        gameData.password = password;
         startGame();
-        saveUsername(username);
     }
     else {
         singupUsernameStatusUpdate(signupUsernameMsg.error, username);
@@ -125,20 +150,84 @@ function validForm(username, password){
 function validUsername(username){
     return username.length > 0 && username.length < 50;
 }
-function saveUsername(username){
-    gameData.username = username;
-}
+
+//---------- game functions ----------
 function startGame(){
-    updateLoadingState("starting", 0);
+    updateLoadingStatus("starting", 0);
     // LOGDEV
     console.log("game started");
     setView("game");
-    // TODO canvasManager.start(connectManager);
+    connectManager.getData(gameData, function(data){
+        gameData = data;
+        // set canvas manager
+        for(let key in gameData) if(key !== "password")canvasManager.setData(key, gameData[key]);
+
+        updateBar();
+        // save any data from server
+        connectManager.gameMode(function(key, value){
+            gameData[key] = value;
+            canvasManager.setData(key, value);
+            updateBar();
+        });
+
+        // if player is already on a mission
+        if(gameData.mission !== false) return showMission();
+        // if it is the player's first time in game(xp=0)
+        else if(gameData.xp == 0) showGuide();
+        // just show home
+        else showHome();
+    });
+}
+// game mission
+function showMission(){
+    canvasManager.clear();
+    canvasManager.showMission(missionMove, missionQuit);
+}
+function missionMove(movement){
+    connectManager.missionMove(movement, function(newMission){
+        gameData.mission = newMission;
+        canvasManager.setData("mission", gameData.mission);
+        showMission();
+    });
+}
+function missionQuit(){
+    connectManager.missionQuit(function(){
+        gameData.mission = false;
+        canvasManager.setData("mission", gameData.mission);
+        showHome();
+    });
+}
+// game guide
+function showGuide(){
+    canvasManager.showGuide();
+    showHome();
+}
+// game home
+function showHome(){
+    canvasManager.clear();
+    canvasManager.showHome(enterMission, buyClothes, buySpell);
+}
+function enterMission(){
+    connectManager.enterMission(function(newMission){
+        gameData.mission = newMission;
+        canvasManager.setData("mission", gameData.mission);
+        showMission();
+    });
+}
+function buyClothes(id, callback){
+    connectManager.buyClothes(id, function(){
+        callback();
+    });
+}
+function buySpell(id){
+    connectManager.buySpell(id, function(){
+        callback();
+    });
 }
 
 
 //---------- design functions ----------
-function updateLoadingState(newStatus, progress = 33){
+function updateLoadingStatus(newStatus, progress = 33){
     statusView.text(newStatus + "...");
     let  newValue = Number(progressBar.attr("aria-valuenow")) + progress;
     progressBar.attr("aria-valuenow", newValue);
@@ -174,6 +263,7 @@ function setView(view){
         case "game":
             hideAll();
             menus.canvas.show();
+            canvasSetup(menus.canvas);
             break;
     }
 }
@@ -228,4 +318,11 @@ function singupUsernameStatusUpdate(status, username){
 
     signupInputs.usernameIcon.removeClass();
     signupInputs.usernameIcon.addClass(status.iconClass);
+}
+
+function canvasSetup(canvas){
+    canvasManager.setSize($(window).width(), $(window).height() - navbar.height());
+}
+function updateBar(){
+    for(let key in resources) resources[key].text(" " + gameData.resources[key]);
 }

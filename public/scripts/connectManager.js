@@ -4,33 +4,36 @@
  * !function{}(...game.js:varible = connectManager;...);
  * it is just development right now, so it is not like that.
  */
- const codes = {
-    error:-1,
-    login: {request:0, success:1, fail: 2},
-    signup: {request:10, success:11, fail:12},
-    usernameCheck: {exist:21, unexist:22}
-};
-var ws;
+
+let codes;
+let ws;
 window.connectManager = {
-    createWS: function() {
+    createWS: function(callback) {
         ws = new WebSocket(connectManager.wsPath);
+        ws.onmessage = function(event){
+            codes = wsParse(event.data);
+            ws.onmessage = null;
+            callback();
+        };
     },
     tryCoockiesLogin: function(callback){
         const username = readCookie("username");
         const password = readCookie("password");
-        ws.onopen = function(){
+        function coockiesLogin(){
             connectManager.login(username, password, false, function(result){
-                if(result) callback(username);
-                else callback(null);
+                if(result) callback(username, password, true);
+                else callback(null, null, false);
             });
-        };
+        }
+        if(ws.readyState === WebSocket.OPEN) coockiesLogin();
+        else ws.onopen = coockiesLogin;
     },
     login: function(username, password, remember, callback){
         // set timeout(connectManager.pongTime): if there is no positive respone- callbacks a failure
         var timeout;
         function failed(){
             ws.onmessage = null;
-            callback(false);
+            callback(null, null, false);
         };
         timeout = setTimeout(failed, connectManager.pongTime);
 
@@ -44,7 +47,7 @@ window.connectManager = {
                         writeCookie("username", username, connectManager.coockiesExpire);
                         writeCookie("password", password, connectManager.coockiesExpire);
                     }
-                    callback(true);
+                    callback(username, password, true);
                     break;
                 case codes.login.fail:
                     clearTimeout(timeout);
@@ -74,7 +77,7 @@ window.connectManager = {
         var timeout;
         function failed(){
             ws.onmessage = null;
-            callback(false);
+            callback(null, null, false);
         };
         timeout = setTimeout(failed, connectManager.pongTime);
         wsSend({code:codes.signup.request, username:username, password:password});
@@ -85,7 +88,7 @@ window.connectManager = {
                     ws.onmessage = null;
                     writeCookie("username", username, connectManager.coockiesExpire);
                     writeCookie("password", password, connectManager.coockiesExpire);
-                    callback(true);
+                    callback(username, password, true);
                     break;
                 case codes.signup.fail:
                     clearTimeout(timeout);
@@ -94,6 +97,30 @@ window.connectManager = {
             }
         };
     },
+
+
+    getData: function(oldData, callback){
+        // TODO
+    },
+    gameMode: function(callback){
+        // TODO
+    },
+    missionMove: function(movement, callback){
+        // TODO
+    },
+    missionQuit: function(callback){
+        // TODO
+    },
+    enterMission: function(callback){
+        // TODO
+    },
+    buyClothes: function(callback){
+        // TODO
+    },
+    buySpell: function(callback){
+        // TODO
+    },
+
 
     coockiesExpire: 2000,
     pongTime: 10000
