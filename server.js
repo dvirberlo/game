@@ -55,36 +55,39 @@ wss.on("connection", (ws, req, client)=>{
             return ws.terminate();
         }
         message = wsParse(message);
-        switch(message.code){
-            case codes.login.request:
-                wsActive = false;
-                loginCheck(message.username, message.password, result=> {
-                    if(result) wsSend({code:codes.login.success}, ws);
-                    else wsSend({code:codes.login.fail}, ws);
-                    wsActive = true;
-                });
-                break;
-            case codes.signup.request:
-                // if invalid- send fail
-                if(!inputsValid(message.username, message.password)){
-                    wsSend({code:codes.signup.fail} ,ws);
-                    break;
-                }
-                wsActive = false;
-                // LOGDEV
-                console.log("signup request: " + JSON.stringify({username:message.username, password:message.password}));
-                newUser(message.username, message.password, result=> {
-                    if(result) wsSend({code:codes.signup.success}, ws);
-                    else wsSend({code:codes.signup.fail}, ws);
-                    wsActive = true;
-                });
-                break;
-        }
+        wsSwitchCodes(message, ws);
     });
     ws.on("close", ()=>{
 		//on close
     });
 });
+function wsSwitchCodes(message, ws){
+    switch(message.code){
+        case codes.login.request:
+            wsActive = false;
+            loginCheck(message.username, message.password, result=> {
+                if(result) wsSend({code:codes.login.success}, ws);
+                else wsSend({code:codes.login.fail}, ws);
+                wsActive = true;
+            });
+            break;
+        case codes.signup.request:
+            // if invalid- send fail
+            if(!inputsValid(message.username, message.password)){
+                wsSend({code:codes.signup.fail} ,ws);
+                break;
+            }
+            wsActive = false;
+            // LOGDEV
+            console.log("signup request: " + JSON.stringify({username:message.username, password:message.password}));
+            newUser(message.username, message.password, result=> {
+                if(result) wsSend({code:codes.signup.success}, ws);
+                else wsSend({code:codes.signup.fail}, ws);
+                wsActive = true;
+            });
+            break;
+    }
+}
 function wsSend(obj, ws){
     // TODO: handle network issues
     if(ws.readyState === WebSocket.OPEN) ws.send(wsStringify(obj));
