@@ -57,13 +57,13 @@ window.connectManager = {
             data: { username: username }
         })
         .done(msg=>{
-            if(msg == codes.usernameCheck.unexist) callback(true);
-            else callback(false);
+            if(msg == codes.usernameCheck.unexist) callback(username, true);
+            else callback(username, false);
         })
         .fail(err=> {
             console.log("error: ");
             console.log(err);
-            callback(true);
+            callback(username, true);
         });
     },
     signup: function(username, password, callback){

@@ -8,7 +8,7 @@
     <div class="container pt-1 pt-md-5 pt-sm-3 pt-md-5">
       <div id="loadingMenu">
         <div class="progress">
-          <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"style="width: 1%">1%</div>
+          <div id="progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="1" style="width: 1%">1%</div>
         </div>
         <p id="status" class="text-center"></p>
       </div>
@@ -42,7 +42,7 @@
             <div class="form-group">
               <label for="signupUsername">Username</label>
               <input class="form-control" type="text" id="signupUsername" placeholder="Username">
-              <small id="signupUsernameStatus" class="form-text"></small>
+              <small id="signupUsernameStatus" class="form-text"><i id="signupUsernameIcon"></i> <b id="signupUsernameBold"></b><span id="signupUsernameText"></span></small>
             </div>
             <div class="form-group">
               <label for="signupPassword">Password</label>
