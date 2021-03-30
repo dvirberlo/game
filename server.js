@@ -2,8 +2,8 @@
 // database
 const MongoDB = require('mongodb');
 const MONGODB_URI = process.env.MONGODB_URI;
-const MONGODB_DB ="magicbamba";
-const MONGODB_COLLECTION = "herokutest";
+const MONGODB_DB = process.env.MONGODB_DB || "magicbamba";
+const MONGODB_COLLECTION = process.env.MONGODB_COLLECTION || "herokutest";
 const startedDocument = {username:"", password:"", magicType:0, xp:0, resources:[10,0,0,0,0], ownedSpells:[], ownedClothes:[], state:{}};
 
 // express
