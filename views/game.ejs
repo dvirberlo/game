@@ -14,6 +14,23 @@
       </div>
 
       <div class="row">
+        <!--signup-->
+        <div id="signupMenu" class="col-sm container m-1 p-3 p-lg-4 border border-primary rounded">
+          <form id="signup">
+            <p>Sign Up</p>
+            <div class="form-group">
+              <label for="signupUsername">Username</label>
+              <input class="form-control" type="text" id="signupUsername" placeholder="Username">
+              <small id="signupUsernameStatus" class="form-text"><i id="signupUsernameIcon"></i> <b id="signupUsernameBold"></b><span id="signupUsernameText"></span></small>
+            </div>
+            <div class="form-group">
+              <label for="signupPassword">Password</label>
+              <input class="form-control" type="password" id="signupPassword" placeholder="Password">
+            </div>
+            <button id="signupBtn" type="button" class="btn btn-outline-primary">Sign Up</button>
+          </form>
+        </div>
+        
         <!--login-->
         <div id="loginMenu" class="col-sm container m-1 p-3 p-lg-4 border border-primary rounded">
           <form id="login">
@@ -35,22 +52,6 @@
           </form>
         </div>
 
-        <!--signup-->
-        <div id="signupMenu" class="col-sm container m-1 p-3 p-lg-4 border border-primary rounded">
-          <form id="signup">
-            <p>Sign Up</p>
-            <div class="form-group">
-              <label for="signupUsername">Username</label>
-              <input class="form-control" type="text" id="signupUsername" placeholder="Username">
-              <small id="signupUsernameStatus" class="form-text"><i id="signupUsernameIcon"></i> <b id="signupUsernameBold"></b><span id="signupUsernameText"></span></small>
-            </div>
-            <div class="form-group">
-              <label for="signupPassword">Password</label>
-              <input class="form-control" type="password" id="signupPassword" placeholder="Password">
-            </div>
-            <button id="signupBtn" type="button" class="btn btn-outline-primary">Sign Up</button>
-          </form>
-        </div>
       </div>
     </div>
     <canvas id="game"></canvas>

@@ -36,7 +36,7 @@ process.on("exit", code=> console.log(`About to exit with code ${code}`));
 
 function usernameCheck(req, res){
     // invalid username act as unavailable
-    if(!usernameValid(req.query.username)) return res.json(codes.exist);
+    if(!usernameValid(req.query.username)) return res.json(codes.usernameCheck.exist);
 
     readByUsername(req.query.username, result=> res.json(result? codes.usernameCheck.exist: codes.usernameCheck.unexist));
 }
@@ -59,7 +59,7 @@ wss.on("connection", (ws, req, client)=>{
             case codes.login.request:
                 wsActive = false;
                 loginCheck(message.username, message.password, result=> {
-                    if(result) wsSend({code:codes.logged.success}, ws);
+                    if(result) wsSend({code:codes.login.success}, ws);
                     else wsSend({code:codes.login.fail}, ws);
                     wsActive = true;
                 });
