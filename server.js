@@ -4,7 +4,16 @@ const MongoDB = require('mongodb');
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB = process.env.MONGODB_DB || "magicbamba";
 const MONGODB_COLLECTION = process.env.MONGODB_COLLECTION || "herokutest";
-const startedDocument = {username:"", password:"", magicType:0, xp:0, resources:[10,0,0,0,0], ownedSpells:[], ownedClothes:[], state:{}};
+const startedDocument = {
+    username:"",
+    password:"",
+    magicType:0,
+    xp:0,
+    resources:{a:10, b:5, c:5},
+    ownedSpells:[],
+    ownedClothes:[],
+    mission:false
+};
 
 // express
 const express  = require("express"),
@@ -13,7 +22,7 @@ PORT = process.env.PORT || 5000;
 
 // websocket
 const WebSocket = require('ws');
-const maxMsgLenght = 500;
+const maxMsgLenght = 1000;
 
 const codes = {
     error:-1,
@@ -45,6 +54,9 @@ function usernameCheck(req, res){
 // ----- start websocket -----
 const wss = new WebSocket.Server({server});
 wss.on("connection", (ws, req, client)=>{
+    // on connection send codes table
+    wsSend(codes, ws);
+    
     ws.wsActive = true;
 
     ws.on("message", (msg)=>{
@@ -64,6 +76,12 @@ wss.on("connection", (ws, req, client)=>{
 function wsSwitchCodes(message, ws){
     switch(message.code){
         case codes.login.request:
+            // if invalid- send fail
+            if(!inputsValid(message.username, message.password)){
+                wsSend({code:codes.login.fail} ,ws);
+                break;
+            }
+
             ws.wsActive = false;
             loginCheck(message.username, message.password, result=> {
                 if(result) wsSend({code:codes.login.success}, ws);
@@ -77,9 +95,8 @@ function wsSwitchCodes(message, ws){
                 wsSend({code:codes.signup.fail} ,ws);
                 break;
             }
+
             ws.wsActive = false;
-            // LOGDEV
-            console.log("signup request: " + JSON.stringify({username:message.username, password:message.password}));
             newUser(message.username, message.password, result=> {
                 if(result) wsSend({code:codes.signup.success}, ws);
                 else wsSend({code:codes.signup.fail}, ws);
@@ -131,7 +148,7 @@ function loginCheck(username, password, callback){
 
     dbCollection.findOne({username:username, password:password}, function(err, result){
         if(err) throw err;
-        callback(!!result._id);
+        callback(!!result);
     });
 }
 function newUser(username, password, callback){
@@ -163,7 +180,7 @@ function readByUsername(username, callback){
         callback(result);
     });
 }
-function updateByUsername(username, key, value, callback){
+function setByUsername(username, key, value, callback){
     const query = {username: username};
     const update = { $set: {[key]: value} };
 
@@ -172,4 +189,7 @@ function updateByUsername(username, key, value, callback){
         if(err) throw err;
         callback(true);
     });
+}
+function addByUsername(username, key, item, callback){
+    // TODO
 }

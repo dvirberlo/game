@@ -1,5 +1,5 @@
 <!-- nav start -->
-<nav class="navbar sticky-top navbar-expand navbar-dark bg-dark">
+<nav id="navbar" class="navbar sticky-top navbar-expand navbar-dark bg-dark">
   <div class="collapse navbar-collapse">
     <ul class="mr-auto navbar-nav">
       <li class="nav-item <% if(page == "home"){ %> active <% } %> " >
@@ -12,6 +12,19 @@
         <a class="nav-link" href="https://github.com/dvirberlo/magic-bamba" target="_blank"><i class="bi bi-cloud-download"></i> Source on GitHub</a>
       </li>
     </ul>
+    <% if(page == "game"){ %>
+    <ul class="navbar-nav">
+      <li class="nav-item mx-1 mx-md-2 mx-lg-3 text-warning">
+        <i class="bi bi-wallet-fill"></i><span id="resA"> 100</span>
+      </li>
+      <li class="nav-item mx-1 mx-md-2 mx-lg-3 text-info">
+        <i class="bi bi-wallet-fill"></i><span id="resB"> 100</span>
+      </li>
+      <li class="nav-item mx-1 mx-md-2 mx-lg-3 text-danger">
+        <i class="bi bi-wallet-fill"></i><span id="resC"> 100</span>
+      </li>
+    </ul>
+    <% } %>
   </div>
 </nav>
 <!-- nav end -->
