@@ -45,10 +45,10 @@ function usernameCheck(req, res){
 // ----- start websocket -----
 const wss = new WebSocket.Server({server});
 wss.on("connection", (ws, req, client)=>{
-    let wsActive = true;
+    ws.wsActive = true;
 
     ws.on("message", (msg)=>{
-        if(!wsActive) return false;
+        if(!ws.wsActive) return false;
         var message = msg.toString();
         if(message.length > maxMsgLenght){
             wsSend({code:codes.error}, ws);
@@ -64,11 +64,11 @@ wss.on("connection", (ws, req, client)=>{
 function wsSwitchCodes(message, ws){
     switch(message.code){
         case codes.login.request:
-            wsActive = false;
+            ws.wsActive = false;
             loginCheck(message.username, message.password, result=> {
                 if(result) wsSend({code:codes.login.success}, ws);
                 else wsSend({code:codes.login.fail}, ws);
-                wsActive = true;
+                ws.wsActive = true;
             });
             break;
         case codes.signup.request:
@@ -77,13 +77,13 @@ function wsSwitchCodes(message, ws){
                 wsSend({code:codes.signup.fail} ,ws);
                 break;
             }
-            wsActive = false;
+            ws.wsActive = false;
             // LOGDEV
             console.log("signup request: " + JSON.stringify({username:message.username, password:message.password}));
             newUser(message.username, message.password, result=> {
                 if(result) wsSend({code:codes.signup.success}, ws);
                 else wsSend({code:codes.signup.fail}, ws);
-                wsActive = true;
+                ws.wsActive = true;
             });
             break;
     }
