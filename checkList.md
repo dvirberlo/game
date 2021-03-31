@@ -64,7 +64,8 @@
     - [x] login check
     - [x] new user
     - [x] read data (by username)
-    - [ ] update data (by username)
+    - [x] set data (by username)
+    - [ ] update data (by username, complex queryUpdate)
     - [ ] handle errors
     - [ ] handle delays
     - [ ] handle crashes

@@ -5,6 +5,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB = process.env.MONGODB_DB || "magicbamba";
 const MONGODB_COLLECTION = process.env.MONGODB_COLLECTION || "herokutest";
 const startedDocument = {
+    _id:null,
     username:"",
     password:"",
     magicType:0,
@@ -13,6 +14,10 @@ const startedDocument = {
     ownedSpells:[],
     ownedClothes:[],
     mission:false
+};
+// TODO
+const queryUpdateTable = {
+
 };
 
 // express
@@ -215,6 +220,10 @@ function setByUsername(username, key, value, callback){
         callback(true);
     });
 }
-function updateByUsername(username, key, item, callback){
-    // TODO
+function updateByUsername(queryUpdate, callback){
+    if(!dbCollection) throw "dbCollection is not defined";
+    dbCollection.updateOne(queryUpdate.query, queryUpdate.update, (err, res)=>{
+        if(err) throw err;
+        callback(true);
+    });
 }
