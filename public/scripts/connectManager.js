@@ -7,6 +7,7 @@
 
 let codes;
 let ws;
+let gameMode = false;
 window.connectManager = {
     createWS: function(callback) {
         ws = new WebSocket(connectManager.wsPath);
@@ -107,8 +108,13 @@ window.connectManager = {
         });
         wsSend({code: codes.game.getData.request});
     },
-    gameMode: function(callback){
-        // TODO
+    enterGameMode: function(callback){
+        gameMode = ws.addEventListener("message", function(event){
+            const data = wsParse(event.data);
+            if(data.code == codes.gameMode){
+                callback(data.key, data.value);
+            }
+        });
     },
     missionMove: function(movement, callback){
         // TODO
