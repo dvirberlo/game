@@ -164,7 +164,7 @@ function startGame(){
 
         updateBar();
         // save any data from server
-        connectManager.gameMode(function(key, value){
+        connectManager.enterGameMode(function(key, value){
             gameData[key] = value;
             canvasManager.setData(key, value);
             updateBar();
