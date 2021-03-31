@@ -23,10 +23,7 @@ window.connectManager = {
         const username = readCookie("username");
         const password = readCookie("password");
 
-        connectManager.login(username, password, false, function(result){
-            if(result) callback(true);
-            else callback(false);
-        });
+        connectManager.login(username, password, false, callback);
     },
     login: function(username, password, remember, callback){
         const code = codesTable.login;
