@@ -5,14 +5,16 @@
  * it is just development right now, so it is not like that.
  */
 
-let codes;
+const coockiesExpire = 365*100;
+let codesTable;
 let ws;
 let gameMode = false;
 window.connectManager = {
     createWS: function(callback) {
         ws = new WebSocket(connectManager.wsPath);
+        // get codesTable from server
         ws.onmessage = function(event){
-            codes = wsParse(event.data);
+            codesTable = wsParse(event.data);
             ws.onmessage = null;
             callback();
         };
@@ -20,42 +22,22 @@ window.connectManager = {
     tryCoockiesLogin: function(callback){
         const username = readCookie("username");
         const password = readCookie("password");
-        function coockiesLogin(){
-            connectManager.login(username, password, false, function(result){
-                if(result) callback(username, password, true);
-                else callback(null, null, false);
-            });
-        }
-        if(ws.readyState === WebSocket.OPEN) coockiesLogin();
-        else ws.onopen = coockiesLogin;
+
+        connectManager.login(username, password, false, function(result){
+            if(result) callback(true);
+            else callback(false);
+        });
     },
     login: function(username, password, remember, callback){
-        // set timeout(connectManager.pongTime): if there is no positive respone- callbacks a failure
-        var timeout;
-        function failed(){
-            ws.onmessage = null;
-            callback(null, null, false);
-        };
-        timeout = setTimeout(failed, connectManager.pongTime);
-
-        wsSend({code:codes.login.request, username:username, password:password});
-        ws.onmessage = function(event){
-            switch(wsParse(event.data).code){
-                case codes.login.success:
-                    clearTimeout(timeout);
-                    ws.onmessage = null;
-                    if(remember){
-                        writeCookie("username", username, connectManager.coockiesExpire);
-                        writeCookie("password", password, connectManager.coockiesExpire);
-                    }
-                    callback(username, password, true);
-                    break;
-                case codes.login.fail:
-                    clearTimeout(timeout);
-                    failed();
-                    break;
+        const code = codesTable.login;
+        ws.onmessage = wsOnMessage(code, function(res){
+            if(res && remember){
+                writeCookie("username", username);
+                writeCookie("password", password);
             }
-        };
+            callback(res);
+        });
+        wsSend({code: code, username:username, password:password});
     },
     checkUsernameAvailable: function(username, callback){
         $.ajax({
@@ -64,55 +46,50 @@ window.connectManager = {
             data: { username: username }
         })
         .done(msg=>{
-            if(msg == codes.usernameCheck.unexist) callback(username, true);
-            else callback(username, false);
+            callback(username, ajaxParse(msg));
         })
         .fail(err=> {
+            // LOGDEV
             console.log("error: ");
             console.log(err);
-            callback(username, true);
+
+            callback(username, false);
         });
     },
     signup: function(username, password, callback){
-        // set timeout(connectManager.pongTime): if there is no positive respone- callbacks a failure
-        var timeout;
-        function failed(){
-            ws.onmessage = null;
-            callback(null, null, false);
-        };
-        timeout = setTimeout(failed, connectManager.pongTime);
-        wsSend({code:codes.signup.request, username:username, password:password});
-        ws.onmessage = function(event){
-            switch(wsParse(event.data).code){
-                case codes.signup.success:
-                    clearTimeout(timeout);
-                    ws.onmessage = null;
-                    writeCookie("username", username, connectManager.coockiesExpire);
-                    writeCookie("password", password, connectManager.coockiesExpire);
-                    callback(username, password, true);
-                    break;
-                case codes.signup.fail:
-                    clearTimeout(timeout);
-                    failed();
-                    break;
+        $.ajax({
+            method: "GET",
+            url: "/signup",
+            data: { username: username, password: password }
+        })
+        .done(msg=>{
+            if(ajaxParse(msg)){
+                writeCookie("username", username);
+                writeCookie("password", password);
+                callback(true);
             }
-        };
+            else callback(false);
+        })
+        .fail(err=> {
+            // LOGDEV
+            console.log("error: ");
+            console.log(err);
+
+            callback(username, false);
+        });
     },
 
     // game
-    getData: function(oldData, callback){
-        ws.onmessage = wsOnMessage(codes.game.getData, function(result){
-            ws.onmessage = null;
-            if(result) callback(result.result);
-            else callback(false);
-        });
-        wsSend({code: codes.game.getData.request});
+    getData: function(callback){
+        const code = codesTable.getData;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
     },
     enterGameMode: function(callback){
         gameMode = ws.addEventListener("message", function(event){
-            const data = wsParse(event.data);
-            if(data.code == codes.gameMode){
-                callback(data.key, data.value);
+            const res = wsParse(event.data).response;
+            if(data.code == codesTable.gameMode){
+                callback(res.key, res.value);
             }
         });
     },
@@ -125,15 +102,14 @@ window.connectManager = {
     enterMission: function(callback){
         // TODO
     },
-    buyClothes: function(callback){
+    updateClothes: function(callback){
         // TODO
     },
-    buySpell: function(callback){
+    updateSpell: function(callback){
         // TODO
     },
 
 
-    coockiesExpire: 2000,
     pongTime: 10000
 };
 
@@ -153,38 +129,39 @@ function wsStringify(obj){
 function wsParse(data){
     return JSON.parse(data);
 }
+function ajaxParse(data){
+    return JSON.parse(data);
+}
 function connectionError(){
+    // LOGDEV
     console.log("connection error");
     // TODO
     callback(false);
 }
-function wsOnMessage(codeTable, callback){
-    return function(event){
-        const result = wsParse(event.data);
-        switch(result.code){
-            case codeTable.success:
-                callback(result);
-                break;
-            case codeTable.fail:
-                callback(false);
-                break;
-        }
+function wsOnMessage(code, callback){
+    return event=>{
+        ws.onmessage = null;
+        const data = wsParse(event.data);
+        // (TODO: is it needed to use eventListener to multy request support?)
+        // if codes doesnt fit- throw error
+        if(data.code != code) throw "error: ws codes doesnt fit";
+        callback(data.response);
     };
 }
 
 // ----- coockies functions -----
-function writeCookie(cname, cvalue, days) {
-    var d = new Date();
+function writeCookie(cname, cvalue, days = coockiesExpire){
+    let d = new Date();
     d.setTime(d.getTime() + (days*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
+    let expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 function readCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
         while (c.charAt(0) == ' ') {
             c = c.substring(1);
         }
