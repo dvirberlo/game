@@ -119,11 +119,11 @@ function signupPressed(username, password){
 }
 function signupCallback(result){
     if(result){
-        // TODO: reload page (auto login)
-        startGame();
+        // reload page (auto login when reload)
+        location.reload();
     }
     else {
-        singupUsernameStatusUpdate(signupUsernameMsg.error, username);
+        singupUsernameStatusUpdate(signupUsernameMsg.error, "");
         signupSetup();
     }
 }
@@ -192,8 +192,7 @@ function missionQuit(){
 }
 // game guide
 function showGuide(){
-    canvasManager.showGuide();
-    showHome();
+    canvasManager.showGuide(showHome);
 }
 // game home
 function showHome(){
@@ -317,4 +316,5 @@ function canvasSetup(canvas){
 }
 function updateBar(){
     for(let key in navDetails.resources) navDetails.resources[key].text(" " + gameData.resources[key]);
+    navDetails.username.text(gameData.username);
 }
