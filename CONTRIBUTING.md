@@ -1,5 +1,5 @@
 # Contributing to Magic Bamba
-more information in [checkList.md]("/checkList.md").
+more information in [checkList.md](/checkList.md).
 
 I just started this project but there is a couple of things you can surely contribute:
 - Basic principles how it should be.
