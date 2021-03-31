@@ -24,11 +24,15 @@ PORT = process.env.PORT || 5000;
 const WebSocket = require('ws');
 const maxMsgLenght = 1000;
 
-const codes = {
-    error:-1,
-    login: {request:0, success:1, fail: 2},
-    signup: {request:10, success:11, fail:12},
-    usernameCheck: {exist:21, unexist:22}
+const codesTable = {
+    login         : 0,
+    getData       : 1,
+    missionMove   : 2,
+    missionQuit   : 3,
+    enterMission  : 4,
+    updateClothes : 5,
+    updateSpell   : 6,
+    gameMode      : 7
 };
 
 
@@ -39,71 +43,76 @@ const server = express()
     .set("view engine", "ejs")
     .get("/", (req, res)=> res.render("index"))
     .get("/game", (req, res)=> res.render("game"))
-    .get("/usernameCheck", usernameCheck)
+    .get("/usernameCheck", usernameCheckRequest)
+    .get("/signup", signupRequest)
     .listen(PORT, ()=>console.log(`Liseting on ${PORT}`));
 process.on("exit", code=> console.log(`About to exit with code ${code}`));
 
-function usernameCheck(req, res){
-    // invalid username act as unavailable
-    if(!usernameValid(req.query.username)) return res.json(codes.usernameCheck.exist);
-
-    readByUsername(req.query.username, result=> res.json(result? codes.usernameCheck.exist: codes.usernameCheck.unexist));
+// /usernameCheck request
+function usernameCheckRequest(req, res){
+    // invalid username act as exist
+    if(!usernameValid(req.query.username)) res.json(false);
+    // return the opposit: if this usernmae already exists (exist- false, unexist- true)
+    else readByUsername(req.query.username, result=> res.json(!result));
 }
-
+// /signup request
+function signupRequest(req, res){
+    // if invalid- response failue
+    if(!inputsValid(req.query.username, req.query.password)){
+        res.json(false);
+    }
+    //else- create new user
+    else newUser(req.query.username, req.query.password, result=> {
+        res.json(result);
+    });
+}
 
 // ----- start websocket -----
 const wss = new WebSocket.Server({server});
 wss.on("connection", (ws, req, client)=>{
     // on connection send codes table
-    wsSend(codes, ws);
+    wsSend(codesTable, ws);
     
-    ws.wsActive = true;
+    // open ws for requests
+    ws.isActive = true;
 
     ws.on("message", (msg)=>{
-        if(!ws.wsActive) return false;
-        var message = msg.toString();
+        // check if opened to requests
+        if(!ws.isActive) return false;
+
+        // check if message is not too long
+        let message = msg.toString();
         if(message.length > maxMsgLenght){
-            wsSend({code:codes.error}, ws);
+            // LOGDEV
+            wsSend("maxMsgLenght", ws);
             return ws.terminate();
         }
+        // parse message
         message = wsParse(message);
-        wsSwitchCodes(message, ws);
+        // disable react requests till there is a response
+        ws.isActive = false;
+        // callback with response
+        wsSwitchCodes(message, ws, (res)=>{
+            // send the response with the request code
+            wsSend({code: message.code, response: res}, ws);
+            // reopen ws for requests
+            ws.isActive = true;
+        });
     });
     ws.on("close", ()=>{
 		//on close
     });
 });
-function wsSwitchCodes(message, ws){
+function wsSwitchCodes(message, ws, callback){
     switch(message.code){
-        case codes.login.request:
-            // if invalid- send fail
-            if(!inputsValid(message.username, message.password)){
-                wsSend({code:codes.login.fail} ,ws);
-                break;
-            }
-
-            ws.wsActive = false;
-            loginCheck(message.username, message.password, result=> {
-                if(result) wsSend({code:codes.login.success}, ws);
-                else wsSend({code:codes.login.fail}, ws);
-                ws.wsActive = true;
-            });
-            break;
-        case codes.signup.request:
-            // if invalid- send fail
-            if(!inputsValid(message.username, message.password)){
-                wsSend({code:codes.signup.fail} ,ws);
-                break;
-            }
-
-            ws.wsActive = false;
-            newUser(message.username, message.password, result=> {
-                if(result) wsSend({code:codes.signup.success}, ws);
-                else wsSend({code:codes.signup.fail}, ws);
-                ws.wsActive = true;
-            });
+        case codesTable.login:
+            loginRequest(message.username, message.password, callback);
             break;
     }
+}
+function loginRequest(username, password, callback){
+    if(inputsValid(username, password)) loginCheck(username, password, callback);
+    else callback(false);
 }
 function wsSend(obj, ws){
     // TODO: handle network issues
@@ -131,14 +140,13 @@ function passwordValid(password){
 
 
 // ----- database functions -----
-var dbCollection = null;
+let dbCollection = null;
 function connectDB(){
     const client = new MongoDB.MongoClient(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     client.connect(err => {
         if(err) throw err;
         const collection = client.db(MONGODB_DB).collection(MONGODB_COLLECTION);
         dbCollection = collection;
-
     });
 }
 connectDB();
@@ -155,7 +163,7 @@ function newUser(username, password, callback){
     readByUsername(username, result=>{
         if(result) callback(false);
         else{
-            var obj = startedDocument;
+            let obj = startedDocument;
             obj.username = username;
             obj.password = password;
             obj._id = new MongoDB.ObjectID();

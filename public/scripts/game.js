@@ -90,7 +90,6 @@ updateLoadingStatus("Connecting");
 // set connect manager variables
 connectManager.pongTime = 5000;// [ms]
 connectManager.wsPath = paths.ws;
-connectManager.coockiesExpire = 365*100;
 connectManager.createWS(function(){
     connectManager.tryCoockiesLogin(tryCoockiesLoginCallback);
 });
@@ -98,24 +97,16 @@ connectManager.createWS(function(){
 
 //---------- main functions ----------
 // login functions:
-function tryCoockiesLoginCallback(username, password, result){
-    if(result){
-        gameData.username = username;
-        gameData.password = password;
-        startGame();
-    }
+function tryCoockiesLoginCallback(result){
+    if(result) startGame();
     else setView("login_signup");
 }
 function loginPressed(username, password, remember){
     if(validForm(username, password)) connectManager.login(username, password, remember, loginCallback);
     else loginShowError();
 }
-function loginCallback(username, password, result){
-    if(result){
-        gameData.username = username;
-        gameData.password = password;
-        startGame();
-    }
+function loginCallback(result){
+    if(result) startGame();
     else loginShowError(true);
 }
 
@@ -123,10 +114,9 @@ function loginCallback(username, password, result){
 function signupPressed(username, password){
     connectManager.signup(username, password, signupCallback);
 }
-function signupCallback(username, password, result){
+function signupCallback(result){
     if(result){
-        gameData.username = username;
-        gameData.password = password;
+        // TODO: reload page (auto login)
         startGame();
     }
     else {
@@ -156,7 +146,7 @@ function startGame(){
     // LOGDEV
     console.log("game started");
     setView("game");
-    connectManager.getData(gameData, function(data){
+    connectManager.getData(function(data){
         gameData = data;
         // set canvas manager
         canvasManager.setCanvas(menus.canvas);
