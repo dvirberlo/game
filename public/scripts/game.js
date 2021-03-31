@@ -29,7 +29,6 @@ const loginInputs = {
     btn:$("#loginBtn"),
     username:$("input#loginUsername"),
     password:$("input#loginPassword"),
-    remember:$("input#loginRemember"),
     formError:$("#loginFormError")
 };
 const loginMsg = {
@@ -101,8 +100,8 @@ function tryCoockiesLoginCallback(result){
     if(result) startGame();
     else setView("login_signup");
 }
-function loginPressed(username, password, remember){
-    if(validForm(username, password)) connectManager.login(username, password, remember, loginCallback);
+function loginPressed(username, password){
+    if(validForm(username, password)) connectManager.login(username, password, loginCallback);
     else loginShowError();
 }
 function loginCallback(result){
@@ -264,8 +263,7 @@ function loginSetup(){
         loginInputs.btn.prop("disabled", true);
         const username = loginInputs.username.val();
         const password = loginInputs.password.val();
-        const remember = loginInputs.remember.prop("checked", true);
-        loginPressed(username, password, remember);
+        loginPressed(username, password);
     });
 }
 function signupSetup(){
