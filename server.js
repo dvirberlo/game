@@ -215,6 +215,6 @@ function setByUsername(username, key, value, callback){
         callback(true);
     });
 }
-function addByUsername(username, key, item, callback){
+function updateByUsername(username, key, item, callback){
     // TODO
 }

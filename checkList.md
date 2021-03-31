@@ -3,6 +3,9 @@
 - [x] game icon
 - [ ] game trailer
 ## client
+- [x] general
+    - [x] nav bar
+    - [x] title
 - [ ] index
     - [x] nice details about the game
     - [ ] more detail about the game
@@ -13,6 +16,7 @@
     - [x] signup form
     - [x] login form
     - [x] design views manager
+    - [x] nav details
     - [ ] connect manager
         - [x] get from server client<->server codes table
         - [x] create websocket
@@ -20,7 +24,7 @@
         - [x] login
         - [x] signup
         - [x] username availability check
-        - [ ] get data
+        - [x] get data
         - [ ] enter game mode
         - [ ] mission move
         - [ ] mission quit
@@ -31,6 +35,9 @@
         - [ ] ping - pong
     - [ ] canvas manager
         - [ ] load
+        - [ ] show guide
+        - [ ] show home
+        - [ ] show mission
 ## server
 - [x] basic express server
     - [x] check username availability
@@ -42,7 +49,7 @@
     - [x] create
     - [x] login request
     - [x] signup request
-    - [ ] get data request
+    - [x] get data request
     - [ ] mission move request
     - [ ] mission quit request
     - [ ] enter mission request
@@ -57,7 +64,7 @@
     - [x] login check
     - [x] new user
     - [x] read data (by username)
-    - [x] update data (by username)
+    - [ ] update data (by username)
     - [ ] handle errors
     - [ ] handle delays
     - [ ] handle crashes
