@@ -36,4 +36,5 @@ I'm joking...
     + Bootstrap 4
     + javascript ES6
     + jQuery
+    + PixiJS 6
     + WebSocket
