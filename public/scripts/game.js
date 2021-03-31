@@ -15,6 +15,15 @@ const paths = {
 
 // design
 const navbar = $("#navbar");
+const navDetails = {
+    all: $("#navDetails"),
+    resources: {
+        lights: $("#navLights"),
+        gems: $("#navGems"),
+        flowers: $("#navFlowers")
+    },
+    username: $("#navUsername"),
+};
 const menus = {
     loadingMenu: $("#loadingMenu"),
     signup_login: $("#signup_login"),
@@ -54,11 +63,6 @@ const signupUsernameMsg = {
 };
 
 //game
-const resources = {
-    a:$("#resA"),
-    b:$("#resb"),
-    c:$("#resC")
-};
 let gameData = {
     username:false,
     password:false,
@@ -308,8 +312,9 @@ function singupUsernameStatusUpdate(status, username){
 }
 
 function canvasSetup(canvas){
+    navDetails.all.show();
     // TODO ?
 }
 function updateBar(){
-    for(let key in resources) resources[key].text(" " + gameData.resources[key]);
+    for(let key in navDetails.resources) navDetails.resources[key].text(" " + gameData.resources[key]);
 }
