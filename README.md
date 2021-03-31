@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-keep light
-=======
 # magic-bamba
 ## Description
 Attempt to recreate the beloved game "Bamba in the Magic Kingdom" in HTML5
@@ -41,4 +38,3 @@ I'm joking...
         * jQuery
         * PixiJS 6
         * WebSocket
->>>>>>> main
