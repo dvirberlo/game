@@ -14,7 +14,7 @@
     1. [x] login form
     1. [x] design views manager
     1. [ ] connect manager
-        1. [x] client<->server codes table
+        1. [x] get from server client<->server codes table
         1. [x] create websocket
         1. [x] coockies login
         1. [x] login

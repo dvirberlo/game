@@ -5,14 +5,19 @@
  * it is just development right now, so it is not like that.
  */
 let view = "";
+let data = {};
+let canvasDiv, width = 800, height = 600;
 window.canvasManager = {
     load: function(){
         // TODO
     },
-    setData: function(key, value){
-        // TODO
+    setCanvas: function(canvas){
+        canvasDiv = canvas;
     },
-    setSize: function(width, height){
+    setData: function(key, value){
+        data[key] = value;
+    },
+    setSize: function(newWidth, newHeight){
         // TODO
     },
     showGuide: function(callback){
