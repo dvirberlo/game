@@ -25,10 +25,10 @@ window.connectManager = {
 
         connectManager.login(username, password, false, callback);
     },
-    login: function(username, password, remember, callback){
+    login: function(username, password, callback){
         const code = codesTable.login;
         ws.onmessage = wsOnMessage(code, function(res){
-            if(res && remember){
+            if(res){
                 writeCookie("username", username);
                 writeCookie("password", password);
             }
