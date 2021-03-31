@@ -9,7 +9,7 @@ const startedDocument = {
     password:"",
     magicType:0,
     xp:0,
-    resources:{a:10, b:5, c:5},
+    resources:{lights:10, gems:5, flowers:5},
     ownedSpells:[],
     ownedClothes:[],
     mission:false
@@ -75,6 +75,8 @@ wss.on("connection", (ws, req, client)=>{
     
     // open ws for requests
     ws.isActive = true;
+    // ws was not logged in yet
+    ws.username = false;
 
     ws.on("message", (msg)=>{
         // check if opened to requests
@@ -106,12 +108,27 @@ wss.on("connection", (ws, req, client)=>{
 function wsSwitchCodes(message, ws, callback){
     switch(message.code){
         case codesTable.login:
-            loginRequest(message.username, message.password, callback);
+            loginRequest(message.username, message.password, ws, callback);
+            break;
+        case codesTable.getData:
+            getDataRequest(ws, callback);
             break;
     }
 }
-function loginRequest(username, password, callback){
-    if(inputsValid(username, password)) loginCheck(username, password, callback);
+function loginRequest(username, password, ws, callback){
+    if(inputsValid(username, password)) loginCheck(username, password, result=>{
+        // if login succeeded- save username: means ws logged in.
+        if(result){
+            ws.username = username;
+        }
+        callback(result);
+    });
+    else callback(false);
+}
+function getDataRequest(ws, callback){
+    const username = ws.username;
+    // only if logged in- send the data
+    if(username) readByUsername(username, callback);
     else callback(false);
 }
 function wsSend(obj, ws){
@@ -154,7 +171,7 @@ connectDB();
 function loginCheck(username, password, callback){
     if(!dbCollection) throw "dbCollection is not defined";
 
-    dbCollection.findOne({username:username, password:password}, function(err, result){
+    dbCollection.findOne({username:username, password:password}, (err, result)=>{
         if(err) throw err;
         callback(!!result);
     });
@@ -169,7 +186,7 @@ function newUser(username, password, callback){
             obj._id = new MongoDB.ObjectID();
 
             if(!dbCollection) throw "dbCollection is not defined";
-            dbCollection.insertOne(obj, function(err, res){
+            dbCollection.insertOne(obj, (err, res)=>{
                 if(err) throw err;
                 // LOGDEV
                 console.log("newUser: " + JSON.stringify({username:username, password:password, res:res}));
@@ -181,7 +198,7 @@ function newUser(username, password, callback){
 function readByUsername(username, callback){
     if(!dbCollection) throw "dbCollection is not defined";
 
-    dbCollection.findOne({username:username}, function(err, result){
+    dbCollection.findOne({username:username}, {projection: {_id:0}}, (err, result)=>{
         if(err) throw err;
         // LOGDEV
         console.log("readByUsername: " + JSON.stringify({username:username, result:result}));
@@ -193,7 +210,7 @@ function setByUsername(username, key, value, callback){
     const update = { $set: {[key]: value} };
 
     if(!dbCollection) throw "dbCollection is not defined";
-    dbCollection.updateOne(query, update, function(err, res) {
+    dbCollection.updateOne(query, update, (err, res)=>{
         if(err) throw err;
         callback(true);
     });
