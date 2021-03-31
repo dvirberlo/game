@@ -98,9 +98,14 @@ window.connectManager = {
         };
     },
 
-
+    // game
     getData: function(oldData, callback){
-        // TODO
+        ws.onmessage = wsOnMessage(codes.game.getData, function(result){
+            ws.onmessage = null;
+            if(result) callback(result.result);
+            else callback(false);
+        });
+        wsSend({code: codes.game.getData.request});
     },
     gameMode: function(callback){
         // TODO
@@ -146,6 +151,19 @@ function connectionError(){
     console.log("connection error");
     // TODO
     callback(false);
+}
+function wsOnMessage(codeTable, callback){
+    return function(event){
+        const result = wsParse(event.data);
+        switch(result.code){
+            case codeTable.success:
+                callback(result);
+                break;
+            case codeTable.fail:
+                callback(false);
+                break;
+        }
+    };
 }
 
 // ----- coockies functions -----
