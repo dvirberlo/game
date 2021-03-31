@@ -17,9 +17,8 @@ const paths = {
 const navbar = $("#navbar");
 const menus = {
     loadingMenu: $("#loadingMenu"),
-    loginMenu: $("#loginMenu"),
-    signupMenu: $("#signupMenu"),
-    canvas: $("canvas#game")
+    signup_login: $("#signup_login"),
+    canvas: $("#game")
 };
 
 const progressBar = $("#progress");
@@ -160,6 +159,7 @@ function startGame(){
     connectManager.getData(gameData, function(data){
         gameData = data;
         // set canvas manager
+        canvasManager.setCanvas(menus.canvas);
         for(let key in gameData) if(key !== "password")canvasManager.setData(key, gameData[key]);
 
         updateBar();
@@ -255,8 +255,7 @@ function setView(view){
             break;
         case "login_signup":
             hideAll();
-            menus.loginMenu.show();
-            menus.signupMenu.show();
+            menus.signup_login.show();
             loginSetup();
             signupSetup();
             break;
@@ -321,7 +320,7 @@ function singupUsernameStatusUpdate(status, username){
 }
 
 function canvasSetup(canvas){
-    canvasManager.setSize($(window).width(), $(window).height() - navbar.height());
+    // TODO ?
 }
 function updateBar(){
     for(let key in resources) resources[key].text(" " + gameData.resources[key]);

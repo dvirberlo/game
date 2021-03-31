@@ -1,0 +1,67 @@
+# checkList
+## general
+- [x] game icon
+- [ ] game trailer
+## client
+- [ ] index
+    - [x] nice details about the game
+    - [ ] more detail about the game
+    - [ ] screenshots
+    - [ ] trailer
+- [ ] game
+    - [x] loading progress bar
+    - [x] signup form
+    - [x] login form
+    - [x] design views manager
+    - [ ] connect manager
+        - [x] get from server client<->server codes table
+        - [x] create websocket
+        - [x] coockies login
+        - [x] login
+        - [x] signup
+        - [x] username availability check
+        - [ ] get data
+        - [ ] enter game mode
+        - [ ] mission move
+        - [ ] mission quit
+        - [ ] enter mission
+        - [ ] buy clothes
+        - [ ] buy spell
+        - [ ] handle connections error
+        - [ ] ping - pong
+    - [ ] canvas manager
+        - [ ] load
+## server
+- [x] basic express server
+    - [x] check username availability
+- [x] basic ejs engine
+    - [x] header pattern
+    - [x] nav bar pattern
+- [x] client<->server codes table
+- [ ] websocket server
+    - [x] create
+    - [x] login request
+    - [x] signup request
+    - [ ] get data request
+    - [ ] mission move request
+    - [ ] mission quit request
+    - [ ] enter mission request
+    - [ ] buy clothes request
+    - [ ] buy spell request
+    - [x] handle duplicated requests
+    - [ ] handle errors
+    - [ ] handle congestions
+    - [ ] ping - pong
+- [ ] database functions
+    - [x] connect database
+    - [x] login check
+    - [x] new user
+    - [x] read data (by username)
+    - [x] update data (by username)
+    - [ ] handle errors
+    - [ ] handle delays
+    - [ ] handle crashes
+## database
+- [x] create temporary MongoDB cloud cluser, database and collection
+- [x] open cluser to all ip
+- [x] set MONGODB_URI, MONGODB_DB, MONGODB_COLLECTION in env
