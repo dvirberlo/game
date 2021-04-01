@@ -16,7 +16,7 @@
     - [x] signup form
     - [x] login form
     - [x] design views manager
-    - [x] nav details
+    - [ ] nav details
     - [ ] connect manager
         - [x] get from server client<->server codes table
         - [x] create websocket
@@ -25,12 +25,12 @@
         - [x] signup
         - [x] username availability check
         - [x] get data
-        - [ ] enter game mode
-        - [ ] mission move
-        - [ ] mission quit
-        - [ ] enter mission
-        - [ ] buy clothes
-        - [ ] buy spell
+        - [x] enter game mode
+        - [x] mission move
+        - [x] mission quit
+        - [x] enter mission
+        - [x] buy clothes
+        - [x] buy spell
         - [ ] handle connections error
         - [ ] ping - pong
     - [ ] canvas manager
@@ -50,11 +50,12 @@
     - [x] login request
     - [x] signup request
     - [x] get data request
-    - [ ] mission move request
-    - [ ] mission quit request
-    - [ ] enter mission request
-    - [ ] buy clothes request
-    - [ ] buy spell request
+    - [x] mission move request
+    - [X] mission quit request
+    - [x] enter mission request
+    - [X] buy clothes request
+    - [X] buy spell request
+    - [x] game mode
     - [x] handle duplicated requests
     - [ ] handle errors
     - [ ] handle congestions
@@ -65,7 +66,9 @@
     - [x] new user
     - [x] read data (by username)
     - [x] set data (by username)
-    - [ ] update data (by username, complex queryUpdate)
+    - [x] update data (by username, complex queryUpdate)
+    - [ ] check afford
+    - [ ] query update automatic generate
     - [ ] handle errors
     - [ ] handle delays
     - [ ] handle crashes

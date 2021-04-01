@@ -91,19 +91,29 @@ window.connectManager = {
         });
     },
     missionMove: function(movement, callback){
-        // TODO
+        const code = codes.missionMove;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code, request: movement});
     },
     missionQuit: function(callback){
-        // TODO
+        const code = codes.missionQuit;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
     },
     enterMission: function(callback){
-        // TODO
+        const code = codes.enterMission;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
     },
-    updateClothes: function(callback){
-        // TODO
+    buyClothes: function(clothesId, callback){
+        const code = codes.updateClothes;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code, request: clothesId});
     },
-    updateSpell: function(callback){
-        // TODO
+    buySpell: function(spellId, callback){
+        const code = codes.updateSpell;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code, request: spellId});
     },
 
 

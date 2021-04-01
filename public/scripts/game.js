@@ -29,9 +29,12 @@ const menus = {
     signup_login: $("#signup_login"),
     canvas: $("#game")
 };
-
 const progressBar = $("#progress");
 const statusView = $("#status");
+
+const animations = {
+    show:"slow"
+};
 
 // login:
 const loginInputs = {
@@ -173,6 +176,7 @@ function startGame(){
 }
 // game mission
 function showMission(){
+    // TODO: showMission (missionMove, missionQuit, toBattle), showBattle (battleMove, missionQuit)
     canvasManager.clear();
     canvasManager.showMission(missionMove, missionQuit);
 }
@@ -243,17 +247,17 @@ function setView(view){
     switch (view){
         case "loading":
             hideAll();
-            menus.loadingMenu.show();
+            menus.loadingMenu.show(animations.show);
             break;
         case "login_signup":
             hideAll();
-            menus.signup_login.show();
+            menus.signup_login.show(animations.show);
             loginSetup();
             signupSetup();
             break;
         case "game":
             hideAll();
-            menus.canvas.show();
+            menus.canvas.show(animations.show);
             canvasSetup(menus.canvas);
             break;
     }
@@ -311,8 +315,7 @@ function singupUsernameStatusUpdate(status, username){
 }
 
 function canvasSetup(canvas){
-    navDetails.all.show();
-    // TODO ?
+    navDetails.all.show(animations.show);
 }
 function updateBar(){
     for(let key in navDetails.resources) navDetails.resources[key].text(" " + gameData.resources[key]);
