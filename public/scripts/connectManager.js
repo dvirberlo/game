@@ -91,27 +91,27 @@ window.connectManager = {
         });
     },
     missionMove: function(movement, callback){
-        const code = codes.missionMove;
+        const code = codesTable.missionMove;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: movement});
     },
     missionQuit: function(callback){
-        const code = codes.missionQuit;
+        const code = codesTable.missionQuit;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
     enterMission: function(callback){
-        const code = codes.enterMission;
+        const code = codesTable.enterMission;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
     buyClothes: function(clothesId, callback){
-        const code = codes.updateClothes;
+        const code = codesTable.buyClothes;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: clothesId});
     },
     buySpell: function(spellId, callback){
-        const code = codes.updateSpell;
+        const code = codesTable.buySpell;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: spellId});
     },
