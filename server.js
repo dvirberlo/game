@@ -217,7 +217,7 @@ function buySpellRequest(id, ws, callback){
 
 
 function gameMode(ws, key, value){
-    wsSend({code: codesTable.gameMode, response: {[key]:value}}, ws);
+    wsSend({code: codesTable.gameMode, response: {key: key, value: value}}, ws);
 }
 function wsSend(obj, ws){
     // TODO: handle network issues

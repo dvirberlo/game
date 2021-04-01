@@ -84,9 +84,9 @@ window.connectManager = {
     },
     enterGameMode: function(callback){
         gameMode = ws.addEventListener("message", function(event){
-            const res = wsParse(event.data).response;
+            const data = wsParse(event.data);
             if(data.code == codesTable.gameMode){
-                callback(res.key, res.value);
+                callback(data.response.key, data.response.value);
             }
         });
     },
@@ -147,12 +147,12 @@ function connectionError(){
 }
 function wsOnMessage(code, callback){
     return event=>{
-        ws.onmessage = null;
         const data = wsParse(event.data);
         // (TODO: is it needed to use eventListener to multy request support?)
-        // if codes doesnt fit- throw error
-        if(data.code != code) throw "error: ws codes doesnt fit";
-        callback(data.response);
+        if(data.code === code){
+            ws.onmessage = null;
+            callback(data.response);
+        }
     };
 }
 
