@@ -312,5 +312,13 @@ function updateByUsername(query, update, callback){
 }
 
 function checkAfford(username, price, callback){
-    // TODO
+    readByUsername(username, result=>{
+        let resources = result.resources;
+        let affordable = true;
+        for(let key in resources){
+            resources[key] -= price[key];
+            affordable = affordable && resources[key] >= 0;
+        }
+        callback(affordable, resources);
+    });
 }
