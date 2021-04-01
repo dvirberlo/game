@@ -189,7 +189,7 @@ function buyClothesRequest(id, ws, callback){
             updateByUsername({username: username}, {$push:{ownedClothes: newClothes}}, callback);
             // decrease price from resources and send new resources
             setByUsername(username, "resources", newResources, result=> {
-                gameMode("resources", newResources);
+                gameMode(ws, "resources", newResources);
             });
         }
         else callback(false);
