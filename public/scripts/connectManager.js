@@ -95,8 +95,8 @@ window.connectManager = {
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: movement});
     },
-    missionQuit: function(callback){
-        const code = codesTable.missionQuit;
+    quitMission: function(callback){
+        const code = codesTable.quitMission;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
@@ -110,10 +110,30 @@ window.connectManager = {
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: clothesId});
     },
+    equipClothes: function(clothesId, value, callback){
+        const code = codesTable.equipClothes;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code, request: {id:clothesId, value: value}});
+    },
     buySpell: function(spellId, callback){
         const code = codesTable.buySpell;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: spellId});
+    },
+    equipSpell: function(spellId, value, callback){
+        const code = codesTable.equipSpell;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code, request: {id: spellId, value: value}});
+    },
+    enterBattle: function(callback){
+        const code = codesTable.enterBattle;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
+    },
+    enterMission: function(callback){
+        const code = codesTable.enterMission;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
     },
 
 

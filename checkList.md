@@ -17,6 +17,9 @@
     - [x] login form
     - [x] design views manager
     - [ ] nav details
+    - [ ] ai manager
+        - [ ] write here what most include
+    - [ ] sound manager ?
     - [ ] connect manager
         - [x] get from server client<->server codes table
         - [x] create websocket
@@ -27,10 +30,15 @@
         - [x] get data
         - [x] enter game mode
         - [x] mission move
-        - [x] mission quit
+        - [x] quit mission
+        - [ ] enter battle
+        - [ ] battle attack
+        - [ ] quit battle
         - [x] enter mission
         - [x] buy clothes
+        - [x] equip clothes
         - [x] buy spell
+        - [x] equip spell
         - [ ] handle connections error
         - [ ] ping - pong
     - [ ] canvas manager
@@ -51,10 +59,15 @@
     - [x] signup request
     - [x] get data request
     - [x] mission move request
-    - [X] mission quit request
+    - [X] quit mission request
+    - [x] enter battle request
+    - [x] battle attack request
+    - [x] quit battle request
     - [x] enter mission request
     - [X] buy clothes request
+    - [x] equip clothes request
     - [X] buy spell request
+    - [x] equip spell request
     - [x] game mode
     - [x] handle duplicated requests
     - [ ] handle errors

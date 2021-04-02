@@ -176,9 +176,9 @@ function startGame(){
 }
 // game mission
 function showMission(){
-    // TODO: showMission (missionMove, missionQuit, toBattle), showBattle (battleMove, missionQuit)
+    // TODO: showMission (missionMove, quitMission, toBattle), showBattle (battleMove, quitMission)
     canvasManager.clear();
-    canvasManager.showMission(missionMove, missionQuit);
+    canvasManager.showMission(missionMove, quitMission);
 }
 function missionMove(movement){
     connectManager.missionMove(movement, function(newMission){
@@ -187,8 +187,8 @@ function missionMove(movement){
         showMission();
     });
 }
-function missionQuit(){
-    connectManager.missionQuit(function(){
+function quitMission(){
+    connectManager.quitMission(function(){
         gameData.mission = false;
         canvasManager.setData("mission", gameData.mission);
         showHome();
