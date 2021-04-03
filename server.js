@@ -42,8 +42,6 @@ const codesTable = {
     missionMove   : 2,
     quitMission   : 3,
     enterMission  : 4,
-    buySpell      : 7,
-    equipSpell    : 8,
     gameMode      : 9,
     enterBattle   :10,
     battleAttack  :11,
@@ -117,7 +115,8 @@ wss.on("connection", (ws, req, client)=>{
         });
     });
     ws.on("close", ()=>{
-		//on close
+        //on close
+        ws.terminate();
     });
 });
 function wsSwitchCodes(message, ws, callback){
@@ -142,14 +141,6 @@ function wsSwitchCodes(message, ws, callback){
         break;
         case codesTable.battleAttack:
             gameUpdate("mission.battle.state", message.request, ws, callback);
-        break;
-        // buy
-        case codesTable.buySpell:
-            buyItemRequest(message.request, "spells", ws, callback);
-        break;
-        // un/equip
-        case codesTable.equipSpell:
-            equipItemRequest(message.request.id, message.request.value, "spells", callback);
         break;
     }
 }
