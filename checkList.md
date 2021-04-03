@@ -1,78 +1,79 @@
-# checkList
-## general
-- [x] game icon
-- [ ] game trailer
-## client
-- [x] general
-    - [x] nav bar
-    - [x] title
-- [ ] index
-    - [x] nice details about the game
-    - [ ] more detail about the game
-    - [ ] screenshots
-    - [ ] trailer
-- [ ] game
-    - [x] loading progress bar
-    - [x] signup form
-    - [x] login form
-    - [x] design views manager
-    - [ ] nav details
-    - [ ] connect manager
-        - [x] get from server client<->server codes table
-        - [x] create websocket
-        - [x] coockies login
-        - [x] login
-        - [x] signup
-        - [x] username availability check
-        - [x] get data
-        - [x] enter game mode
-        - [x] mission move
-        - [x] mission quit
-        - [x] enter mission
-        - [x] buy clothes
-        - [x] buy spell
-        - [ ] handle connections error
-        - [ ] ping - pong
-    - [ ] canvas manager
-        - [ ] load
-        - [ ] show guide
-        - [ ] show home
-        - [ ] show mission
-## server
-- [x] basic express server
-    - [x] check username availability
-- [x] basic ejs engine
-    - [x] header pattern
-    - [x] nav bar pattern
-- [x] client<->server codes table
-- [ ] websocket server
-    - [x] create
-    - [x] login request
-    - [x] signup request
-    - [x] get data request
-    - [x] mission move request
-    - [X] mission quit request
-    - [x] enter mission request
-    - [X] buy clothes request
-    - [X] buy spell request
-    - [x] game mode
-    - [x] handle duplicated requests
-    - [ ] handle errors
-    - [ ] handle congestions
-    - [ ] ping - pong
-- [ ] database functions
-    - [x] connect database
-    - [x] login check
-    - [x] new user
-    - [x] read data (by username)
-    - [x] set data (by username)
-    - [x] update data (by username, complex queryUpdate)
-    - [ ] check afford
-    - [ ] query update automatic generate
-    - [ ] handle errors
-    - [ ] handle delays
-    - [ ] handle crashes
-## database
-- [x] create temporary MongoDB cloud cluser, database and collection
-- [x] open cluser to all ip
-- [x] set MONGODB_URI, MONGODB_DB, MONGODB_COLLECTION in env
+## checkList
+## minimal features:
+### index:
+- [x] details about the game
+- [x] link to the game
+### game:
+- [x] any loading progress bar
+- [x] login
+    - [x] websocket login (client, server)
+    - [x] use coockies
+- [x] sign up
+    - [x] ajax sign up (client, server)
+    - [x] ajax check username availability
+- [x] game navbar
+    - [x] show username
+    - [x] show resources
+    - [x] show xp
+- [x] HTML home view
+    - [ ] get mission
+    - [x] enter mission
+- [ ] PIXI mission view
+    - [ ] background color
+    - [ ] cells
+    - [ ] enemys
+    - [ ] move with cube
+    - [ ] quit mission
+- [ ] PIXI battle view
+    - [ ] 2 designed attack cards
+    - [ ] 4 designed move cards
+    - [ ] enemy attack/move cards AI- random
+    - [ ] round preview: 3 cards per round
+        - [ ] choose cards screen
+        - [ ] perform user and enemy cards
+        - [ ] show hp status for user and enemy
+    - [ ] win- continue mission. loss- restart mission
+    - [ ] quit battle and mission
+- [ ] server obey client request: read and write to the database
+- [ ] spells.json data: spells[]
+- [ ] missions.json data: missions[]
+- [ ] database form
+    - username
+    - password
+    - xp
+    - resources
+        + lights
+        + gems
+        + flowers
+    - spells []
+        + id -> .json of spells[] by id with: name, price, damage.
+        + equip
+    - mission
+        + id -> .json of missions[] by id with: cells form, backgroud color, enemys[]:
+            - isAlive
+            - current cell
+            - spells[]
+            - name
+        + current cell
+        + battle
+            + enemy id -> by mission.enemys[]
+            + hp statuses
+## more features:
+### index
+- [ ] trailer
+- [ ] screenshots
+### game
+- [ ] game nav bar
+    - [ ] xp progress to next level
+- [ ] clothes
+- [ ] maps
+- [ ] ? player vs player
+- [ ] spells upgrades
+- [ ] sounds
+- [ ] AI levels
+- [ ] game guide
+- [ ] enemys types, levels
+- [ ] PIXI home view
+- [ ] better PIXI animations and graphics
+- [ ] more: missions, spells, clothes, types...
+- [ ] server security

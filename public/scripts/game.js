@@ -23,15 +23,21 @@ const navDetails = {
         flowers: $("#navFlowers")
     },
     username: $("#navUsername"),
+    xp: $("#navXp")
 };
 const menus = {
     loadingMenu: $("#loadingMenu"),
     signup_login: $("#signup_login"),
-    canvas: $("#game")
+    canvas: $("#game"),
+    gameHome: $("#gameHome")
 };
 const progressBar = $("#progress");
 const statusView = $("#status");
 
+const gameFrame = {
+    width: 800,
+    height: 600
+};
 const animations = {
     show:"slow"
 };
@@ -76,7 +82,11 @@ let gameData = {
     ownedClothes:false,
     mission:false
 };
-
+const homeInputs = {
+    text: $("#missionText"),
+    enter: $("#missionText"),
+    another: $("#anotherMission")
+};
 
 // -------------------- game preperations --------------------
 setView("loading")
@@ -176,9 +186,9 @@ function startGame(){
 }
 // game mission
 function showMission(){
-    // TODO: showMission (missionMove, missionQuit, toBattle), showBattle (battleMove, missionQuit)
+    // TODO: showMission (missionMove, quitMission, toBattle), showBattle (battleMove, quitMission)
     canvasManager.clear();
-    canvasManager.showMission(missionMove, missionQuit);
+    canvasManager.showMission(missionMove, quitMission);
 }
 function missionMove(movement){
     connectManager.missionMove(movement, function(newMission){
@@ -187,8 +197,8 @@ function missionMove(movement){
         showMission();
     });
 }
-function missionQuit(){
-    connectManager.missionQuit(function(){
+function quitMission(){
+    connectManager.quitMission(function(){
         gameData.mission = false;
         canvasManager.setData("mission", gameData.mission);
         showHome();
@@ -200,19 +210,25 @@ function showGuide(){
 }
 // game home
 function showHome(){
-    canvasManager.clear();
-    canvasManager.showHome(enterMission, buyClothes, buySpell);
+    setView("gameHome");
+    anotherMission();
+    homeInputs.another.click(anotherMission);
+    homeInputs.enter.click(()=>{
+        connectManager.enterMission(gameData.mission, enterMission);
+    });
+}
+function anotherMission(){
+    connectManager.anotherMission(mission=>{
+        homeInputs.text.text(mission.text);
+        gameData.mission = mission;
+    });
 }
 function enterMission(){
+    setView("game");
     connectManager.enterMission(function(newMission){
         gameData.mission = newMission;
         canvasManager.setData("mission", gameData.mission);
         showMission();
-    });
-}
-function buyClothes(id, callback){
-    connectManager.buyClothes(id, function(){
-        callback();
     });
 }
 function buySpell(id){
@@ -248,18 +264,24 @@ function setView(view){
         case "loading":
             hideAll();
             menus.loadingMenu.show(animations.show);
-            break;
+        break;
         case "login_signup":
             hideAll();
             menus.signup_login.show(animations.show);
             loginSetup();
             signupSetup();
-            break;
+        break;
         case "game":
             hideAll();
             menus.canvas.show(animations.show);
             canvasSetup(menus.canvas);
-            break;
+        break;
+        case "gameHome":
+            hideAll();
+            menus.gameHome.show(animations.show);
+            menus.gameHome.width(gameFrame.width);
+            menus.gameHome.height(gameFrame.height);
+        break;
     }
 }
 function hideAll(obj = menus){
@@ -320,4 +342,5 @@ function canvasSetup(canvas){
 function updateBar(){
     for(let key in navDetails.resources) navDetails.resources[key].text(" " + gameData.resources[key]);
     navDetails.username.text(gameData.username);
+    navDetails.xp.text(gameData.xp);
 }

@@ -91,29 +91,34 @@ window.connectManager = {
         });
     },
     missionMove: function(movement, callback){
-        const code = codes.missionMove;
+        const code = codesTable.missionMove;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code, request: movement});
     },
-    missionQuit: function(callback){
-        const code = codes.missionQuit;
+    quitMission: function(callback){
+        const code = codesTable.quitMission;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
     enterMission: function(callback){
-        const code = codes.enterMission;
+        const code = codesTable.enterMission;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
-    buyClothes: function(clothesId, callback){
-        const code = codes.updateClothes;
+    enterBattle: function(callback){
+        const code = codesTable.enterBattle;
         ws.onmessage = wsOnMessage(code, callback);
-        wsSend({code: code, request: clothesId});
+        wsSend({code: code});
     },
-    buySpell: function(spellId, callback){
-        const code = codes.updateSpell;
+    enterMission: function(callback){
+        const code = codesTable.enterMission;
         ws.onmessage = wsOnMessage(code, callback);
-        wsSend({code: code, request: spellId});
+        wsSend({code: code});
+    },
+    anotherMission: function(callback){
+        const code = codesTable.anotherMission;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
     },
 
 

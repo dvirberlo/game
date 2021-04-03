@@ -8,15 +8,14 @@ const startedDocument = {
     _id:null,
     username:"",
     password:"",
-    magicType:0,
     xp:0,
     resources:{lights:10, gems:5, flowers:5},
-    ownedSpells:[],
-    ownedClothes:[],
+    spells:[],
     mission:false
 };
-const spells = [{name: "fireball", price:{lights:0, gems:5, flowers:5}}];
-const clothes = [{name: "hat", price:{lights:10, gems:0, flowers:0}}];
+const data = {
+    spells: [{name: "fireball", price:{lights:0, gems:5, flowers:5}}]
+};
 /**
  * TODO: any type of simple the queryUpdate system (queryUpdate table/function).
  * till then- there are the basics:
@@ -41,11 +40,13 @@ const codesTable = {
     login         : 0,
     getData       : 1,
     missionMove   : 2,
-    missionQuit   : 3,
+    quitMission   : 3,
     enterMission  : 4,
-    buyClothes    : 5,
-    buySpell      : 6,
-    gameMode      : 7
+    gameMode      : 9,
+    enterBattle   :10,
+    battleAttack  :11,
+    quitBattle    :12,
+    anotherMission:13
 };
 
 
@@ -115,32 +116,33 @@ wss.on("connection", (ws, req, client)=>{
         });
     });
     ws.on("close", ()=>{
-		//on close
+        //on close
+        ws.terminate();
     });
 });
 function wsSwitchCodes(message, ws, callback){
     switch(message.code){
         case codesTable.login:
             loginRequest(message.username, message.password, ws, callback);
-            break;
+        break;
+
         case codesTable.getData:
             getDataRequest(ws, callback);
-            break;
+        break;
+        // mission and battle: enter and quit
+        case codesTable.setMission:
+            gameUpdate("mission", message.request, ws, callback);
+        break;
+        case codesTable.setBattle:
+            gameUpdate("mission.battle", message.request, ws, callback);
+        break;
+        // updates
         case codesTable.missionMove:
-            missionMoveRequest(message.request, ws, callback);
-            break;
-        case codesTable.missionQuit:
-            missionQuitRequest(ws, callback);
-            break;
-        case codesTable.enterMission:
-            enterMissionRequest(ws, callback);
-            break;
-        case codesTable.buyClothes:
-            buyClothesRequest(message.request, ws, callback);
-            break;
-        case codesTable.buySpell:
-            buySpellRequest(message.request, ws, callback);
-            break;
+            gameUpdate("mission.cell", message.request, ws, callback);
+        break;
+        case codesTable.battleAttack:
+            gameUpdate("mission.battle.state", message.request, ws, callback);
+        break;
     }
 }
 function loginRequest(username, password, ws, callback){
@@ -159,52 +161,15 @@ function getDataRequest(ws, callback){
     if(username) readByUsername(username, callback);
     else callback(false);
 }
-function missionMoveRequest(movement, ws, callback){
-    // TODO? check movement valid
+function buyItemRequest(id, type, ws, callback){
     const username = ws.username;
-    // only if logged in- set the movement
-    if(username) setByUsername(username, "mission.cell", movement, callback);
-    else callback(false);
-}
-function missionQuitRequest(ws, callback){
-    const username = ws.username;
-    // only if logged in- quit the mission
-    if(username) setByUsername(username, "mission", false, callback);
-    else callback(false);
-}
-function enterMissionRequest(ws, callback){
-    const username = ws.username;
-    // only if logged in- enter the mission
-    if(username) setByUsername(username, "mission.init", true, callback);
-    else callback(false);
-}
-function buyClothesRequest(id, ws, callback){
-    const username = ws.username;
-    // only if logged in- buy clothes
-    if(username) checkAfford(username, clothes[id].price, (result, newResources)=>{
+    // only if logged in- buy item
+    if(username) checkAfford(username, data[type][id].price, (result, newResources)=>{
         // only if affordable
         if(result){
-            // add clothes to list
-            const newClothes = {id: id, equip: false};
-            updateByUsername({username: username}, {$push:{ownedClothes: newClothes}}, callback);
-            // decrease price from resources and send new resources
-            setByUsername(username, "resources", newResources, result=> {
-                gameMode("resources", newResources);
-            });
-        }
-        else callback(false);
-    });
-    else callback(false);
-}
-function buySpellRequest(id, ws, callback){
-    const username = ws.username;
-    // only if logged in- buy spell
-    if(username) checkAfford(username, spells[id].price, (result, newResources)=>{
-        // only if affordable
-        if(result){
-            // add spell to list
-            const newSpell = {id: id, equip: false};
-            updateByUsername({username: username}, {$push:{ownedSpells: newSpell}}, callback);
+            // add item to list
+            const newItem = {id: id, equip: false};
+            updateByUsername({username: username}, {$push:{[type]: newItem}}, callback);
             // decrease price from resources and send new resources
             setByUsername(username, "resources", newResources, result=> {
                 gameMode(ws, "resources", newResources);
@@ -214,11 +179,32 @@ function buySpellRequest(id, ws, callback){
     });
     else callback(false);
 }
+function equipItemRequest(id, value, type, ws, callback){
+    const username = ws.username;
+    // only if logged in- buy item
+    if(username){
+        // query: username && id.
+        updateByUsername({username: username, [type+".id"]: id}, {$set:{[type+'.$.equip']: value}}, callback);
+        // decrease price from resources and send new resources
+        setByUsername(username, "resources", newResources, result=>{
+            // result to boolean
+            callback(!!result);
+        });
+    }
+    else callback(false);
+}
 
 
 function gameMode(ws, key, value){
     wsSend({code: codesTable.gameMode, response: {key: key, value: value}}, ws);
 }
+function gameUpdate(path, value, ws, callback){
+    const username = ws.username;
+    // only if logged in- update
+    if(username) setByUsername(username, path, value, callback);
+    else callback(false);
+}
+
 function wsSend(obj, ws){
     // TODO: handle network issues
     if(ws.readyState === WebSocket.OPEN) ws.send(wsStringify(obj));
@@ -261,6 +247,7 @@ function loginCheck(username, password, callback){
 
     dbCollection.findOne({username:username, password:password}, (err, result)=>{
         if(err) throw err;
+        // result to boolean
         callback(!!result);
     });
 }
@@ -312,5 +299,13 @@ function updateByUsername(query, update, callback){
 }
 
 function checkAfford(username, price, callback){
-    // TODO
+    readByUsername(username, result=>{
+        let resources = result.resources;
+        let affordable = true;
+        for(let key in resources){
+            resources[key] -= price[key];
+            affordable = affordable && resources[key] >= 0;
+        }
+        callback(affordable, resources);
+    });
 }
