@@ -16,7 +16,7 @@
     - [x] show resources
     - [x] show xp
 - [x] HTML home view
-    - [x] get mission
+    - [ ] get mission
     - [x] enter mission
 - [ ] PIXI mission view
     - [ ] background color

@@ -45,7 +45,8 @@ const codesTable = {
     gameMode      : 9,
     enterBattle   :10,
     battleAttack  :11,
-    quitBattle    :12
+    quitBattle    :12,
+    anotherMission:13
 };
 
 

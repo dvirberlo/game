@@ -105,16 +105,6 @@ window.connectManager = {
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
-    buySpell: function(spellId, callback){
-        const code = codesTable.buySpell;
-        ws.onmessage = wsOnMessage(code, callback);
-        wsSend({code: code, request: spellId});
-    },
-    equipSpell: function(spellId, value, callback){
-        const code = codesTable.equipSpell;
-        ws.onmessage = wsOnMessage(code, callback);
-        wsSend({code: code, request: {id: spellId, value: value}});
-    },
     enterBattle: function(callback){
         const code = codesTable.enterBattle;
         ws.onmessage = wsOnMessage(code, callback);
@@ -122,6 +112,11 @@ window.connectManager = {
     },
     enterMission: function(callback){
         const code = codesTable.enterMission;
+        ws.onmessage = wsOnMessage(code, callback);
+        wsSend({code: code});
+    },
+    anotherMission: function(callback){
+        const code = codesTable.anotherMission;
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },

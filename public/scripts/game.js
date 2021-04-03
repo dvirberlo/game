@@ -264,24 +264,24 @@ function setView(view){
         case "loading":
             hideAll();
             menus.loadingMenu.show(animations.show);
-            break;
+        break;
         case "login_signup":
             hideAll();
             menus.signup_login.show(animations.show);
             loginSetup();
             signupSetup();
-            break;
+        break;
         case "game":
             hideAll();
             menus.canvas.show(animations.show);
             canvasSetup(menus.canvas);
-            break;
-            case "game":
-                hideAll();
-                menus.gameHome.show(animations.show);
-                menus.gameHome.width(gameFrame.width);
-                menus.gameHome.height(gameFrame.height);
-                break;
+        break;
+        case "gameHome":
+            hideAll();
+            menus.gameHome.show(animations.show);
+            menus.gameHome.width(gameFrame.width);
+            menus.gameHome.height(gameFrame.height);
+        break;
     }
 }
 function hideAll(obj = menus){
