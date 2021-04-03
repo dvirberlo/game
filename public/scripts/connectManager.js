@@ -105,16 +105,6 @@ window.connectManager = {
         ws.onmessage = wsOnMessage(code, callback);
         wsSend({code: code});
     },
-    buyClothes: function(clothesId, callback){
-        const code = codesTable.buyClothes;
-        ws.onmessage = wsOnMessage(code, callback);
-        wsSend({code: code, request: clothesId});
-    },
-    equipClothes: function(clothesId, value, callback){
-        const code = codesTable.equipClothes;
-        ws.onmessage = wsOnMessage(code, callback);
-        wsSend({code: code, request: {id:clothesId, value: value}});
-    },
     buySpell: function(spellId, callback){
         const code = codesTable.buySpell;
         ws.onmessage = wsOnMessage(code, callback);

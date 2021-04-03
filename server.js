@@ -8,16 +8,13 @@ const startedDocument = {
     _id:null,
     username:"",
     password:"",
-    magicType:0,
     xp:0,
     resources:{lights:10, gems:5, flowers:5},
     spells:[],
-    clothes:[],
     mission:false
 };
 const data = {
-    spells: [{name: "fireball", price:{lights:0, gems:5, flowers:5}}],
-    clothes: [{name: "hat", price:{lights:10, gems:0, flowers:0}}]
+    spells: [{name: "fireball", price:{lights:0, gems:5, flowers:5}}]
 };
 /**
  * TODO: any type of simple the queryUpdate system (queryUpdate table/function).
@@ -45,14 +42,12 @@ const codesTable = {
     missionMove   : 2,
     quitMission   : 3,
     enterMission  : 4,
-    buyClothes    : 5,
-    equipClothes  : 6,
     buySpell      : 7,
     equipSpell    : 8,
     gameMode      : 9,
     enterBattle   :10,
     battleAttack  :11,
-    quitBattle     :12
+    quitBattle    :12
 };
 
 
@@ -149,16 +144,10 @@ function wsSwitchCodes(message, ws, callback){
             gameUpdate("mission.battle.state", message.request, ws, callback);
         break;
         // buy
-        case codesTable.buyClothes:
-            buyItemRequest(message.request, "clothes", ws, callback);
-        break;
         case codesTable.buySpell:
             buyItemRequest(message.request, "spells", ws, callback);
         break;
         // un/equip
-        case codesTable.equipClothes:
-            equipItemRequest(message.request.id, message.request.value, "clothes", callback);
-        break;
         case codesTable.equipSpell:
             equipItemRequest(message.request.id, message.request.value, "spells", callback);
         break;

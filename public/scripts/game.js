@@ -23,15 +23,21 @@ const navDetails = {
         flowers: $("#navFlowers")
     },
     username: $("#navUsername"),
+    xp: $("#navXp")
 };
 const menus = {
     loadingMenu: $("#loadingMenu"),
     signup_login: $("#signup_login"),
-    canvas: $("#game")
+    canvas: $("#game"),
+    gameHome: $("#gameHome")
 };
 const progressBar = $("#progress");
 const statusView = $("#status");
 
+const gameFrame = {
+    width: 800,
+    height: 600
+};
 const animations = {
     show:"slow"
 };
@@ -76,7 +82,11 @@ let gameData = {
     ownedClothes:false,
     mission:false
 };
-
+const homeInputs = {
+    text: $("#missionText"),
+    enter: $("#missionText"),
+    another: $("#anotherMission")
+};
 
 // -------------------- game preperations --------------------
 setView("loading")
@@ -200,19 +210,25 @@ function showGuide(){
 }
 // game home
 function showHome(){
-    canvasManager.clear();
-    canvasManager.showHome(enterMission, buyClothes, buySpell);
+    setView("gameHome");
+    anotherMission();
+    homeInputs.another.click(anotherMission);
+    homeInputs.enter.click(()=>{
+        connectManager.enterMission(gameData.mission, enterMission);
+    });
+}
+function anotherMission(){
+    connectManager.anotherMission(mission=>{
+        homeInputs.text.text(mission.text);
+        gameData.mission = mission;
+    });
 }
 function enterMission(){
+    setView("game");
     connectManager.enterMission(function(newMission){
         gameData.mission = newMission;
         canvasManager.setData("mission", gameData.mission);
         showMission();
-    });
-}
-function buyClothes(id, callback){
-    connectManager.buyClothes(id, function(){
-        callback();
     });
 }
 function buySpell(id){
@@ -260,6 +276,12 @@ function setView(view){
             menus.canvas.show(animations.show);
             canvasSetup(menus.canvas);
             break;
+            case "game":
+                hideAll();
+                menus.gameHome.show(animations.show);
+                menus.gameHome.width(gameFrame.width);
+                menus.gameHome.height(gameFrame.height);
+                break;
     }
 }
 function hideAll(obj = menus){
@@ -320,4 +342,5 @@ function canvasSetup(canvas){
 function updateBar(){
     for(let key in navDetails.resources) navDetails.resources[key].text(" " + gameData.resources[key]);
     navDetails.username.text(gameData.username);
+    navDetails.xp.text(gameData.xp);
 }
