@@ -4,15 +4,15 @@
  * !function{}(...game.js:varible = canvasManager;...);
  * it is just development right now, so it is not like that.
  */
-const view = ''
+// const view = ''
 const data = {}
-let canvasDiv; const width = 800; const height = 600
+// let canvasDiv; const width = 800; const height = 600
 window.canvasManager = {
   load: function () {
     // TODO
   },
   setCanvas: function (canvas) {
-    canvasDiv = canvas
+    // canvasDiv = canvas
   },
   setData: function (key, value) {
     data[key] = value

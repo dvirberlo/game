@@ -11,7 +11,7 @@ let ws
 let gameMode = false
 window.connectManager = {
   createWS: function (callback) {
-    ws = new WebSocket(connectManager.wsPath)
+    ws = new window.WebSocket(window.connectManager.wsPath)
     // get codesTable from server
     ws.onmessage = function (event) {
       codesTable = wsParse(event.data)
@@ -23,7 +23,7 @@ window.connectManager = {
     const username = readCookie('username')
     const password = readCookie('password')
 
-    connectManager.login(username, password, callback)
+    window.connectManager.login(username, password, callback)
   },
   login: function (username, password, callback) {
     const code = codesTable.login
@@ -63,8 +63,8 @@ window.connectManager = {
         if (ajaxParse(msg)) {
           writeCookie('username', username)
           writeCookie('password', password)
-          callback(true)
-        } else callback(false)
+          callback(null)
+        } else callback(new Error('signup failed'))
       })
       .fail(err => {
         // LOGDEV
@@ -84,7 +84,7 @@ window.connectManager = {
   enterGameMode: function (callback) {
     gameMode = ws.addEventListener('message', function (event) {
       const data = wsParse(event.data)
-      if (data.code == codesTable.gameMode) {
+      if (data.code === codesTable.gameMode) {
         callback(data.response.key, data.response.value)
       }
     })
@@ -109,23 +109,21 @@ window.connectManager = {
     ws.onmessage = wsOnMessage(code, callback)
     wsSend({ code: code })
   },
-  enterMission: function (callback) {
-    const code = codesTable.enterMission
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code })
-  },
   anotherMission: function (callback) {
     const code = codesTable.anotherMission
     ws.onmessage = wsOnMessage(code, callback)
     wsSend({ code: code })
   },
-
+  exit: function () {
+    // TODO
+    ws.removeEventListener(gameMode)
+  },
   pongTime: 10000
 }
 
 function wsSend (obj) {
   // TODO: handle network issues
-  if (ws.readyState === WebSocket.OPEN) ws.send(wsStringify(obj))
+  if (ws.readyState === window.WebSocket.OPEN) ws.send(wsStringify(obj))
   else {
     // TODO
     // LOGDEV
@@ -142,12 +140,12 @@ function wsParse (data) {
 function ajaxParse (data) {
   return JSON.parse(data)
 }
-function connectionError () {
-  // LOGDEV
-  console.log('connection error')
-  // TODO
-  callback(false)
-}
+// function connectionError () {
+//   // LOGDEV
+//   console.log('connection error')
+//   // TODO
+//   callback(false)
+// }
 function wsOnMessage (code, callback) {
   return event => {
     const data = wsParse(event.data)
@@ -172,10 +170,10 @@ function readCookie (cname) {
   const ca = decodedCookie.split(';')
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i]
-    while (c.charAt(0) == ' ') {
+    while (c.charAt(0) === ' ') {
       c = c.substring(1)
     }
-    if (c.indexOf(name) == 0) {
+    if (c.indexOf(name) === 0) {
       return c.substring(name.length, c.length)
     }
   }

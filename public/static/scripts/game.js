@@ -14,7 +14,7 @@ const paths = {
 }
 
 // design
-const navbar = $('#navbar')
+// const navbar = $('#navbar')
 const navDetails = {
   all: $('#navDetails'),
   resources: {
@@ -93,21 +93,21 @@ setView('loading')
 
 updateLoadingStatus('Loading code')
 
-// load canvasManager.js
+// load window.canvasManager.js
 $.ajax({ async: false, url: paths.canvasManager, dataType: 'script' })
 updateLoadingStatus('Loading Draws')
 
-canvasManager.load()
+window.canvasManager.load()
 
-// load connectManager.js
+// load window.connectManager.js
 $.ajax({ async: false, url: paths.connectManager, dataType: 'script' })
 updateLoadingStatus('Connecting')
 
 // set connect manager variables
-connectManager.pongTime = 5000// [ms]
-connectManager.wsPath = paths.ws
-connectManager.createWS(function () {
-  connectManager.tryCoockiesLogin(tryCoockiesLoginCallback)
+window.connectManager.pongTime = 5000// [ms]
+window.connectManager.wsPath = paths.ws
+window.connectManager.createWS(function () {
+  window.connectManager.tryCoockiesLogin(tryCoockiesLoginCallback)
 })
 
 // ---------- main functions ----------
@@ -117,7 +117,7 @@ function tryCoockiesLoginCallback (result) {
   else setView('login_signup')
 }
 function loginPressed (username, password) {
-  if (validForm(username, password)) connectManager.login(username, password, loginCallback)
+  if (validForm(username, password)) window.connectManager.login(username, password, loginCallback)
   else loginShowError()
 }
 function loginCallback (result) {
@@ -127,12 +127,12 @@ function loginCallback (result) {
 
 // signup functions:
 function signupPressed (username, password) {
-  connectManager.signup(username, password, signupCallback)
+  window.connectManager.signup(username, password, signupCallback)
 }
-function signupCallback (result) {
-  if (result) {
+function signupCallback (err) {
+  if (!err) {
     // reload page (auto login when reload)
-    location.reload()
+    window.location.reload()
   } else {
     singupUsernameStatusUpdate(signupUsernameMsg.error, '')
     signupSetup()
@@ -143,7 +143,7 @@ function checkUsernameAvailable (username) {
   if (!validUsername(username)) return false
 
   singupUsernameStatusUpdate(signupUsernameMsg.checking, username)
-  connectManager.checkUsernameAvailable(username, showUsernameAvailability)
+  window.connectManager.checkUsernameAvailable(username, showUsernameAvailability)
 }
 
 // both functions:
@@ -160,24 +160,24 @@ function startGame () {
   // LOGDEV
   console.log('game started')
   setView('game')
-  connectManager.getData(function (data) {
+  window.connectManager.getData(function (data) {
     gameData = data
     // set canvas manager
-    canvasManager.setCanvas(menus.canvas)
-    for (const key in gameData) if (key !== 'password')canvasManager.setData(key, gameData[key])
+    window.canvasManager.setCanvas(menus.canvas)
+    for (const key in gameData) if (key !== 'password')window.canvasManager.setData(key, gameData[key])
 
     updateBar()
     // save any data from server
-    connectManager.enterGameMode(function (key, value) {
+    window.connectManager.enterGameMode(function (key, value) {
       gameData[key] = value
-      canvasManager.setData(key, value)
+      window.canvasManager.setData(key, value)
       updateBar()
     })
 
     // if player is already on a mission
     if (gameData.mission !== false) return showMission()
     // if it is the player's first time in game(xp=0)
-    else if (gameData.xp == 0) showGuide()
+    else if (gameData.xp === 0) showGuide()
     // just show home
     else showHome()
   })
@@ -185,26 +185,26 @@ function startGame () {
 // game mission
 function showMission () {
   // TODO: showMission (missionMove, quitMission, toBattle), showBattle (battleMove, quitMission)
-  canvasManager.clear()
-  canvasManager.showMission(missionMove, quitMission)
+  window.canvasManager.clear()
+  window.canvasManager.showMission(missionMove, quitMission)
 }
 function missionMove (movement) {
-  connectManager.missionMove(movement, function (newMission) {
+  window.connectManager.missionMove(movement, function (newMission) {
     gameData.mission = newMission
-    canvasManager.setData('mission', gameData.mission)
+    window.canvasManager.setData('mission', gameData.mission)
     showMission()
   })
 }
 function quitMission () {
-  connectManager.quitMission(function () {
+  window.connectManager.quitMission(function () {
     gameData.mission = false
-    canvasManager.setData('mission', gameData.mission)
+    window.canvasManager.setData('mission', gameData.mission)
     showHome()
   })
 }
 // game guide
 function showGuide () {
-  canvasManager.showGuide(showHome)
+  window.canvasManager.showGuide(showHome)
 }
 // game home
 function showHome () {
@@ -212,28 +212,27 @@ function showHome () {
   anotherMission()
   homeInputs.another.click(anotherMission)
   homeInputs.enter.click(() => {
-    connectManager.enterMission(gameData.mission, enterMission)
+    window.connectManager.enterMission(gameData.mission, enterMission)
   })
 }
 function anotherMission () {
-  connectManager.anotherMission(mission => {
+  window.connectManager.anotherMission(mission => {
     homeInputs.text.text(mission.text)
     gameData.mission = mission
   })
 }
 function enterMission () {
   setView('game')
-  connectManager.enterMission(function (newMission) {
+  window.connectManager.enterMission(function (newMission) {
     gameData.mission = newMission
-    canvasManager.setData('mission', gameData.mission)
+    window.canvasManager.setData('mission', gameData.mission)
     showMission()
   })
 }
-function buySpell (id) {
-  connectManager.buySpell(id, function () {
-    callback()
-  })
-}
+// function buySpell (id) {
+//   window.connectManager.buySpell(id, function () {
+//   })
+// }
 
 // ---------- design functions ----------
 function updateLoadingStatus (newStatus, progress = 33) {
@@ -318,7 +317,10 @@ function showUsernameAvailability (username, isAva) {
 }
 function singupUsernameStatusUpdate (status, username) {
   // do not show if username have already changed
-  if (username != signupInputs.username.val()) return false
+  if (username !== signupInputs.username.val()) {
+    for (const ele of [signupInputs.usernameStatus, signupInputs.usernameText, signupInputs.usernameIcon]) ele.addClass('d-none')
+    return false
+  }
 
   signupInputs.btn.prop('disabled', false)
 
