@@ -1,5 +1,5 @@
 # magic-bamba
-Core version 0.3.2
+Core version 0.4.1
 ## Description
 Attempt to recreate the beloved game "Bamba in the Magic Kingdom" in HTML5
 

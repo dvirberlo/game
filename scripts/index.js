@@ -1,7 +1,13 @@
 'use strict'
 
+import '../lib/preload.js'
+import * as db from '../lib/db.js'
+import * as server from '../lib/server.js'
+import * as ws from '../lib/ws.js'
+import path from 'path'
 import fs from 'fs'
-/**
+
+/*
  * TODO: any type of simple the queryUpdate system (queryUpdate table/function).
  * till then- there are the basics:
  * push item in array:  update= {$push: {[array]: value}}
@@ -12,15 +18,8 @@ import fs from 'fs'
  *
  */
 
-import * as db from '../lib/db.js'
-import * as server from '../lib/server.js'
-import * as ws from '../lib/ws.js'
-import path from 'path'
-// database
-
 export const missions = JSON.parse(fs.readFileSync('public/static/data/missions.json', 'utf8'))
 
-process.debug = true
 process.on('exit', code => {
   if (process.debug) console.log(`About to exit with code ${code}`)
 })
