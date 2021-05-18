@@ -1,5 +1,13 @@
 {
   "name": "Magic Bamba Game",
   "description": "An adventures game.",
-  "keywords": ["magic", "bamba", "game"]
+  "keywords": ["magic", "bamba", "game"],
+  "website": "https://magic-bamba.herokuapp.com/",
+  "repository": "https://github.com/dvirberlo/magic-bamba",
+  "logo": "https://magic-bamba.herokuapp.com/images/icon_big.png",
+  "env": {
+    "MONGODB_URI": {
+      "description": "URI for mongodb connection (include user and password)"
+    }
+  }
 }

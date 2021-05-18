@@ -1,24 +1,43 @@
 {
-  "name": "a",
-  "version": "0.3.0",
-  "description": "An adventure game",
+  "name": "dvirberlo",
+  "version": "1.0.0",
+  "description": "Core version 0.3.2\r ## Description\r Attempt to recreate the beloved game \"Bamba in the Magic Kingdom\" in HTML5",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "type": "module",
   "engines": {
     "node": "12.x"
   },
-  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node scripts/index.js",
+    "test": "standard && node script/test.js",
+    "build": "node scripts/build.js"
   },
   "dependencies": {
+    "ejs": "^3.1.5",
     "express": "^4.15.2",
-    "ws": "^3.3.0",
-    "ejs": "^3.0.0",
-    "mongodb": "^3.6.0"
+    "mongodb": "^3.6.0",
+    "ws": "^7.4.5"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3",
+    "fs-extra": "^10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dvirberlo/magic-bamba"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dvirberlo/magic-bamba/issues"
   },
   "keywords": [
     "magic",
     "bamba",
     "game"
   ],
-  "license": ""
+  "homepage": "https://github.com/dvirberlo/magic-bamba#readme"
 }

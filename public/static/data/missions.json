@@ -1,0 +1,12 @@
+[
+    {
+        "id": 0,
+        "cellsForm": [
+            {"contain": null}
+        ],
+        "backgroud": "#000000",
+        "enemies": [],
+        "currentCell": 0,
+        "battle": null
+    }
+]
