@@ -5,6 +5,8 @@
  * it is just development right now, so it is not like that.
  */
 // alert("NOTE: game is under development");
+import * as canvasManager from '../scripts/canvasManager.js'
+import * as connectManager from '../scripts/connectManager.js'
 // -------------------- constants --------------------
 // websocket
 const paths = {
@@ -93,21 +95,17 @@ setView('loading')
 
 updateLoadingStatus('Loading code')
 
-// load window.canvasManager.js
-$.ajax({ async: false, url: paths.canvasManager, dataType: 'script' })
+// load canvasManager.js
 updateLoadingStatus('Loading Draws')
 
-window.canvasManager.load()
+canvasManager.load()
 
-// load window.connectManager.js
-$.ajax({ async: false, url: paths.connectManager, dataType: 'script' })
+// load connectManager.js
 updateLoadingStatus('Connecting')
 
 // set connect manager variables
-window.connectManager.pongTime = 5000// [ms]
-window.connectManager.wsPath = paths.ws
-window.connectManager.createWS(function () {
-  window.connectManager.tryCoockiesLogin(tryCoockiesLoginCallback)
+connectManager.createWS({ pongTime: 5000, wsPath: paths.ws }, function () {
+  connectManager.tryCoockiesLogin(tryCoockiesLoginCallback)
 })
 
 // ---------- main functions ----------
@@ -117,7 +115,7 @@ function tryCoockiesLoginCallback (result) {
   else setView('login_signup')
 }
 function loginPressed (username, password) {
-  if (validForm(username, password)) window.connectManager.login(username, password, loginCallback)
+  if (validForm(username, password)) connectManager.login(username, password, loginCallback)
   else loginShowError()
 }
 function loginCallback (result) {
@@ -127,7 +125,7 @@ function loginCallback (result) {
 
 // signup functions:
 function signupPressed (username, password) {
-  window.connectManager.signup(username, password, signupCallback)
+  connectManager.signup(username, password, signupCallback)
 }
 function signupCallback (err) {
   if (!err) {
@@ -143,7 +141,7 @@ function checkUsernameAvailable (username) {
   if (!validUsername(username)) return false
 
   singupUsernameStatusUpdate(signupUsernameMsg.checking, username)
-  window.connectManager.checkUsernameAvailable(username, showUsernameAvailability)
+  connectManager.checkUsernameAvailable(username, showUsernameAvailability)
 }
 
 // both functions:
@@ -160,17 +158,17 @@ function startGame () {
   // LOGDEV
   console.log('game started')
   setView('game')
-  window.connectManager.getData(function (data) {
+  connectManager.getData(function (data) {
     gameData = data
     // set canvas manager
-    window.canvasManager.setCanvas(menus.canvas)
-    for (const key in gameData) if (key !== 'password')window.canvasManager.setData(key, gameData[key])
+    canvasManager.setCanvas(menus.canvas)
+    for (const key in gameData) if (key !== 'password')canvasManager.setData(key, gameData[key])
 
     updateBar()
     // save any data from server
-    window.connectManager.enterGameMode(function (key, value) {
+    connectManager.enterGameMode(function (key, value) {
       gameData[key] = value
-      window.canvasManager.setData(key, value)
+      canvasManager.setData(key, value)
       updateBar()
     })
 
@@ -185,26 +183,26 @@ function startGame () {
 // game mission
 function showMission () {
   // TODO: showMission (missionMove, quitMission, toBattle), showBattle (battleMove, quitMission)
-  window.canvasManager.clear()
-  window.canvasManager.showMission(missionMove, quitMission)
+  canvasManager.clear()
+  canvasManager.showMission(missionMove, quitMission)
 }
 function missionMove (movement) {
-  window.connectManager.missionMove(movement, function (newMission) {
+  connectManager.missionMove(movement, function (newMission) {
     gameData.mission = newMission
-    window.canvasManager.setData('mission', gameData.mission)
+    canvasManager.setData('mission', gameData.mission)
     showMission()
   })
 }
 function quitMission () {
-  window.connectManager.quitMission(function () {
+  connectManager.quitMission(function () {
     gameData.mission = false
-    window.canvasManager.setData('mission', gameData.mission)
+    canvasManager.setData('mission', gameData.mission)
     showHome()
   })
 }
 // game guide
 function showGuide () {
-  window.canvasManager.showGuide(showHome)
+  canvasManager.showGuide(showHome)
 }
 // game home
 function showHome () {
@@ -212,25 +210,25 @@ function showHome () {
   anotherMission()
   homeInputs.another.click(anotherMission)
   homeInputs.enter.click(() => {
-    window.connectManager.enterMission(gameData.mission, enterMission)
+    connectManager.enterMission(gameData.mission, enterMission)
   })
 }
 function anotherMission () {
-  window.connectManager.anotherMission(mission => {
+  connectManager.anotherMission(mission => {
     homeInputs.text.text(mission.text)
     gameData.mission = mission
   })
 }
 function enterMission () {
   setView('game')
-  window.connectManager.enterMission(function (newMission) {
+  connectManager.enterMission(function (newMission) {
     gameData.mission = newMission
-    window.canvasManager.setData('mission', gameData.mission)
+    canvasManager.setData('mission', gameData.mission)
     showMission()
   })
 }
 // function buySpell (id) {
-//   window.connectManager.buySpell(id, function () {
+//   connectManager.buySpell(id, function () {
 //   })
 // }
 

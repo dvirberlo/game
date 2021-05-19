@@ -9,117 +9,119 @@ const coockiesExpire = 365 * 100
 let codesTable
 let ws
 let gameMode = false
-window.connectManager = {
-  createWS: function (callback) {
-    ws = new window.WebSocket(window.connectManager.wsPath)
-    // get codesTable from server
-    ws.onmessage = function (event) {
-      codesTable = wsParse(event.data)
-      ws.onmessage = null
-      callback()
-    }
-  },
-  tryCoockiesLogin: function (callback) {
-    const username = readCookie('username')
-    const password = readCookie('password')
+let pongTime = 10000
 
-    window.connectManager.login(username, password, callback)
-  },
-  login: function (username, password, callback) {
-    const code = codesTable.login
-    ws.onmessage = wsOnMessage(code, function (res) {
-      if (res) {
-        writeCookie('username', username)
-        writeCookie('password', password)
-      }
-      callback(res)
-    })
-    wsSend({ code: code, username: username, password: password })
-  },
-  checkUsernameAvailable: function (username, callback) {
-    $.ajax({
-      method: 'GET',
-      url: '/usernameCheck',
-      data: { username: username }
-    })
-      .done(msg => {
-        callback(username, ajaxParse(msg))
-      })
-      .fail(err => {
-        // LOGDEV
-        console.log('error: ')
-        console.log(err)
+export function createWS (options, callback) {
+  if(options.pongTime) pongTime = options.pongTime
 
-        callback(username, false)
-      })
-  },
-  signup: function (username, password, callback) {
-    $.ajax({
-      method: 'GET',
-      url: '/signup',
-      data: { username: username, password: password }
-    })
-      .done(msg => {
-        if (ajaxParse(msg)) {
-          writeCookie('username', username)
-          writeCookie('password', password)
-          callback(null)
-        } else callback(new Error('signup failed'))
-      })
-      .fail(err => {
-        // LOGDEV
-        console.log('error: ')
-        console.log(err)
-
-        callback(username, false)
-      })
-  },
-
-  // game
-  getData: function (callback) {
-    const code = codesTable.getData
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code })
-  },
-  enterGameMode: function (callback) {
-    gameMode = ws.addEventListener('message', function (event) {
-      const data = wsParse(event.data)
-      if (data.code === codesTable.gameMode) {
-        callback(data.response.key, data.response.value)
-      }
-    })
-  },
-  missionMove: function (movement, callback) {
-    const code = codesTable.missionMove
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code, request: movement })
-  },
-  quitMission: function (callback) {
-    const code = codesTable.quitMission
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code })
-  },
-  enterMission: function (callback) {
-    const code = codesTable.enterMission
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code })
-  },
-  enterBattle: function (callback) {
-    const code = codesTable.enterBattle
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code })
-  },
-  anotherMission: function (callback) {
-    const code = codesTable.anotherMission
-    ws.onmessage = wsOnMessage(code, callback)
-    wsSend({ code: code })
-  },
-  exit: function () {
-    // TODO
-    ws.removeEventListener(gameMode)
-  },
-  pongTime: 10000
+  ws = new window.WebSocket(options.wsPath || 'localhost:5000')
+  // get codesTable from server
+  ws.onmessage = function (event) {
+    codesTable = wsParse(event.data)
+    ws.onmessage = null
+    callback()
+  }
 }
+export function tryCoockiesLogin (callback) {
+  const username = readCookie('username')
+  const password = readCookie('password')
+
+  login(username, password, callback)
+}
+export function login (username, password, callback) {
+  const code = codesTable.login
+  ws.onmessage = wsOnMessage(code, function (res) {
+    if (res) {
+      writeCookie('username', username)
+      writeCookie('password', password)
+    }
+    callback(res)
+  })
+  wsSend({ code: code, username: username, password: password })
+}
+export function checkUsernameAvailable (username, callback) {
+  $.ajax({
+    method: 'GET',
+    url: '/usernameCheck',
+    data: { username: username }
+  })
+  .done(msg => {
+    callback(username, ajaxParse(msg))
+  })
+  .fail(err => {
+    // LOGDEV
+    console.log('error: ')
+    console.log(err)
+
+    callback(username, false)
+  })
+}
+export function signup (username, password, callback) {
+  $.ajax({
+    method: 'GET',
+    url: '/signup',
+    data: { username: username, password: password }
+  })
+  .done(msg => {
+    if (ajaxParse(msg)) {
+    writeCookie('username', username)
+    writeCookie('password', password)
+    callback(null)
+    } else callback(new Error('signup failed'))
+  })
+  .fail(err => {
+    // LOGDEV
+    console.error(err)
+
+    callback(username, false)
+  })
+}
+
+// game
+export function getData (callback) {
+  const code = codesTable.getData
+  ws.onmessage = wsOnMessage(code, callback)
+  wsSend({ code: code })
+}
+export function enterGameMode (callback) {
+  gameMode = ws.addEventListener('message', function (event) {
+    const data = wsParse(event.data)
+    if (data.code === codesTable.gameMode) {
+      callback(data.response.key, data.response.value)
+    }
+  })
+}
+export function missionMove (movement, callback) {
+  const code = codesTable.missionMove
+  ws.onmessage = wsOnMessage(code, callback)
+  wsSend({ code: code, request: movement })
+}
+export function quitMission (callback) {
+  const code = codesTable.quitMission
+  ws.onmessage = wsOnMessage(code, callback)
+  wsSend({ code: code })
+}
+export function enterMission (callback) {
+  const code = codesTable.enterMission
+  ws.onmessage = wsOnMessage(code, callback)
+  wsSend({ code: code })
+}
+export function enterBattle (callback) {
+  const code = codesTable.enterBattle
+  ws.onmessage = wsOnMessage(code, callback)
+  wsSend({ code: code })
+}
+export function anotherMission (callback) {
+  const code = codesTable.anotherMission
+  ws.onmessage = wsOnMessage(code, callback)
+  wsSend({ code: code })
+}
+export function exit () {
+  // TODO
+  ws.removeEventListener(gameMode)
+}
+
+
 
 function wsSend (obj) {
   // TODO: handle network issues

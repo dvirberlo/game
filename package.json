@@ -1,6 +1,6 @@
 {
   "name": "magic-bamba",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Attempt to recreate the beloved game \"Bamba in the Magic Kingdom\" in HTML5",
   "main": "index.js",
   "directories": {

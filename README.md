@@ -2,7 +2,7 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 
-Core version 0.4.2
+Core version 0.4.3
 ## Description
 Attempt to recreate the beloved game "Bamba in the Magic Kingdom" in HTML5
 

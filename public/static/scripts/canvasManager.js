@@ -7,30 +7,29 @@
 // const view = ''
 const data = {}
 // let canvasDiv; const width = 800; const height = 600
-window.canvasManager = {
-  load: function () {
-    // TODO
-  },
-  setCanvas: function (canvas) {
-    // canvasDiv = canvas
-  },
-  setData: function (key, value) {
-    data[key] = value
-  },
-  setSize: function (newWidth, newHeight) {
-    // TODO
-  },
-  showGuide: function (callback) {
-    // TODO
-    callback()
-  },
-  showHome: function (buyClothes, buySpell, enterMission) {
-    // TODO
-  },
-  showMission: function (missionMove, missionQuit) {
-    // TODO
-  },
-  clear: function () {
-    // TODO
-  }
+
+export function load () {
+  // TODO
+}
+export function setCanvas (canvas) {
+  // canvasDiv = canvas
+}
+export function setData (key, value) {
+  data[key] = value
+}
+export function setSize (newWidth, newHeight) {
+  // TODO
+}
+export function showGuide (callback) {
+  // TODO
+  callback()
+}
+export function showHome (buyClothes, buySpell, enterMission) {
+  // TODO
+}
+export function showMission (missionMove, missionQuit) {
+  // TODO
+}
+export function clear () {
+  // TODO
 }
