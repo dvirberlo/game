@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  #loadingMenu.container.pt-1.pt-sm-3.pt-md-5
+    .progress
+      #progress.progress-bar.progress-bar-striped.progress-bar-animated(role='progressbar' aria-valuenow='1' style='width: 1%') 1%
+    p#status.text-center
+  // signup_login
+  #signup_login.container.pt-1.pt-sm-3.pt-md-5
+    .row
+      // signup
+      #signupMenu.col-sm.container.m-1.p-3.p-lg-4.border.border-primary.rounded
+        form#signup
+          p Sign Up
+          .form-group
+            label(for='signupUsername') Username
+            input#signupUsername.form-control(type='text' placeholder='Username')
+            small#signupUsernameStatus.form-text
+              i#signupUsernameIcon
+              b#signupUsernameBold
+              span#signupUsernameText
+          .form-group
+            label(for='signupPassword') Password
+            input#signupPassword.form-control(type='password' placeholder='Password')
+          button#signupBtn.btn.btn-outline-primary(type='button') Sign Up
+      // login
+      #loginMenu.col-sm.container.m-1.p-3.p-lg-4.border.border-primary.rounded
+        form#login
+          p Log In
+          .form-group
+            label(for='loginUsername') Username
+            input#loginUsername.form-control(type='text' placeholder='Username')
+          .form-group
+            label(for='loginPassword') Password
+            input#loginPassword.form-control(type='password' placeholder='Password')
+          button#loginBtn.btn.btn-primary(type='button') Login
+          small#loginFormError.form-text.text-danger
+  // canvas div
+  #game.text-center
+  #gameHome
+    #mission
+      span#missionText
+      button#enterMission.btn.btn-primary  Enter Mission
+      button#anotherMission.btn.btn-secondary Another Mission
