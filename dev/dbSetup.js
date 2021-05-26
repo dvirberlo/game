@@ -14,7 +14,7 @@ console.log('NOTE: terminate the program when you see its done (all "saved")')
 // createUser({username: 'user', password: 'pass'})
 printUsers()
 
-function createUser(user){
+function createUser (user) {
   // costumize your users carefully: there is no duplication check here!
   const u = new User(user)
   u.save(err => {
@@ -22,7 +22,7 @@ function createUser(user){
     else console.log(`User(${JSON.stringify(user)}): saved`)
   })
 }
-function printUsers(){
+function printUsers () {
   User.find({}).exec((err, arr) => {
     if (err) console.error(err)
     else console.log(arr)

@@ -1,6 +1,6 @@
 const User = require('../models/user')
-const httpStatus = require('http-status-codes');
-const cookieParser = require('cookie-parser')
+const { StatusCodes } = require('http-status-codes')
+// const cookieParser = require('cookie-parser')
 
 /** Protected Controller
  * /protected
@@ -11,22 +11,22 @@ const cookieParser = require('cookie-parser')
  *     /quit -> ?err
  *     /enter/:id -> ?err
  *     /battle/:id -> ?err
- *     /mission -> available mission 
+ *     /mission -> available mission
  */
 
-function userpassCheck(username, password, callback){
+function userpassCheck (username, password, callback) {
   User.findOne({ username, password }).exec(callback)
 }
-
+function registerSHA (username, password, u) {
+}
 exports.login = (req, res) => {
   const username = req.params.username
   const password = req.params.password
   userpassCheck(username, password, (err, u) => {
     if (err) {
-      res.status(500)
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR)
       console.error(err)
-    }
-    else if (!u) res.send(new Error('wrong username or password').toString())
+    } else if (!u) res.send(new Error('wrong username or password').toString())
     else registerSHA(username, password, u)
   })
 }

@@ -11,7 +11,7 @@ const protectedController = require('../controllers/protectedController')
  *     /quit -> ?err
  *     /enter/:id -> ?err
  *     /battle/:id -> ?err
- *     /mission -> available mission 
+ *     /mission -> available mission
  */
 
 /* GET users listing. */
