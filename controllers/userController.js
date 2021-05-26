@@ -8,7 +8,7 @@ const client = require('../lib/client')
  *    /signup/:username/:password -> ?err
  */
 function usernameAvailable (username, callback) {
-  User.findOne({ username }).exec(callback)
+  User.findOne({ username }, callback)
 }
 function newUser (user, callback) {
   const newUser = new User(user)
@@ -16,17 +16,13 @@ function newUser (user, callback) {
 }
 exports.username = (req, res) => {
   const username = req.params.username
-  usernameAvailable(username, (err, u) => {
+  usernameAvailable(username, (err, user) => {
     if (err) client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR, true)
-    else res.send(!u)
+    else client.send(res, !user)
   })
 }
 exports.signup = (req, res) => {
   const username = req.params.username
   const password = req.params.password
-  usernameAvailable(username, (err, u) => {
-    if (err) client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR)
-    else if (u) client.error(res, new Error('usernmae already exists'), StatusCodes.FORBIDDEN)
-    else newUser({ username, password }, err => client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR))
-  })
+  newUser({ username, password }, err => client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR))
 }

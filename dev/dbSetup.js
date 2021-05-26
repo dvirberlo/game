@@ -5,14 +5,16 @@ require('dotenv').config()
 const User = require('../models/user')
 
 // mongoose connection setup
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true , useUnifiedTopology: true})
+mongoose.set('useCreateIndex', true)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.on('error', console.error.bind(console, 'MongpDB connection error:'))
 
 // because program is ansyc:
-console.log('NOTE: terminate the program when you see its done (all "saved")')
+console.log('NOTE: terminate the program when you see its done')
 
 // createUser({username: 'user', password: 'pass'})
-printUsers()
+// printUsers()
+printUsersAtr('authTokens')
 
 function createUser (user) {
   // costumize your users carefully: there is no duplication check here!
@@ -26,5 +28,11 @@ function printUsers () {
   User.find({}).exec((err, arr) => {
     if (err) console.error(err)
     else console.log(arr)
+  })
+}
+function printUsersAtr (atr) {
+  User.find({}).exec((err, arr) => {
+    if (err) console.error(err)
+    else for (const user of arr) console.log(user[atr])
   })
 }

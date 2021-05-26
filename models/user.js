@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
 
 const UserSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  sha: String,
+  username: { type: String, required: true, index: { unique: true } },
+  password: { type: String, required: true },
+  authTokens: [
+    { token: String, expires: Number }
+  ],
   xp: { type: Number, default: 0 },
   resources: {
     lights: { type: Number, default: 10 },

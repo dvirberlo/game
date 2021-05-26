@@ -8,11 +8,12 @@ require('dotenv').config()
 
 const indexRouter = require('./routes/index')
 const userRouter = require('./routes/user')
-// const protectedRouter = require('./routes/protected')
+const protectedRouter = require('./routes/protected')
 
 const app = express()
 
 // mongoose connection setup
+mongoose.set('useCreateIndex', true)
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.connection.on('error', console.error.bind(console, 'MongpDB connection error:'))
 
@@ -28,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
 app.use('/user', userRouter)
-// app.use('/protected', protectedRouter)
+app.use('/protected', protectedRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
