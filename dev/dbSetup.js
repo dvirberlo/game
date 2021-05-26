@@ -13,8 +13,8 @@ mongoose.connection.on('error', console.error.bind(console, 'MongpDB connection 
 console.log('NOTE: terminate the program when you see its done')
 
 // createUser({username: 'user', password: 'pass'})
-// printUsers()
-printUsersAtr('authTokens')
+printUsers()
+// printUsersAtr('authTokens')
 
 function createUser (user) {
   // costumize your users carefully: there is no duplication check here!
@@ -32,7 +32,6 @@ function printUsers () {
 }
 function printUsersAtr (atr) {
   User.find({}).exec((err, arr) => {
-    if (err) console.error(err)
-    else for (const user of arr) console.log(user[atr])
+    if (!err) for (const user of arr) console.log(user.username + ':' + user[atr])
   })
 }

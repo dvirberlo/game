@@ -24,5 +24,5 @@ exports.username = (req, res) => {
 exports.signup = (req, res) => {
   const username = req.params.username
   const password = req.params.password
-  newUser({ username, password }, err => client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR))
+  newUser({ username, password }, err => client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR, true))
 }

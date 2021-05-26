@@ -5,7 +5,7 @@ const crypto = require('crypto')
 const client = require('../lib/client')
 /** Protected Controller
  * /protected
- *   /login/:username/:password -> id
+ *   /login/:username/:password/:remeber -> id
  *   /:username
  *     / -> data
  *     /move/:des -> ?err
@@ -23,8 +23,11 @@ const generateAuthToken = (bytes = 30) => {
 }
 function registerAuthToken (user, req, res) {
   const token = generateAuthToken()
-  const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 12)
-  user.authTokens.push({ token, expires })
+  const expiresDefault = 1000 * 60 * 60 * 6
+  const remember = req.params.remember === 'true' ? 1000 * 60 * 60 * 24 * 30 * 12 : 0 
+  const expires = remember ? new Date(Date.now() + remember) : false
+  const expiresTime = remember || expiresDefault
+  user.authTokens.push({ token })
   user.save(err => {
     if (err) client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR, true)
     else {
@@ -37,8 +40,7 @@ exports.login = (req, res) => {
   const username = req.params.username
   const password = req.params.password
   userpassCheck(username, password, (err, user) => {
-    if (err) client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR, true)
-    else if (!user) client.error(res, new Error('wrong username or password'))
+    if (err || !user) client.multiError(res, err, StatusCodes.INTERNAL_SERVER_ERROR, new Error('wrong username or password'), StatusCodes.FORBIDDEN)
     else registerAuthToken(user, req, res)
   })
 }
