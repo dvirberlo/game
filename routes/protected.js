@@ -3,7 +3,7 @@ const router = express.Router()
 
 const protectedController = require('../controllers/protectedController')
 /** Protected Controller
- * /protected
+ * /protected .use(authCheck)
  *   /login/:username/:password/:remember -> id
  *   /:username
  *     / -> data
@@ -15,6 +15,8 @@ const protectedController = require('../controllers/protectedController')
  */
 
 /* GET users listing. */
+// router.use('/:username', protectedController.authCheck)
+
 router.get('/login/:username/:password/:remember', protectedController.login)
 
 module.exports = router
