@@ -15,7 +15,7 @@ const app = express()
 // mongoose connection setup
 mongoose.set('useCreateIndex', true)
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-mongoose.connection.on('error', console.error.bind(console, 'MongpDB connection error:'))
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error: '))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))

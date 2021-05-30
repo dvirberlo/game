@@ -1,4 +1,4 @@
-const { StatusCodes } = require('http-status-codes')
+const createError = require('http-errors')
 const User = require('../models/user')
 const client = require('../lib/client')
 
@@ -14,15 +14,18 @@ function newUser (user, callback) {
   const newUser = new User(user)
   newUser.save(callback)
 }
-exports.username = (req, res) => {
+exports.username = (req, res, next) => {
   const username = req.params.username
   usernameAvailable(username, (err, user) => {
-    if (err) client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR, true)
-    else client.send(res, !user)
+    if (err) return next(createError(err))
+    client.send(res, !user)
   })
 }
-exports.signup = (req, res) => {
+exports.signup = (req, res, next) => {
   const username = req.params.username
   const password = req.params.password
-  newUser({ username, password }, err => client.error(res, err, StatusCodes.INTERNAL_SERVER_ERROR, true))
+  newUser({ username, password }, err => {
+    if (err) return next(createError(err))
+    client.send(res)
+  })
 }
