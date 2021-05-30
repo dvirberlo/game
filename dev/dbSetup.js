@@ -15,8 +15,8 @@ console.log('NOTE: terminate the program when you see its done')
 
 // createUser(User, {username: 'user', password: 'pass'})
 printModel(AuthTokens)
-printModel(User)
-userTokens('60b0ddc89fb70f2770c0c798')
+// printModel(User)
+userTokens('60b39aaac7fa480660bf80d5')
 
 function createUser (Model, doc) {
   const d = new Model(doc)
