@@ -1,22 +1,33 @@
+const crypto = require('crypto')
 const createError = require('http-errors')
 const User = require('../models/user')
+const AuthToken = require('../models/authToken')
 const client = require('../lib/client')
 
 /** User Controller **\
  * /user
  *    /username -> availability
  *    /signup/:username/:password -> ?err
+ *    /login/:username/:password/:remember -> id
  */
-function usernameAvailable (username, callback) {
-  User.findOne({ username }, callback)
+const generateAuthToken = (bytes = 20) => {
+  return crypto.randomBytes(bytes).toString('hex')
 }
-function newUser (user, callback) {
-  const newUser = new User(user)
-  newUser.save(callback)
+function registerAuthToken (user, req, res, next) {
+  const token = generateAuthToken()
+  const remember = req.params.remember === 'true'
+  const expires = remember ? new Date(Date.now() + AuthToken.rememberExpiration) : false
+  const Auth = new AuthToken({ user: user._id, token, remember })
+  Auth.save(err => {
+    if (err) return next(createError(err))
+    res.cookie('AuthToken', token, { expires })
+    res.cookie('UserId', user._id, { expires })
+    client.send(res)
+  })
 }
 exports.username = (req, res, next) => {
   const username = req.params.username
-  usernameAvailable(username, (err, user) => {
+  User.findOne({ username }, (err, user) => {
     if (err) return next(createError(err))
     client.send(res, !user)
   })
@@ -24,8 +35,17 @@ exports.username = (req, res, next) => {
 exports.signup = (req, res, next) => {
   const username = req.params.username
   const password = req.params.password
-  newUser({ username, password }, err => {
+  new User({ username, password }).save(err => {
     if (err) return next(createError(err))
     client.send(res)
+  })
+}
+exports.login = (req, res, next) => {
+  const username = req.params.username
+  const password = req.params.password
+  User.findOne({ username, password }, (err, user) => {
+    if (err) return next(createError(err))
+    if (!user) return next(createError.Forbidden('Wrong username or password'))
+    registerAuthToken(user, req, res, next)
   })
 }
