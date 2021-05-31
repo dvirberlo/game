@@ -3,10 +3,6 @@
     "_id": 0,
     "level": 1,
     "description": "The box was lost. Go take it back!",
-    "map": "map._id",
-    "progress": {
-      "currentCell": 1,
-      "emptyCells": [1]
-    }
+    "map": "map._id"
   }
 ]

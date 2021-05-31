@@ -3,6 +3,8 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
 const User = require('../../models/user')
+const Mission = require('../../models/mission')
+const Map = require('../../models/map')
 const AuthTokens = require('../../models/authToken')
 
 // mongoose connection setup
@@ -13,24 +15,28 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 // because program is ansyc:
 console.log('NOTE: terminate the program when you see its done')
 
-// createUser(User, {username: 'user', password: 'pass'})
-printModel(AuthTokens)
-printModel(User)
+// createModel(M, d)
+// printModel(AuthTokens)
+Mission.find({}).populate('map').exec((err, docs) => {
+  if (err) return false
+  console.log('printModel')
+  for (const doc of docs) console.log(doc.map)
+})
 // userTokens('60b39aaac7fa480660bf80d5')
 
-function createUser (Model, doc) {
+function createModel (Model, doc) {
   const d = new Model(doc)
   d.save(err => {
     if (err) return false
-    console.log('createUser')
-    console.log(`User(${JSON.stringify(doc)}): saved`)
+    console.log('createModel')
+    console.log(`Model(${JSON.stringify(doc)}): saved`)
   })
 }
 function printModel (Model) {
-  Model.find({}).exec((err, arr) => {
+  Model.find({}).exec((err, docs) => {
     if (err) return false
     console.log('printModel')
-    console.log(arr)
+    console.log(docs)
   })
 }
 function userTokens (id) {

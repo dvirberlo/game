@@ -8,6 +8,13 @@
       "gems": 5,
       "flowers": 5
     },
-    "spells": [ 0 ]
+    "spells": [ 0 ],
+    "mission": {
+      "main": "mission._id",
+      "progress": {
+        "currentCell": 1,
+        "emptyCells": [1]
+      }
+    }
   }
 ]
