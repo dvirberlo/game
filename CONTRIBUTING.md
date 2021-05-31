@@ -1,10 +1,7 @@
-# Contributing to Magic Bamba
-right now, i am working on the core of the game, so it is less practical to contribute code.
-but there is a couple of things you can surely contribute:
-- write (and update) code documentation.
-- propose future features.
-- make more of everything: spells, maps, clothes, enemys.
-- start working on future features.
-- propose better: APIs, working methods, designed views, gaming ideas.
+# Contributing to this project
+## Bugs
+Please [create a **detailed** issue](https://github.com/dvirberlo/game/issues) and let me know if you wish to fix it yourself.
+## Ideas
+If you have any ideas for new features or any thing related to this project please take a look at [IDEAS.md](IDEAS.md) and [create an issue](https://github.com/dvirberlo/game/issues) and i will add your idea to the list.
 
-> please check also [checkList.md](/checkList.md) for more information.
+Additionally, if you wish to work on this idea- please let me know.

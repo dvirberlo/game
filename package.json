@@ -1,24 +1,37 @@
 {
-  "name": "a",
-  "version": "0.3.0",
-  "description": "An adventure game",
-  "engines": {
-    "node": "12.x"
-  },
-  "main": "index.js",
+  "name": "game",
+  "version": "0.7.5",
+  "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node ./bin/www",
+    "devstart": "nodemon ./bin/www",
+    "devdb": "node ./dev/db/"
   },
   "dependencies": {
-    "express": "^4.15.2",
-    "ws": "^3.3.0",
-    "ejs": "^3.0.0",
-    "mongodb": "^3.6.0"
+    "cookie-parser": "^1.4.5",
+    "debug": "^4.3.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "http-errors": "^1.8.0",
+    "mongoose": "^5.12.11",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
   },
-  "keywords": [
-    "magic",
-    "bamba",
-    "game"
-  ],
-  "license": ""
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "author": {
+    "name": "Dvir Berlowitz",
+    "url": "https://github.com/dvirberlo",
+    "email": "dvir.berlowitz@hotmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/dvirberlo/game/issues"
+  },
+  "readme": "https://github.com/dvirberlo/game/#readme",
+  "repository": {
+    "url": "https://github.com/dvirberlo/game/",
+    "type": "git"
+  },
+  "icon": "./public/favicon.ico"
 }

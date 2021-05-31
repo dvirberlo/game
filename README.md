@@ -1,40 +1,31 @@
-# magic-bamba
-Core version 0.3.2
+# Game
+version 0.7.5
 ## Description
-Attempt to recreate the beloved game "Bamba in the Magic Kingdom" in HTML5
-
+Adenture game built with Node.js, Express and Love.
+Thanks you MDN for [this helpfull guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)!
 ## Contributing
-You can be really helpfull.
+Please fill free to contribute this project!
 
-> Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
-
-I fill really lonely here :(
+Look at [CONTRIBUTING.md](CONTRIBUTING.md) for more details,
+or [create an issue](https://github.com/dvirberlo/game/issues).
 
 ## Quick start
 [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/downloads) are required.
 ```sh
-git clone https://github.com/dvirberlo/magic-bamba.git
-cd magic-bamba
+git clone https://github.com/dvirberlo/game
+cd game
 npm install
 npm start
 ```
+if you have [nodemon](https://www.npmjs.com/package/nodemon) installed you can use:
+```sh
+npm run devstart
+```
 
-if you want to use the database, you need to create your own mongoDB database and set the MONGODB_URI, MONGODB_DB and MONGODB_COLLECTION at the top of server.js
+Additionally, create .env file and put your mongoDB uri:
+```env
+MONGODB_URI="mongodb+srv://<user>:y<pass>@<path>.mongodb.net/<db>?retryWrites=true&w=majority"
+```
 
 ## Preview
-Strong versions are updated from main branch into [Heroku App](https://magic-bamba.herokuapp.com).
-
-## Langauges
-- server side code:
-    + Node.js
-        * express
-        * MongoDB
-        * ejs engine
-        * WebSocket Server
-- client side code:
-    + html (ejs)
-        * Bootstrap 4
-    + javascript ES6
-        * jQuery
-        * PixiJS 6
-        * WebSocket
+Major versions are updated into [Heroku App](https://dvirberlo-game.herokuapp.com/).

@@ -1,0 +1,20 @@
+[
+  {
+    "username": "user",
+    "password": "pass",
+    "xp": 0,
+    "resources": {
+      "lights": 10,
+      "gems": 5,
+      "flowers": 5
+    },
+    "spells": [ 0 ],
+    "mission": {
+      "missionId": "mission._id",
+      "progress": {
+        "currentCell": 1,
+        "emptyCells": [1]
+      }
+    }
+  }
+]
