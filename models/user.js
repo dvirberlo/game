@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema({
     flowers: { type: Number, default: 5 }
   },
   spells: { type: Array, default: [0] },
-  mission: mongoose.Schema.Types.Mixed
+  mission: { type: mongoose.Schema.Types.ObjectId, ref: 'Mission' }
 })
 
 module.exports = mongoose.model('User', UserSchema)

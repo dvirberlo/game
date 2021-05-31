@@ -6,11 +6,6 @@ const client = require('../lib/client')
 /** Protected Controller
  * /protected (authCheck)
  *   / -> data
- *   /move/:des -> ?err
- *   /quit -> ?err
- *   /enter/:id -> ?err
- *   /battle/:id -> ?err
- *   /mission -> available mission
  */
 exports.authCheck = (req, res, next) => {
   req.UserId = req.cookies.UserId
@@ -18,8 +13,8 @@ exports.authCheck = (req, res, next) => {
   AuthToken.find({ user: req.UserId }, (err, docs) => {
     if (err) return next(createError(err))
     for (const doc of docs) req.auth = req.auth || req.cookies.AuthToken === doc.token
-    if (req.auth) next()
-    else next(createError.Unauthorized())
+    if (!req.auth) return next(createError.Unauthorized())
+    next()
   })
 }
 exports.getData = (req, res, next) => {
