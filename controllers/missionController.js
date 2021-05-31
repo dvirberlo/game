@@ -1,7 +1,7 @@
 const Mission = require('../models/mission')
 const User = require('../models/user')
 const createError = require('http-errors')
-// const client = require('../lib/client')
+const client = require('../lib/client')
 
 /** Mission Controller
  * /mission -> available mission
@@ -14,8 +14,9 @@ const createError = require('http-errors')
 exports.getMission = (req, res, next) => {
   User.findById(req.UserId, { level: 1 }, (err, doc) => {
     if (err) return next(createError(err))
-    Mission.findOne({ level: doc.level }, (err, doc) => {
+    Mission.findOne({ level: doc.level }, { _id: 0, __v: 0 }, (err, doc) => {
       if (err) return next(createError(err))
+      client.send(res, doc)
     })
   })
 }
