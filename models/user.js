@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
   },
   spells: { type: Array, default: [0] },
   mission: {
-    main: { type: mongoose.Schema.Types.ObjectId, ref: 'Mission' },
+    missionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Mission' },
     progress: { type: ProgressSchema }
   }
 })

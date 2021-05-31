@@ -17,10 +17,10 @@ console.log('NOTE: terminate the program when you see its done')
 
 // createModel(M, d)
 // printModel(AuthTokens)
-Mission.find({}).populate('map').exec((err, docs) => {
+Mission.find({}, { map: 1 }).populate('map').exec((err, docs) => {
   if (err) return false
   console.log('printModel')
-  for (const doc of docs) console.log(doc.map)
+  for (const doc of docs) console.log(doc)
 })
 // userTokens('60b39aaac7fa480660bf80d5')
 

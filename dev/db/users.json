@@ -10,7 +10,7 @@
     },
     "spells": [ 0 ],
     "mission": {
-      "main": "mission._id",
+      "missionId": "mission._id",
       "progress": {
         "currentCell": 1,
         "emptyCells": [1]
