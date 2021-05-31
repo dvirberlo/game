@@ -1,6 +1,6 @@
 {
-  "name": "magicbamba",
-  "version": "0.7.4",
+  "name": "game",
+  "version": "0.7.5",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -26,11 +26,11 @@
     "email": "dvir.berlowitz@hotmail.com"
   },
   "bugs": {
-    "url": "https://github.com/dvirberlo/magic-bamba/issues"
+    "url": "https://github.com/dvirberlo/game/issues"
   },
-  "readme": "https://github.com/dvirberlo/magic-bamba/#readme",
+  "readme": "https://github.com/dvirberlo/game/#readme",
   "repository": {
-    "url": "https://github.com/dvirberlo/magic-bamba/",
+    "url": "https://github.com/dvirberlo/game/",
     "type": "git"
   },
   "icon": "./public/favicon.ico"
