@@ -1,31 +1,27 @@
+mixin navPage(path, name, icon)
+  li.nav-item(class=view===name?'active':'')
+        a.nav-link(href=path)
+          i.bi(class='bi-'+icon)
+          |  #{name}
+mixin navDetail(name, text, icon)
+  li.nav-item.navbar-text.mx-1(class='text-'+text)
+    i.bi(class='bi-'+icon)
+    span(id=name)  ?
+
 // nav start
 nav#navbar.navbar.sticky-top.navbar-expand.navbar-dark.bg-dark.fixed-top
   .collapse.navbar-collapse
     ul.mr-auto.navbar-nav
-      li.nav-item(class=view==='index'?'active':'')
-        a.nav-link(href='/')
-          i.bi.bi-house
-          |  Home
-      li.nav-item(class=view==='game'?'active':'')
-        a.nav-link(href='/game')
-          i.bi.bi-play-circle
-          |  Game
-      li.nav-item
-        a.nav-link(href='https://github.com/dvirberlo/magic-bamba' target='_blank')
-          i.bi.bi-cloud-download
-          |  Source on GitHub
+      +navPage('/', 'index', 'house')
+      +navPage('/enter', 'enter', 'door-open')
+      +navPage('/game', 'game', 'play-circle')
+      +navPage('https://github.com/dvirberlo/magic-bamba', 'Source on GitHub', 'cloud-download')
     // nav details
     if view==='game'
       ul#navDetails.navbar-nav(style='display: none;')
-        li.nav-item.navbar-text.mx-1.text-warning
-          i.bi.bi-lightbulb
-          span#navLights  ?
-        li.nav-item.navbar-text.mx-1.text-info
-          i.bi.bi-gem
-          span#navGems  ?
-        li.nav-item.navbar-text.mx-1.text-danger
-          i.bi.bi-flower1
-          span#navFlowers  ?
+        +navDetail('light', 'warning', 'lightbulb')
+        +navDetail('gem', 'info', 'gem')
+        +navDetail('flower', 'danger', 'flower1')
         li.nav-item.navbar-text.ml-3
           i.bi.bi-person-fill
           span#navXp  ?
