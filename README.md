@@ -5,7 +5,7 @@ Adenture game built with Node.js, Express and Love.
 
 Thanks you MDN for [this helpfull guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)!
 ## Contributing
-Please fill free to contribute this project!
+Please feel free to contribute this project!
 
 Look at [CONTRIBUTING.md](CONTRIBUTING.md) for more details,
 or [create an issue](https://github.com/dvirberlo/game/issues).
@@ -30,3 +30,8 @@ MONGODB_URI="mongodb+srv://<user>:y<pass>@<path>.mongodb.net/<db>?retryWrites=tr
 
 ## Preview
 Major versions are updated into [Heroku App](https://dvirberlo-game.herokuapp.com/).
+
+## License
+Feel free to take it all and use this project as anything you can think.
+
+However, i would appreciate if you would let me know first...
