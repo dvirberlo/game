@@ -1,7 +1,6 @@
 const User = require('../models/user')
 const AuthToken = require('../models/authToken')
 const createError = require('http-errors')
-const client = require('../lib/client')
 
 /** Protected Controller
  * /protected (authCheck)
@@ -20,6 +19,6 @@ exports.authCheck = (req, res, next) => {
 exports.getData = (req, res, next) => {
   User.findById(req.UserId, { _id: 0, __v: 0, password: 0 }, (err, doc) => {
     if (err) return next(createError(err))
-    client.send(res, doc)
+    res.json(doc)
   })
 }
