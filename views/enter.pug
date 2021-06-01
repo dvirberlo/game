@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  // signup_login
+  .container.pt-1.pt-sm-3.pt-md-5
+    .row
+      // signup
+      form#signup.col-sm.container.m-1.p-3.p-lg-4.border.border-primary.rounded
+        p Sign Up
+        .form-group
+          label(for='signupUsername') Username
+          input#signupUsername.form-control(type='text' placeholder='Username')
+          small#signupUsernameStatus.form-text
+            i#signupUsernameIcon
+            b#signupUsernameBold
+            span#signupUsernameText
+        .form-group
+          label(for='signupPassword') Password
+          input#signupPassword.form-control(type='password' placeholder='Password')
+        button#signupBtn.btn.btn-outline-primary(type='button') Sign Up
+      // login
+      form#login.col-sm.container.m-1.p-3.p-lg-4.border.border-primary.rounded
+        p Log In
+        .form-group
+          label(for='loginUsername') Username
+          input#loginUsername.form-control(type='text' placeholder='Username')
+        .form-group
+          label(for='loginPassword') Password
+          input#loginPassword.form-control(type='password' placeholder='Password')
+        button#loginBtn.btn.btn-primary(type='button') Login
+        small#loginFormError.form-text.text-danger
+  script(src='/javascripts/enter/login.js')
+  script(src='/javascripts/enter/signup.js')
