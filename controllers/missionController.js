@@ -1,7 +1,6 @@
 const Mission = require('../models/mission')
 const User = require('../models/user')
 const createError = require('http-errors')
-const client = require('../lib/client')
 
 /** Mission Controller
  * /mission -> available mission
@@ -15,7 +14,7 @@ exports.details = (req, res, next) => {
     if (err) return next(createError(err))
     Mission.findOne({ level: Math.round(user.xp / 100) }, { __v: 0 }, (err, doc) => {
       if (err) return next(createError(err))
-      client.send(res, doc)
+      res.json(doc)
     })
   })
 }
@@ -26,7 +25,7 @@ exports.enter = (req, res, next) => {
     doc.mission = { missionId, progress: { currentCell: 0, emptyCells: [0] } }
     doc.save(err => {
       if (err) return next(createError(err))
-      client.send(res)
+      res.json(null)
     })
   })
 }
@@ -36,7 +35,7 @@ exports.quit = (req, res, next) => {
     doc.mission = null
     doc.save(err => {
       if (err) return next(createError(err))
-      client.send(res)
+      res.json(null)
     })
   })
 }
@@ -49,7 +48,7 @@ exports.move = (req, res, next) => {
     if (!doc.mission.progress.emptyCells.includes(currentCell)) doc.mission.progress.emptyCells.push(currentCell)
     doc.save(err => {
       if (err) return next(createError(err))
-      client.send(res)
+      res.json(null)
     })
   })
 }
