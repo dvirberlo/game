@@ -2,7 +2,6 @@ const crypto = require('crypto')
 const createError = require('http-errors')
 const User = require('../models/user')
 const AuthToken = require('../models/authToken')
-const client = require('../lib/client')
 
 /** User Controller **\
  * /user
@@ -22,14 +21,14 @@ function registerAuthToken (user, req, res, next) {
     if (err) return next(createError(err))
     res.cookie('AuthToken', token, { expires })
     res.cookie('UserId', user._id, { expires })
-    client.send(res)
+    res.json(null)
   })
 }
 exports.username = (req, res, next) => {
   const username = req.params.username
   User.findOne({ username }, (err, user) => {
     if (err) return next(createError(err))
-    client.send(res, !user)
+    res.json(!user)
   })
 }
 exports.signup = (req, res, next) => {
@@ -37,7 +36,7 @@ exports.signup = (req, res, next) => {
   const password = req.params.password
   new User({ username, password }).save(err => {
     if (err) return next(createError(err))
-    client.send(res)
+    res.json(null)
   })
 }
 exports.login = (req, res, next) => {
