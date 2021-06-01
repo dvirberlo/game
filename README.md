@@ -1,7 +1,7 @@
 # Game
 version 0.7.5
 ## Description
-Adenture game built with Node.js, Express and Love.
+Adenture game built with Node.js, Express and Love :heart:.
 
 Thanks you MDN for [this helpfull guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)!
 ## Contributing
