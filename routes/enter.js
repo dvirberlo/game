@@ -12,7 +12,7 @@ router.get('/login', function (req, res, next) {
 })
 /* GET signup page. */
 router.get('/signup', function (req, res, next) {
-  res.render('signup', { view: 'enter' })
+  res.render('signup', { view: 'enter', error: req.query.error })
 })
 
 /* GET enter listing. */

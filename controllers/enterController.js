@@ -32,11 +32,11 @@ exports.username = (req, res, next) => {
   })
 }
 exports.signup = (req, res, next) => {
-  const username = req.params.username
-  const password = req.params.password
+  const username = req.query.username
+  const password = req.query.password
   new User({ username, password }).save(err => {
     if (err) return next(createError(err))
-    res.json(null)
+    res.redirect('../login')
   })
 }
 exports.login = (req, res, next) => {
