@@ -14,37 +14,37 @@ const generateAuthToken = (bytes = 20) => {
 }
 function registerAuthToken (user, req, res, next) {
   const token = generateAuthToken()
-  const remember = req.params.remember === 'true'
+  const remember = req.query.remember !== 'false'
   const expires = remember ? new Date(Date.now() + AuthToken.rememberExpiration) : false
   const Auth = new AuthToken({ user: user._id, token, remember })
   Auth.save(err => {
     if (err) return next(createError(err))
     res.cookie('AuthToken', token, { expires })
     res.cookie('UserId', user._id, { expires })
-    res.json(null)
+    res.redirect('/game')
   })
 }
 exports.username = (req, res, next) => {
-  const username = req.params.username
+  const username = req.query.username
   User.findOne({ username }, (err, user) => {
     if (err) return next(createError(err))
     res.json(!user)
   })
 }
 exports.signup = (req, res, next) => {
-  const username = req.params.username
-  const password = req.params.password
+  const username = req.query.username
+  const password = req.query.password
   new User({ username, password }).save(err => {
     if (err) return next(createError(err))
-    res.json(null)
+    res.redirect('../login')
   })
 }
 exports.login = (req, res, next) => {
-  const username = req.params.username
-  const password = req.params.password
+  const username = req.query.username
+  const password = req.query.password
   User.findOne({ username, password }, (err, user) => {
     if (err) return next(createError(err))
-    if (!user) return next(createError.Forbidden('Wrong username or password'))
+    if (!user) return res.redirect('/enter/login?error=Wrong username or password')
     registerAuthToken(user, req, res, next)
   })
 }

@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .container.pt-1.pt-sm-3.pt-md-5
+    form#signup.col-sm.container.m-1.p-3.p-lg-4.border.border-primary.rounded(action='/enter/form/signup')
+      p Sign Up
+      .form-group
+        label(for='username') Username
+        input#username.form-control(type='text' placeholder='Username' name='username')
+        small#usernameStatus.form-text
+          i#icon
+          b#name
+          span#message
+      .form-group
+        label(for='password') Password
+        input#password.form-control(type='password' placeholder='Password' name='password')
+      button.btn.btn-primary Sign Up
+      label#error.form-text.text-danger= error
+      .form-group
+        | Already have an account? 
+        a.ml-auto.mr-0(href='./login') Log In
+  script(src='/javascripts/enter/signup.js')
