@@ -1,16 +1,26 @@
 'use strict'
 
 // ;(function () {
-const scripts = {}
-const getPath = (file) => `/javascripts/${file}.js`
-const files = ['manager', 'client', 'pixi', 'mission']
-for (const script of files) $.getScript(getPath(script), () => scriptLoaded(script))
+const $username = $('#username')
+const $status = $('#usernameStatus')
 
-function scriptLoaded (script) {
-  // make each script from global variable(window.script) to local variable(scripts[script])
-  scripts[script] = window[script]
-  delete window[script]
-  files.splice(files.indexOf(script), 1)
-  if (files.length === 0) scripts.manager.start(scripts)
+$username.bind('input', () => getStatus($username.val()))
+
+function getStatus (username) {
+  setStatus('warning', 'arrow-repeat', username, 'checking availability...')
+  $.ajax({ url: './username', data: { username } }).done(res => {
+    console.log(res)
+    if (username !== $username.val()) return false
+    if (res === false) return setStatus('danger', 'emoji-frown', username, 'is unavailabe.')
+    setStatus('success', 'emoji-smile', username, 'is availabe!')
+  })
+}
+function setStatus (color, icon, username, message) {
+  for (const ele of $status.children()) $(ele).removeClass()
+  $status.removeClass()
+  $status.addClass(['form-text', 'text-' + color])
+  $status.children('#icon').addClass(['bi', 'bi-' + icon])
+  $status.children('#name').text(username)
+  $status.children('#message').text(' - ' + message)
 }
 // })()

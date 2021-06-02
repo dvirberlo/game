@@ -3,14 +3,21 @@ const router = express.Router()
 
 const enterController = require('../controllers/enterController')
 
-/* GET enter page. */
+/* GET login page. */
 router.get('/', function (req, res, next) {
-  res.render('enter', { view: 'enter' })
+  res.redirect('/enter/login')
+})
+router.get('/login', function (req, res, next) {
+  res.render('login', { view: 'enter' })
+})
+/* GET signup page. */
+router.get('/signup', function (req, res, next) {
+  res.render('signup', { view: 'enter' })
 })
 
 /* GET enter listing. */
-router.get('/username/:username', enterController.username)
-router.get('/login/:username/:password/:remember', enterController.login)
-router.get('/signup/:username/:password', enterController.signup)
+router.get('/username/', enterController.username)
+router.get('/form/login', enterController.login)
+router.get('/form/signup', enterController.signup)
 
 module.exports = router

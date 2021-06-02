@@ -25,7 +25,7 @@ function registerAuthToken (user, req, res, next) {
   })
 }
 exports.username = (req, res, next) => {
-  const username = req.params.username
+  const username = req.query.username
   User.findOne({ username }, (err, user) => {
     if (err) return next(createError(err))
     res.json(!user)
