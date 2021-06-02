@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
   res.redirect('/enter/login')
 })
 router.get('/login', function (req, res, next) {
-  res.render('login', { view: 'enter' })
+  res.render('login', { view: 'enter', error: req.query.error })
 })
 /* GET signup page. */
 router.get('/signup', function (req, res, next) {
