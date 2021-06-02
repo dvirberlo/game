@@ -1,14 +1,27 @@
 'use strict'
 /**
  * plan: (UPPERCASE means /javascripts/uppercase.js)
- * (GAME ->)
- * MANAGER ->
- * CLIENT.login -<   MANAGER
- *   err: LOGIN, SIGNUP -> CLIENT.login/signup : -< MANAGER
- *   : MISSION
+ * LOADER ->
+ *   MANAGER ->
+ *     HOME -<
+ *   MANAGR ->
+ *     PIXI -<
+ *   MANAGER ->
+ *   ...
  */
-window.manager = {
-  start: (scripts) => {
-    console.log(scripts)
+// ;(function () {
+window.manager = { start }
+function start (scripts) {
+  getData(res => {
+    scripts.nav.update(res)
+    showHome(scripts)
+  })
+
+  function getData (callback) {
+    $.ajax('/protected').done(callback).fail(() => { window.location.href = '/enter' })
+  }
+  function showHome (scripts) {
+    scripts.home.show(scripts, mission => scripts.mission.show(scripts, showHome))
   }
 }
+// })()

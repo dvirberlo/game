@@ -1,6 +1,5 @@
 'use strict'
 
-window.pixi = {
-  start: () => {
-  }
-}
+window.pixi = {}
+
+// TODO

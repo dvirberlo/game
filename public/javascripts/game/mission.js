@@ -1,6 +1,7 @@
 'use strict'
 
-window.mission = {
-  start: () => {
-  }
+window.mission = { show }
+
+function show (script, showHome) {
+  // TODO
 }

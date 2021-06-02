@@ -1,9 +1,10 @@
 extends layout
 
 block content
-  #home.container
+  #main.container
+    #home
     #mission
-      span#missionText
-      button#enterMission.btn.btn-primary  Enter Mission
-      button#anotherMission.btn.btn-secondary Another Mission
-      script(src='/javascripts/game/loader.js')
+        span#missionText
+        button#enterMission.btn.btn-primary  Enter Mission
+        button#anotherMission.btn.btn-secondary Another Mission
+        script(src='/javascripts/game/loader.js')
