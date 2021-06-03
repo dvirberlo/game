@@ -1,11 +1,16 @@
 extends layout
 
 block content
-  // canvas div
-  #game.text-center
-  #gameHome
-    #mission
-      span#missionText
-      button#enterMission.btn.btn-primary  Enter Mission
-      button#anotherMission.btn.btn-secondary Another Mission
-      script(src='/javascripts/game.js')
+  #main.container
+    #home.row
+      #mission.col.border.rounded.p-3
+          span#missionText
+          .container.row
+            button#missionEnter.btn.btn-primary.m-1.col  Enter Mission
+            button#missionAnother.btn.btn-secondary.m-1.col Another Mission
+      #else.col.border.rounded.p-2
+    #map
+      #mapPixi
+      #mapMenu.row
+        button#mapQuit.btn.btn-danger.col Quit
+  script(src='/javascripts/game/loader.js')

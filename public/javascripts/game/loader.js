@@ -2,8 +2,8 @@
 
 // ;(function () {
 const scripts = {}
-const getPath = (file) => `/javascripts/${file}.js`
-const files = ['manager', 'client', 'pixi', 'mission']
+const getPath = (file) => `/javascripts/game/${file}.js`
+const files = ['manager', 'home', 'nav', 'mission', 'map']
 for (const script of files) $.getScript(getPath(script), () => scriptLoaded(script))
 
 function scriptLoaded (script) {
