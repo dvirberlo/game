@@ -3,25 +3,25 @@
  * plan: (UPPERCASE means /javascripts/uppercase.js)
  * LOADER ->
  *   MANAGER ->
- *     HOME -<
+ *     NAV, HOME -<
  *   MANAGR ->
- *     PIXI -<
+ *     MAP -<
  *   MANAGER ->
  *   ...
  */
 // ;(function () {
 window.manager = { start }
 function start (scripts) {
-  getData(res => {
-    scripts.nav.update(res)
-    showHome(scripts)
+  getData(data => {
+    scripts.nav.update(data)
+    showHome()
   })
 
   function getData (callback) {
     $.ajax('/protected').done(callback).fail(() => { window.location.href = '/enter' })
   }
-  function showHome (scripts) {
-    scripts.home.show(scripts, mission => scripts.mission.show(scripts, showHome))
+  function showHome () {
+    scripts.home.show(scripts, mission => scripts.map.show(scripts, mission, showHome))
   }
 }
 // })()
