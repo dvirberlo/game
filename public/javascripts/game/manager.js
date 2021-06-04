@@ -11,6 +11,7 @@
  */
 // ;(function () {
 window.manager = { start }
+
 function start (scripts) {
   getData(data => {
     scripts.nav.update(data)

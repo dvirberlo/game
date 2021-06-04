@@ -1,8 +1,9 @@
 'use strict'
 
+// ;(function () {
 const $map = $('#map')
 const $roll = $map.find('#mapRoll')
-let homeCallback, mapMove
+let homeCallback, mapCube
 let app
 setup()
 
@@ -25,14 +26,16 @@ function setup () {
   }
   function roll () {
     $roll.prop('disabled', true)
-    const move = Math.floor(Math.random() * 6) + 1
-    $map.find('#mapCube').text(move)
-    mapMove(move)
+    const steps = Math.floor(Math.random() * 6) + 1
+    $map.find('#mapCube').text(steps)
+    mapCube(steps)
   }
 }
 function show (scripts, mission, showHome) {
   homeCallback = showHome
+  console.log(mission)
   $map.show()
-  mapMove = move => {
+  mapCube = move => {
   }
 }
+// })()

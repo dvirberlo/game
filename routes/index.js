@@ -5,6 +5,7 @@ const router = express.Router()
 router.get('/', function (req, res, next) {
   res.render('index', { view: 'index' })
 })
+
 /* GET game page. */
 router.get('/game', function (req, res, next) {
   res.render('game', { view: 'game' })
