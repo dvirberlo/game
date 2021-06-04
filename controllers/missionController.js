@@ -8,11 +8,13 @@ const createError = require('http-errors')
  *   /quit -> ?err
  *   /move/:currentCell -> ?err
  */
-// req.UserId
+function getLevel (xp) {
+  return Math.round(xp / 100) + 1
+}
 exports.details = (req, res, next) => {
   User.findById(req.UserId, { xp: 1 }, (err, user) => {
     if (err) return next(createError(err))
-    Mission.findOne({ level: Math.round(user.xp / 100) }, { __v: 0 }, (err, doc) => {
+    Mission.findOne({ level: getLevel(user.xp) }, { __v: 0 }, (err, doc) => {
       if (err) return next(createError(err))
       res.json(doc)
     })
