@@ -1,7 +1,8 @@
 'use strict'
 
 const $map = $('#map')
-let homeCallback
+const $roll = $map.find('#mapRoll')
+let homeCallback, mapMove
 let app
 setup()
 
@@ -9,6 +10,7 @@ window.map = { show }
 
 function setup () {
   $map.find('#mapQuit').click(quit)
+  $roll.click(roll)
 
   app = new window.PIXI.Application()
   $map.find('#mapPixi').append(app.view)
@@ -21,8 +23,16 @@ function setup () {
       homeCallback()
     })
   }
+  function roll () {
+    $roll.prop('disabled', true)
+    const move = Math.floor(Math.random() * 6) + 1
+    $map.find('#mapCube').text(move)
+    mapMove(move)
+  }
 }
 function show (scripts, mission, showHome) {
   homeCallback = showHome
   $map.show()
+  mapMove = move => {
+  }
 }
