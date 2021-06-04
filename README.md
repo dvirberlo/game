@@ -30,7 +30,7 @@ DEBUG = app:*
 ```
 
 ## Preview
-Major versions are updated into [Heroku App](https://dvirberlo-game.herokuapp.com/).
+Minor versions are updated into [Heroku App](https://dvirberlo-game.herokuapp.com/).
 
 ## License
 Feel free to take it all and use this project as anything you can think.
