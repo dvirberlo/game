@@ -1,5 +1,6 @@
 const Mission = require('../models/mission')
 const User = require('../models/user')
+require('../models/map')
 const createError = require('http-errors')
 
 /** Mission Controller
@@ -22,12 +23,15 @@ exports.details = (req, res, next) => {
 }
 exports.enter = (req, res, next) => {
   const missionId = req.params.missionId
-  User.findById(req.UserId, { mission: 1 }, (err, doc) => {
+  User.findById(req.UserId, { mission: 1 }, (err, user) => {
     if (err) return next(createError(err))
-    doc.mission = { missionId, progress: { currentCell: 0, emptyCells: [0] } }
-    doc.save(err => {
+    user.mission = { missionId, progress: { currentCell: 0, emptyCells: [0] } }
+    user.save(err => {
       if (err) return next(createError(err))
-      res.json(null)
+      Mission.findById(missionId).populate('map').exec((err, doc) => {
+        if (err) return next(createError(err))
+        res.json(doc)
+      })
     })
   })
 }

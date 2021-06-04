@@ -5,7 +5,7 @@
 window.mission = { reset }
 
 let mapCallback
-let mission
+let missionId
 const $mission = $('#mission')
 
 setup()
@@ -17,20 +17,20 @@ function reset (script, showMap) {
 }
 
 function setup () {
-  $mission.find('#missionEnter').click(() => {
-    $.ajax('/protected/mission/enter/' + mission._id).done(data => {
-      mapCallback(mission)
-    })
-  })
+  $mission.find('#missionEnter').click(enter)
   $mission.find('#missionAnother').click(another)
+
+  function enter () {
+    $.ajax('/protected/mission/enter/' + missionId).done(data => {
+      mapCallback(data)
+    })
+  }
 }
 function another () {
-  $.ajax('/protected/mission').done(data => {
-    mission = data
-    update()
-  })
+  $.ajax('/protected/mission').done(update)
 }
-function update () {
-  $mission.find('#missionText').text(mission.description)
+function update (data) {
+  missionId = data._id
+  $mission.find('#missionText').text(data.description)
 }
 // })()
