@@ -2,15 +2,6 @@ extends layout
 
 block content
   #main.container
-    #home.row
-      #mission.col.border.rounded.p-3
-          span#missionText
-          .container.row
-            button#missionEnter.btn.btn-primary.m-1.col  Enter Mission
-            button#missionAnother.btn.btn-secondary.m-1.col Another Mission
-      #else.col.border.rounded.p-2
-    #map
-      #mapPixi
-      #mapMenu.row
-        button#mapQuit.btn.btn-danger.col Quit
+    include includes/game/home.pug
+    include includes/game/map.pug
   script(src='/javascripts/game/loader.js')
