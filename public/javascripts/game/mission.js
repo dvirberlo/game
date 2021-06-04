@@ -1,17 +1,14 @@
 'use strict'
 
 // ;(function () {
-
-window.mission = { reset }
-
 let mapCallback
 let missionId
 const $mission = $('#mission')
-
 setup()
 
+window.mission = { reset }
+
 function reset (script, showMap) {
-  $mission.find('#missionText').text('')
   mapCallback = showMap
   another()
 }
@@ -27,10 +24,9 @@ function setup () {
   }
 }
 function another () {
-  $.ajax('/protected/mission').done(update)
-}
-function update (data) {
-  missionId = data._id
-  $mission.find('#missionText').text(data.description)
+  $.ajax('/protected/mission').done(data => {
+    missionId = data._id
+    $mission.find('#missionText').text(data.description)
+  })
 }
 // })()

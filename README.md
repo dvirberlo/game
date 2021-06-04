@@ -1,5 +1,5 @@
 # Game
-version 0.7.5
+version 0.8.0
 ## Description
 Adenture game built with Node.js, Express and Love :heart:.
 
@@ -25,7 +25,8 @@ npm run devstart
 
 Additionally, create .env file and put your mongoDB uri:
 ```env
-MONGODB_URI="mongodb+srv://<user>:y<pass>@<path>.mongodb.net/<db>?retryWrites=true&w=majority"
+MONGODB_URI = "mongodb+srv://<user>:y<pass>@<path>.mongodb.net/<db>?retryWrites=true&w=majority"
+DEBUG = app:*
 ```
 
 ## Preview

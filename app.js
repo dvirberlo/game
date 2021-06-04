@@ -1,14 +1,14 @@
-const createError = require('http-errors')
-const express = require('express')
 const path = require('path')
+const express = require('express')
+const createError = require('http-errors')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+
 const mongoose = require('mongoose')
-require('dotenv').config()
 
 const indexRouter = require('./routes/index')
-const protectedRouter = require('./routes/protected')
 const enterRouter = require('./routes/enter')
+const protectedRouter = require('./routes/protected')
 
 const app = express()
 
