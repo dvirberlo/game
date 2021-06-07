@@ -5,7 +5,7 @@
  *   MANAGER ->
  *     NAV, HOME -<
  *   MANAGR ->
- *     MAP -<
+ *     PIXI -<
  *   MANAGER ->
  *   ...
  */

@@ -4,9 +4,8 @@
 let mapCallback
 let missionId
 const $mission = $('#mission')
-setup()
 
-window.mission = { reset }
+window.mission = { setup, reset }
 
 function reset (script, showMap) {
   mapCallback = showMap

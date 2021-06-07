@@ -3,9 +3,8 @@
 // ;(function () {
 const $pixi = $('#pixi')
 let app
-setup()
 
-window.pixi = { showMap }
+window.pixi = { setup, showMap }
 
 function setup () {
   app = new window.PIXI.Application()
@@ -13,6 +12,7 @@ function setup () {
 
   $pixi.hide()
 }
+
 function showMap (scripts, mission, showHome) {
   scripts.map.show(app, mission, () => {
     $pixi.hide()
