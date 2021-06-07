@@ -1,41 +1,42 @@
 'use strict'
 
 // ;(function () {
-const $map = $('#map')
-const $roll = $map.find('#mapRoll')
+const $mapMenu = $('#map')
 let homeCallback, mapCube
-let app
 setup()
 
 window.map = { show }
 
 function setup () {
-  $map.find('#mapQuit').click(quit)
+  const $roll = $mapMenu.find('#mapRoll')
   $roll.click(roll)
+  $mapMenu.find('#mapQuit').click(quit)
 
-  app = new window.PIXI.Application()
-  $map.find('#mapPixi').append(app.view)
+  $mapMenu.hide()
 
-  $map.hide()
-
-  function quit () {
-    $.ajax('/protected/mission/quit').done(data => {
-      $map.hide()
-      homeCallback()
-    })
-  }
   function roll () {
     $roll.prop('disabled', true)
     const steps = Math.floor(Math.random() * 6) + 1
-    $map.find('#mapCube').text(steps)
+    $mapMenu.find('#mapCube').text(steps)
     mapCube(steps)
   }
+  function quit () {
+    $.ajax('/protected/mission/quit').done(data => {
+      $mapMenu.hide()
+      homeCallback()
+    })
+  }
 }
-function show (scripts, mission, showHome) {
+function show (app, mission, showHome) {
   homeCallback = showHome
   console.log(mission)
-  $map.show()
+  $mapMenu.show()
   mapCube = move => {
+    // TODO
   }
+}
+
+function drawMap (mission) {
+  // TODO
 }
 // })()

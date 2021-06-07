@@ -22,7 +22,7 @@ function start (scripts) {
     $.ajax('/protected').done(callback).fail(() => { window.location.href = '/enter' })
   }
   function showHome () {
-    scripts.home.show(scripts, mission => scripts.map.show(scripts, mission, showHome))
+    scripts.home.show(scripts, mission => scripts.pixi.showMap(scripts, mission, showHome))
   }
 }
 // })()
