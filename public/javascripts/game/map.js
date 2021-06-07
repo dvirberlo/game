@@ -4,7 +4,7 @@
 const $mapMenu = $('#map')
 let homeCallback, mapCube
 
-window.map = { setup, show }
+window.map = { setup, load, show }
 
 function setup () {
   const $roll = $mapMenu.find('#mapRoll')
@@ -25,8 +25,6 @@ function setup () {
       homeCallback()
     })
   }
-
-  PIXI.loader.add('/images/map.json')
 }
 function show (app, mission, showHome) {
   homeCallback = showHome
@@ -38,6 +36,9 @@ function show (app, mission, showHome) {
   }
 }
 
+function load (app) {
+  app.loader.add('/images/map.json') 
+}
 function drawMap (app, mission) {
   // TODO
 }

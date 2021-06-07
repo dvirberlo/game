@@ -4,13 +4,17 @@
 const $pixi = $('#pixi')
 let app
 
-window.pixi = { setup, showMap }
+window.pixi = { setup, postLoad: postLoadFuncs, showMap }
 
 function setup () {
   app = new window.PIXI.Application()
   $pixi.find('#pixiView').append(app.view)
 
   $pixi.hide()
+}
+
+function postLoad (scripts) {
+  scripts.map.load(app)
 }
 
 function showMap (scripts, mission, showHome) {
