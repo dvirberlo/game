@@ -1,10 +1,12 @@
 'use strict'
 
 ;(function () {
-  const $mapMenu = $('#map')
+  const $mapMenu = $('#pixi')
   let homeCallback, mapCube
+  let container
+  let resources
 
-  window.map = { setup, load, show }
+  window.map = { setup, pixiSetup, show }
 
   function setup () {
     const $roll = $mapMenu.find('#mapRoll')
@@ -26,20 +28,28 @@
       })
     }
   }
-  function show (app, mission, showHome) {
+
+  function pixiSetup (app, path, con) {
+    resources = app.loader.resources[path]
+    container = con
+  }
+
+  function show (mission, showHome) {
+    reset()
     homeCallback = showHome
-    console.log(mission)
     $mapMenu.show()
-    drawMap(app, mission)
+    drawMap(mission)
     mapCube = move => {
       // TODO
     }
   }
-
-  function load (app) {
-    app.loader.add('/images/game/map.json') 
+  function reset () {
+    container.removeChildren()
+    $mapMenu.find('#mapCube').text('')
+    $mapMenu.find('#mapRoll').prop('disabled', false)
   }
-  function drawMap (app, mission) {
+  function drawMap (mission) {
     // TODO
+    container.addChild(new PIXI.Sprite(resources.textures['arrow.png']))
   }
 })()

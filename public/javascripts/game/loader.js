@@ -10,10 +10,10 @@
   function scriptLoaded (script) {
     // make each script from global variable(window.script) to local variable(scripts[script])
     scripts[script] = window[script]
-    // delete window[script]
+    delete window[script]
 
     if (typeof scripts[script].setup === 'function') scripts[script].setup()
-    if (typeof scripts[script].allLoaded === 'function') postLoadFuncs.push(scripts[script].allLoaded)
+    if (typeof scripts[script].postLoad === 'function') postLoadFuncs.push(scripts[script].postLoad)
 
     files.splice(files.indexOf(script), 1)
     if (files.length === 0) {

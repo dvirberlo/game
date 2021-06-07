@@ -22,7 +22,8 @@
   },
   "standard": {
     "globals": [
-      "$"
+      "$",
+      "PIXI"
     ]
   },
   "author": {

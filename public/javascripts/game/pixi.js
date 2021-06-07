@@ -3,6 +3,7 @@
 ;(function () {
   const $pixi = $('#pixi')
   let app
+  const containers = {}
 
   window.pixi = { setup, postLoad, showMap }
 
@@ -14,11 +15,22 @@
   }
 
   function postLoad (scripts) {
-    scripts.map.load(app)
+    pixiLoad('map')
+
+    function pixiLoad (name) {
+      const path = `/images/game/${name}.json`
+      app.loader.add(path).load(() => {
+        const con = new PIXI.Container()
+        containers[name] = con
+        scripts[name].pixiSetup(app, path, con)
+      })
+    }
   }
 
   function showMap (scripts, mission, showHome) {
-    scripts.map.show(app, mission, () => {
+    app.stage.addChild(containers.map)
+    scripts.map.show(mission, () => {
+      app.stage.removeChild(containers.map)
       $pixi.hide()
       showHome()
     })
