@@ -2,7 +2,6 @@ const createError = require('http-errors')
 
 const User = require('../models/user')
 const Mission = require('../models/mission')
-require('../models/map')
 
 function getLevel (xp) {
   return Math.round(xp / 100) + 1
@@ -23,7 +22,7 @@ exports.enter = (req, res, next) => {
     user.mission = { missionId, progress: { currentCell: 0, emptyCells: [0] } }
     user.save(error => {
       if (error) return next(createError(error))
-      Mission.findById(missionId).populate('map').exec((error, mission) => {
+      Mission.findById(missionId).exec((error, mission) => {
         if (error) return next(createError(error))
         res.json(mission)
       })

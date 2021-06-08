@@ -18,7 +18,7 @@
     pixiLoad('map')
 
     function pixiLoad (name) {
-      const path = `/images/game/${name}.json`
+      const path = `/images/game/${name}/${name}.json`
       app.loader.add(path).load(() => {
         const con = new PIXI.Container()
         containers[name] = con
