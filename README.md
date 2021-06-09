@@ -1,7 +1,7 @@
 # Game
 version 0.8.0
 ## Description
-Adenture game built with Node.js, Express and Love :heart:.
+Adenture game built with JavaScript(Express.js, Mongoose.js, Pixi.js) and Love :heart:.
 
 Thanks you MDN for [this helpfull guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)!
 ## :heart::heart::heart:Contributing:heart::heart::heart:
