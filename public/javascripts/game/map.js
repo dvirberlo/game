@@ -5,6 +5,7 @@ const $mapMenu = $('#pixi')
 let homeCallback
 let mission
 let loader
+const cellsLoader = {}
 let container
 let resources
 const cells = []
@@ -38,10 +39,9 @@ function pixiSetup (app, path, con) {
   container = con
 }
 
-function show (m, showHome) {
-  reset()
-
-  mission = m
+function show (newMission, showHome = homeCallback) {
+  mission = newMission.mission
+  mission.progress = newMission.progress
   homeCallback = showHome
   $mapMenu.show()
 
@@ -50,23 +50,27 @@ function show (m, showHome) {
   else drawMap(loader.resources[path])
 }
 function reset () {
-  mission = undefined
-  homeCallback = undefined
   container.removeChildren()
   cells.splice(0)
   $mapMenu.find('#mapCube').text('')
   $mapMenu.find('#mapRoll').prop('disabled', false)
 }
 function drawMap (mapResources) {
+  reset()
+
   // background
   const background = new PIXI.Sprite(mapResources.textures['background.png'])
   background.zIndex = -999
   container.addChild(background)
 
   // cells
-  $.getJSON(`/images/game/map/${mission.map}/${mission.map}.cells.json`, data => {
-    $.each(data, (key, cellOpts) => drawCell(cellOpts))
-  })
+  if (!cellsLoader[mission.map]) {
+    $.getJSON(`/images/game/map/${mission.map}/${mission.map}.cells.json`, data => {
+      cellsLoader[mission.map] = data
+      $.each(cellsLoader[mission.map], (key, cellOpts) => drawCell(cellOpts))
+    })
+  } else $.each(cellsLoader[mission.map], (key, cellOpts) => drawCell(cellOpts))
+
   function drawCell (options) {
     const cellCon = new PIXI.Container()
     cells[options.id] = cellCon
@@ -91,6 +95,7 @@ function mapCube (steps) {
   }
 }
 function move (cellId) {
+  $.ajax('/protected/mission/move/' + cellId).done(show)
 }
 function getAllowedCell (steps) {
   const allowed = []
