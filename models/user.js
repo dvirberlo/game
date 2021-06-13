@@ -17,8 +17,8 @@ const UserSchema = new mongoose.Schema({
     flowers: { type: Number, default: 5 }
   },
   spells: { type: Array, default: [0] },
-  mission: {
-    missionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Mission' },
+  currentMission: {
+    mission: { type: mongoose.Schema.Types.ObjectId, ref: 'Mission' },
     progress: { type: ProgressSchema }
   }
 })

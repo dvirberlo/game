@@ -1,0 +1,44 @@
+[
+  {
+    "id": 0,
+    "x": 20,
+    "y": 20,
+    "object": null
+  },
+  {
+    "id": 1,
+    "x": 65,
+    "y": 20,
+    "object": null
+  },
+  {
+    "id": 2,
+    "x": 110,
+    "y": 20,
+    "object": null
+  },
+  {
+    "id": 3,
+    "x": 155,
+    "y": 20,
+    "object": null
+  },
+  {
+    "id": 4,
+    "x": 155,
+    "y": 65,
+    "object": null
+  },
+  {
+    "id": 5,
+    "x": 155,
+    "y": 110,
+    "object": null
+  },
+  {
+    "id": 6,
+    "x": 155,
+    "y": 155,
+    "object": null
+  }
+]
