@@ -64,12 +64,12 @@ function drawMap (mapResources) {
   container.addChild(background)
 
   // cells
-  if (!cellsLoader[mission.map]) {
-    $.getJSON(`/images/game/map/${mission.map}/${mission.map}.cells.json`, data => {
-      cellsLoader[mission.map] = data
-      $.each(cellsLoader[mission.map], (key, cellOpts) => drawCell(cellOpts))
-    })
-  } else $.each(cellsLoader[mission.map], (key, cellOpts) => drawCell(cellOpts))
+  if (!cellsLoader[mission.map]) $.getJSON({ url: `/images/game/map/${mission.map}/${mission.map}.cells.json`, async: false }).done(data => { cellsLoader[mission.map] = data })
+  $.each(cellsLoader[mission.map], (key, cellOpts) => drawCell(cellOpts))
+
+  // player
+  const player = new PIXI.Sprite(resources.textures['player.png'])
+  cells[mission.progress.currentCell].addChild(player)
 
   function drawCell (options) {
     const cellCon = new PIXI.Container()
@@ -87,6 +87,7 @@ function drawMap (mapResources) {
 function mapCube (steps) {
   for (const cellId of getAllowedCell(steps)) {
     const arrow = new PIXI.Sprite(resources.textures['arrow.png'])
+    arrow.anchor.set(-0.5, 0)
     arrow.cellId = cellId
     arrow.interactive = true
     arrow.buttonMode = true
@@ -95,7 +96,7 @@ function mapCube (steps) {
   }
 }
 function move (cellId) {
-  $.ajax('/protected/mission/move/' + cellId).done(show)
+  $.ajax('/protected/mission/move/' + cellId).done(data => show(data))
 }
 function getAllowedCell (steps) {
   const allowed = []
