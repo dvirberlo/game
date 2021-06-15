@@ -4,16 +4,40 @@
       "frame": {
         "x": 0,
         "y": 0,
-        "w": 34,
-        "h": 34
+        "w": 28,
+        "h": 28
       },
       "rotated": false,
       "trimmed": true,
       "spriteSourceSize": {
-        "x": 3,
-        "y": 3,
-        "w": 34,
-        "h": 34
+        "x": 6,
+        "y": 6,
+        "w": 28,
+        "h": 28
+      },
+      "sourceSize": {
+        "w": 40,
+        "h": 40
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "box.png": {
+      "frame": {
+        "x": 0,
+        "y": 28,
+        "w": 27,
+        "h": 27
+      },
+      "rotated": false,
+      "trimmed": true,
+      "spriteSourceSize": {
+        "x": 7,
+        "y": 7,
+        "w": 27,
+        "h": 27
       },
       "sourceSize": {
         "w": 40,
@@ -27,21 +51,21 @@
     "arrow.png": {
       "frame": {
         "x": 0,
-        "y": 34,
+        "y": 55,
         "w": 21,
         "h": 26
       },
       "rotated": false,
-      "trimmed": false,
+      "trimmed": true,
       "spriteSourceSize": {
-        "x": 0,
+        "x": 10,
         "y": 0,
         "w": 21,
         "h": 26
       },
       "sourceSize": {
-        "w": 21,
-        "h": 26
+        "w": 40,
+        "h": 40
       },
       "pivot": {
         "x": 0.5,
@@ -55,8 +79,8 @@
     "image": "map.png",
     "format": "RGBA8888",
     "size": {
-      "w": 34,
-      "h": 60
+      "w": 28,
+      "h": 81
     },
     "scale": 1
   }

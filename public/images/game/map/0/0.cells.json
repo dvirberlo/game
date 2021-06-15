@@ -21,7 +21,10 @@
     "id": 3,
     "x": 155,
     "y": 20,
-    "object": null
+    "object": {
+      "type": "box",
+      "level": 1
+    }
   },
   {
     "id": 4,
