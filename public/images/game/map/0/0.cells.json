@@ -21,10 +21,7 @@
     "id": 3,
     "x": 155,
     "y": 20,
-    "object": {
-      "type": "box",
-      "level": 1
-    }
+    "object": "box"
   },
   {
     "id": 4,

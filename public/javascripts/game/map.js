@@ -81,12 +81,12 @@
 
       // object
       if (options.object && !mission.progress.emptyCells.includes(options.id)) drawObject(options.object)
-      function drawObject (objOptions) {
-        const object = new PIXI.Sprite(resources.textures[objOptions.type + '.png'])
+      function drawObject (objType) {
+        const object = new PIXI.Sprite(resources.textures[objType + '.png'])
         object.zIndex = 1
         cellCon.addChild(object)
 
-        cellCon.object = objOptions
+        cellCon.object = objType
       }
 
       cellCon.x = options.x
