@@ -3,7 +3,7 @@
 ;(function () {
   const scripts = {}
   const getPath = (file) => `/javascripts/game/${file}.js`
-  const files = ['manager', 'pixi', 'home', 'nav', 'mission', 'map']
+  const files = ['manager', 'pixi', 'home', 'nav', 'alert', 'mission', 'map']
   const postLoadFuncs = []
   for (const script of files) $.getScript(getPath(script), () => scriptLoaded(script))
 
