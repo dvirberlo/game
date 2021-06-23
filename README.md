@@ -1,5 +1,5 @@
 # Game
-version 0.8.0
+version 0.8.1
 ## Description
 Adenture game built with JavaScript(Express.js, Mongoose.js, Pixi.js) and Love :heart:.
 
