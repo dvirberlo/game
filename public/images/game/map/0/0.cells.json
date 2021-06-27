@@ -21,7 +21,9 @@
     "id": 3,
     "x": 155,
     "y": 20,
-    "object": "box"
+    "object": {
+      "type":"box"
+    }
   },
   {
     "id": 4,
