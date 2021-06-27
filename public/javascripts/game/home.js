@@ -3,8 +3,8 @@
 ;(function () {
   window.home = { show }
 
-  function show (scripts, showMap) {
-    scripts.mission.reset(scripts, mission => {
+  function show (lib, showMap) {
+    lib.mission.reset(lib, mission => {
       $('#home').hide()
       showMap(mission)
     })

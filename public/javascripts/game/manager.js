@@ -12,9 +12,9 @@
 ;(function () {
   window.manager = { start }
 
-  function start (scripts) {
+  function start (lib) {
     getData(data => {
-      scripts.nav.update(data)
+      lib.nav.update(data)
       showHome()
     })
 
@@ -22,7 +22,7 @@
       $.ajax('/protected').done(callback).fail(() => { window.location.href = '/enter' })
     }
     function showHome () {
-      scripts.home.show(scripts, mission => scripts.pixi.showMap(scripts, mission, showHome))
+      lib.home.show(lib, mission => lib.pixi.showMap(lib, mission, showHome))
     }
   }
 })()

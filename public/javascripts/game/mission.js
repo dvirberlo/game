@@ -7,7 +7,7 @@
 
   window.mission = { setup, reset }
 
-  function reset (script, showMap) {
+  function reset (lib, showMap) {
     mapCallback = showMap
     another()
   }

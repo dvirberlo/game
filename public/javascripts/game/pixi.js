@@ -14,7 +14,7 @@
     $pixi.hide()
   }
 
-  function postLoad (scripts) {
+  function postLoad (lib) {
     pixiLoad('map')
 
     function pixiLoad (name) {
@@ -22,14 +22,14 @@
       app.loader.add(path).load(() => {
         const con = new PIXI.Container()
         containers[name] = con
-        scripts[name].pixiSetup(app, path, con)
+        lib[name].pixiSetup(app, path, con)
       })
     }
   }
 
-  function showMap (scripts, mission, showHome) {
+  function showMap (lib, mission, showHome) {
     app.stage.addChild(containers.map)
-    scripts.map.show(mission, () => {
+    lib.map.show(mission, () => {
       app.stage.removeChild(containers.map)
       $pixi.hide()
       showHome()
