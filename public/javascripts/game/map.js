@@ -1,6 +1,8 @@
 'use strict'
 
 ;(function () {
+  let lib
+
   const $mapMenu = $('#pixi')
   let homeCallback
   let mission
@@ -33,7 +35,8 @@
     }
   }
 
-  function pixiSetup (app, path, con) {
+  function pixiSetup (gLib, app, path, con) {
+    lib = gLib
     loader = app.loader
     resources = app.loader.resources[path]
     container = con
@@ -81,12 +84,12 @@
 
       // object
       if (options.object && !mission.progress.emptyCells.includes(options.id)) drawObject(options.object)
-      function drawObject (objType) {
-        const object = new PIXI.Sprite(resources.textures[objType + '.png'])
+      function drawObject (obj) {
+        const object = new PIXI.Sprite(resources.textures[obj.type + '.png'])
         object.zIndex = 1
         cellCon.addChild(object)
 
-        cellCon.object = objType
+        cellCon.object = obj
       }
 
       cellCon.x = options.x
@@ -105,12 +108,18 @@
       cells[cellId].addChild(arrow)
     }
   }
-  function move (cellId) {
-    $.ajax('/protected/mission/move/' + cellId).done(data => show(data))
-  }
   function getAllowedCell (steps) {
     const allowed = []
     for (const index in cells) if (Math.abs(mission.progress.currentCell - index) === steps) allowed.push(index)
     return allowed
+  }
+  function move (cellId) {
+    const object = cells[cellId].object
+    $.ajax({ url: '/protected/mission/move/' + cellId, data: object }).done(user => {
+      if (object) lib.prompt.object(object)
+
+      lib.nav.update(user)
+      show(user.currentMission)
+    })
   }
 })()

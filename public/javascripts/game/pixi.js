@@ -22,7 +22,7 @@
       app.loader.add(path).load(() => {
         const con = new PIXI.Container()
         containers[name] = con
-        lib[name].pixiSetup(app, path, con)
+        lib[name].pixiSetup(lib, app, path, con)
       })
     }
   }

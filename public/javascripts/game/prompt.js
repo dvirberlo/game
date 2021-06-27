@@ -1,10 +1,10 @@
 'use strict'
 
 ;(function () {
-  window.prompt = { updateResources }
+  window.prompt = { object }
 
-  function updateResources (resources) {
-    window.alert(JSON.stringify(resources))
+  function object (object) {
+    window.alert(JSON.stringify(object))
     // TODO
   }
 })()

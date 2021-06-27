@@ -3,6 +3,8 @@ const createError = require('http-errors')
 const User = require('../models/user')
 const Mission = require('../models/mission')
 
+// TODO validate client moves on map
+
 function getLevel (xp) {
   return Math.round(xp / 100) + 1
 }
@@ -41,14 +43,14 @@ exports.quit = (req, res, next) => {
 }
 exports.move = (req, res, next) => {
   const currentCell = req.params.currentCell
-  User.findById(req.UserId, { currentMission: 1 }).populate('currentMission.mission').exec((error, user) => {
+  User.findById(req.UserId, { currentMission: 1, resources: 1, xp: 1 }).populate('currentMission.mission').exec((error, user) => {
     if (error) return next(createError(error))
     if (!user.currentMission || !user.currentMission.mission || !user.currentMission.progress) return next(createError.Forbidden('No mission found'))
     user.currentMission.progress.currentCell = currentCell
     if (!user.currentMission.progress.emptyCells.includes(currentCell)) user.currentMission.progress.emptyCells.push(currentCell)
     user.save(error => {
       if (error) return next(createError(error))
-      res.json(user.currentMission)
+      res.json(user)
     })
   })
 }
