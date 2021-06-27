@@ -29,7 +29,9 @@
     "id": 4,
     "x": 155,
     "y": 65,
-    "object": null
+    "object": {
+      "type":"enemy"
+    }
   },
   {
     "id": 5,

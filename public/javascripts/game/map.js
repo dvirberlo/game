@@ -5,6 +5,7 @@
 
   const $mapMenu = $('#pixi')
   let homeCallback
+  let arenaCallback
   let mission
   let loader
   const cellsLoader = {}
@@ -42,9 +43,10 @@
     container = con
   }
 
-  function show (newMission, showHome = homeCallback) {
+  function show (newMission, showArena = arenaCallback, showHome = homeCallback) {
     mission = newMission.mission
     mission.progress = newMission.progress
+    arenaCallback = showArena
     homeCallback = showHome
     $mapMenu.show()
 
@@ -116,7 +118,10 @@
   function move (cellId) {
     const object = cells[cellId].object
     $.ajax({ url: '/protected/mission/move/' + cellId, data: object }).done(user => {
-      if (object) lib.prompt.object(object)
+      if (object) {
+        lib.prompt.object(object)
+        if (object.type === 'enemy') arenaCallback(lib, mission, homeCallback)
+      }
 
       lib.nav.update(user)
       show(user.currentMission)
