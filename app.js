@@ -3,6 +3,7 @@ const express = require('express')
 const createError = require('http-errors')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const debug = require('debug')
 
 const mongoose = require('mongoose')
 
@@ -15,7 +16,7 @@ const app = express()
 // mongoose connection setup
 mongoose.set('useCreateIndex', true)
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error: '))
+mongoose.connection.on('error', debug('app:db'))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
