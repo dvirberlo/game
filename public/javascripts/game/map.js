@@ -3,7 +3,7 @@
 ;(function () {
   let lib
 
-  const $mapMenu = $('#pixi')
+  const $bar = $('#mapBar')
   let homeCallback
   let arenaCallback
   let mission
@@ -16,21 +16,20 @@
   window.map = { setup, pixiSetup, show }
 
   function setup () {
-    const $roll = $mapMenu.find('#mapRoll')
+    const $roll = $bar.find('#mapRoll')
     $roll.click(roll)
-    $mapMenu.find('#mapQuit').click(quit)
+    $bar.find('#mapQuit').click(quit)
 
-    $mapMenu.hide()
+    $bar.hide()
 
     function roll () {
       $roll.prop('disabled', true)
       const steps = Math.floor(Math.random() * 6) + 1
-      $mapMenu.find('#mapCube').text(steps)
+      $bar.find('#mapCube').text(steps)
       mapCube(steps)
     }
     function quit () {
       $.ajax('/protected/mission/quit').done(data => {
-        $mapMenu.hide()
         homeCallback()
       })
     }
@@ -48,7 +47,6 @@
     mission.progress = newMission.progress
     arenaCallback = showArena
     homeCallback = showHome
-    $mapMenu.show()
 
     const path = `/images/game/map/${mission.map}/${mission.map}.json`
     if (!loader.resources[path]) loader.add(path).load(() => drawMap(loader.resources[path]))
@@ -57,8 +55,8 @@
   function reset () {
     container.removeChildren()
     cells.splice(0)
-    $mapMenu.find('#mapCube').text('')
-    $mapMenu.find('#mapRoll').prop('disabled', false)
+    $bar.find('#mapCube').text('')
+    $bar.find('#mapRoll').prop('disabled', false)
   }
   function drawMap (mapResources) {
     reset()
@@ -118,12 +116,11 @@
   function move (cellId) {
     const object = cells[cellId].object
     $.ajax({ url: '/protected/mission/move/' + cellId, data: object }).done(user => {
+      lib.nav.update(user)
       if (object) {
         lib.prompt.object(object)
-        if (object.type === 'enemy') arenaCallback(lib, mission, homeCallback)
+        if (object.type === 'enemy') return arenaCallback(lib, mission, homeCallback)
       }
-
-      lib.nav.update(user)
       show(user.currentMission)
     })
   }
