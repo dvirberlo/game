@@ -1,11 +1,13 @@
 'use strict'
 
 ;(function () {
+  const MODULE = 'mission'
+
   let mapCallback
   let missionId
   const $mission = $('#mission')
 
-  window.mission = { setup, reset }
+  window[MODULE] = { setup, reset }
 
   function reset (lib, showMap) {
     mapCallback = showMap

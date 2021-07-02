@@ -1,21 +1,23 @@
 'use strict'
 
 ;(function () {
+  const MODULE = 'map'
+
   let lib
 
-  const $bar = $('#mapBar')
-  let homeCallback
-  let arenaCallback
+  let $bar
   let mission
+  
   let loader
   const cellsLoader = {}
   let container
   let resources
   const cells = []
 
-  window.map = { setup, pixiSetup, show }
+  window[MODULE] = { pixiSetup, show }
 
-  function setup () {
+  function barSetup () {
+    // bar
     const $roll = $bar.find('#mapRoll')
     $roll.click(roll)
     $bar.find('#mapQuit').click(quit)
@@ -30,23 +32,24 @@
     }
     function quit () {
       $.ajax('/protected/mission/quit').done(data => {
-        homeCallback()
+        lib.pixi.exit()
       })
     }
   }
 
-  function pixiSetup (gLib, app, path, con) {
+  function pixiSetup (gLib, app, path, con, bar) {
     lib = gLib
     loader = app.loader
     resources = app.loader.resources[path]
     container = con
+    $bar = bar
+    
+    barSetup()
   }
 
-  function show (newMission, showArena = arenaCallback, showHome = homeCallback) {
+  function show (newMission) {
     mission = newMission.mission
     mission.progress = newMission.progress
-    arenaCallback = showArena
-    homeCallback = showHome
 
     const path = `/images/game/map/${mission.map}/${mission.map}.json`
     if (!loader.resources[path]) loader.add(path).load(() => drawMap(loader.resources[path]))
@@ -119,7 +122,7 @@
       lib.nav.update(user)
       if (object) {
         lib.prompt.object(object)
-        if (object.type === 'enemy') return arenaCallback(lib, mission, homeCallback)
+        if (object.type === 'enemy') return lib.pixi.showArena(mission, object)
       }
       show(user.currentMission)
     })

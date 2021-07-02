@@ -1,7 +1,9 @@
 'use strict'
 
 ;(function () {
-  window.nav = { update }
+  const MODULE = 'nav'
+
+  window[MODULE] = { update }
 
   function update (user) {
     const $details = $('#navDetails')

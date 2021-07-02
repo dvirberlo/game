@@ -1,7 +1,9 @@
 'use strict'
 
 ;(function () {
-  window.prompt = { object }
+  const MODULE = 'prompt'
+
+  window[MODULE] = { object }
 
   function object (object) {
     window.alert(JSON.stringify(object))

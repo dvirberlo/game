@@ -10,7 +10,9 @@
  *   ...
  */
 ;(function () {
-  window.manager = { start }
+  const MODULE = 'manager'
+
+  window[MODULE] = { start }
 
   function start (lib) {
     getData(data => {
@@ -22,7 +24,7 @@
       $.ajax('/protected').done(callback).fail(() => { window.location.href = '/enter' })
     }
     function showHome () {
-      lib.home.show(lib, mission => lib.pixi.showMap(lib, mission, showHome))
+      lib.home.show(lib, mission => lib.pixi.showMap(mission, showHome))
     }
   }
 })()

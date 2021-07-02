@@ -1,7 +1,9 @@
 'use strict'
 
 ;(function () {
-  window.home = { show }
+  const MODULE = 'home'
+
+  window[MODULE] = { show }
 
   function show (lib, showMap) {
     lib.mission.reset(lib, mission => {

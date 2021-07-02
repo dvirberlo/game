@@ -1,12 +1,17 @@
 'use strict'
 
 ;(function () {
+  const MODULE = 'pixi'
+
+  let lib
+  let homeCallback
+
   const $pixi = $('#pixi')
   let app
   const containers = {}
   const bars = {}
 
-  window.pixi = { setup, postLoad, showMap }
+  window[MODULE] = { setup, postLoad, exit, showMap, showArena }
 
   function setup () {
     app = new window.PIXI.Application()
@@ -15,7 +20,8 @@
     $pixi.hide()
   }
 
-  async function postLoad (lib) {
+  async function postLoad (gLib) {
+    lib = gLib
     pixiLoad(['map', 'arena'])
 
     function pixiLoad (names) {
@@ -35,27 +41,30 @@
     }
   }
 
-  function hide (showHome) {
+  function hideAll () {
     app.stage.removeChildren()
     $.each(bars, (key, $e) => $e.hide())
+  }
+  function exit () {
+    hideAll()
+    $pixi.hide()
+    homeCallback()
+  }
 
-    if (typeof showHome === 'function') {
-      $pixi.hide()
-      showHome()
-    }
-  }
-  function showMap (lib, mission, showHome) {
-    hide()
-    app.stage.addChild(containers.map)
-    bars.map.show()
-    lib.map.show(mission, showArena, () => hide(showHome))
+  function pixiShow (name) {
+    hideAll()
+    app.stage.addChild(containers[name])
+    bars[name].show()
     $pixi.show()
   }
-  function showArena (lib, mission, showHome) {
-    hide()
-    app.stage.addChild(containers.arena)
-    bars.arena.show()
-    lib.arena.show(mission, showMap, () => hide(showHome))
-    $pixi.show()
+  function showMap (mission, showHome) {
+    homeCallback = showHome
+
+    pixiShow('map')
+    lib.map.show(mission)
+  }
+  function showArena (mission, object) {
+    pixiShow('arena')
+    lib.arena.show(mission, object)
   }
 })()

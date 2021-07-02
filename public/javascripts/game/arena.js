@@ -1,33 +1,36 @@
 'use strict'
 
 ;(function () {
+  const MODULE = 'arena'
+
   let lib
-  let mapCallback
-  let homeCallback
+
+  let $bar
   let mission
+  let enemy
 
   let loader
   let resources
   let container
 
-  window.arena = { setup, pixiSetup, show }
+  window[MODULE] = { setup, pixiSetup, show }
 
   function setup () {
     // TODO
   }
 
-  function pixiSetup (gLib, app, path, con) {
+  function pixiSetup (gLib, app, path, con, bar) {
     lib = gLib
     loader = app.loader
     resources = app.loader.resources[path]
     container = con
+    $bar = bar
     // TODO
   }
 
-  function show (newMission, showMap = mapCallback, showHome = homeCallback) {
+  function show (newMission, object) {
     mission = newMission
-    mapCallback = showMap
-    homeCallback = showHome
+    enemy = object
     // TODO
   }
   function reset () {
