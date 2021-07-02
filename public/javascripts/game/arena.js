@@ -13,9 +13,10 @@
   let resources
   let container
 
-  window[MODULE] = { setup, pixiSetup, show }
+  window[MODULE] = { pixiSetup, show }
 
-  function setup () {
+  function barSetup () {
+    $bar.find('#arenaQuit').click(() => window.alert('quit'))
     // TODO
   }
 
@@ -25,6 +26,8 @@
     resources = app.loader.resources[path]
     container = con
     $bar = bar
+
+    barSetup()
     // TODO
   }
 

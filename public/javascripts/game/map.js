@@ -17,24 +17,8 @@
   window[MODULE] = { pixiSetup, show }
 
   function barSetup () {
-    // bar
-    const $roll = $bar.find('#mapRoll')
-    $roll.click(roll)
-    $bar.find('#mapQuit').click(quit)
-
-    $bar.hide()
-
-    function roll () {
-      $roll.prop('disabled', true)
-      const steps = Math.floor(Math.random() * 6) + 1
-      $bar.find('#mapCube').text(steps)
-      mapCube(steps)
-    }
-    function quit () {
-      $.ajax('/protected/mission/quit').done(data => {
-        lib.pixi.exit()
-      })
-    }
+    $bar.find('#mapRoll').click(() => showCube(Math.floor(Math.random() * 6) + 1))
+    $bar.find('#mapQuit').click(() => $.ajax('/protected/mission/quit').done(data => lib.pixi.exit()))
   }
 
   function pixiSetup (gLib, app, path, con, bar) {
@@ -100,7 +84,10 @@
       container.addChild(cellCon)
     }
   }
-  function mapCube (steps) {
+  function showCube (steps) {
+    $bar.find('#mapRoll').prop('disabled', true)
+    $bar.find('#mapCube').text(steps)
+
     for (const cellId of getAllowedCell(steps)) {
       const arrow = new PIXI.Sprite(resources.textures['arrow.png'])
       arrow.zIndex = 2
