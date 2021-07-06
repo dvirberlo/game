@@ -65,6 +65,6 @@
   }
   function showArena (mission, object) {
     pixiShow('arena')
-    lib.arena.show(mission, object)
+    lib.arena.show(true, mission, object)
   }
 })()
