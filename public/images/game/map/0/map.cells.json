@@ -30,7 +30,8 @@
     "x": 155,
     "y": 65,
     "object": {
-      "type":"enemy"
+      "type":"enemy",
+      "id": 0
     }
   },
   {
