@@ -7,7 +7,7 @@
 
   let $bar
   let mission
-  
+
   let loader
   const cellsLoader = {}
   let container
@@ -16,9 +16,10 @@
 
   window[MODULE] = { pixiSetup, show }
 
+  // ----- pre-show: -----
   function barSetup () {
     $bar.find('#mapRoll').click(() => showCube(Math.floor(Math.random() * 6) + 1))
-    $bar.find('#mapQuit').click(() => $.ajax('/protected/mission/quit').done(data => lib.pixi.exit()))
+    $bar.find('#mapQuit').click(quit)
   }
 
   function pixiSetup (gLib, app, path, con, bar) {
@@ -27,17 +28,48 @@
     resources = app.loader.resources[path]
     container = con
     $bar = bar
-    
+
     barSetup()
   }
 
+  // ----- actions: -----
+  function quit () {
+    $.ajax('/protected/mission/quit').done(data => lib.pixi.exit())
+  }
+
+  function move (cellId) {
+    const object = cells[cellId].object
+    $.ajax({ url: '/protected/mission/move/' + cellId, data: object }).done(user => {
+      lib.nav.update(user)
+      if (object) {
+        lib.prompt.object(object)
+        if (object.type === 'enemy') return lib.pixi.showArena(mission, object)
+      }
+      show(user.currentMission)
+    })
+  }
+
+  // ----- on-show: -----
+  function load (callback) {
+    const path = `/images/game/map/${mission.map}/`
+    const loadCells = () => new Promise((resolve, reject) => {
+      if (!cellsLoader[mission.map]) {
+        $.getJSON(path + 'map.cells.json').done(data => {
+          cellsLoader[mission.map] = data
+          resolve()
+        })
+      } else resolve()
+    })
+    const loadGraphics = () => new Promise((resolve, reject) => {
+      if (!loader.resources[path + 'map.json']) loader.add(path + 'map.json').load(resolve)
+      else resolve()
+    })
+    window.Promise.allSettled([loadCells(), loadGraphics()]).then(() => callback(loader.resources[path + 'map.json']))
+  }
   function show (newMission) {
     mission = newMission.mission
     mission.progress = newMission.progress
-
-    const path = `/images/game/map/${mission.map}/${mission.map}.json`
-    if (!loader.resources[path]) loader.add(path).load(() => drawMap(loader.resources[path]))
-    else drawMap(loader.resources[path])
+    load(drawMap)
   }
   function reset () {
     container.removeChildren()
@@ -45,23 +77,21 @@
     $bar.find('#mapCube').text('')
     $bar.find('#mapRoll').prop('disabled', false)
   }
+
+  // ----- drawings: -----
   function drawMap (mapResources) {
     reset()
-
-    // background
+    drawBackground(mapResources)
+    drawCells(mapResources)
+    drawPlayer()
+  }
+  function drawBackground (mapResources) {
     const background = new PIXI.Sprite(mapResources.textures['background.png'])
     background.zIndex = -999
     container.addChild(background)
-
-    // cells
-    if (!cellsLoader[mission.map]) $.getJSON({ url: `/images/game/map/${mission.map}/${mission.map}.cells.json`, async: false }).done(data => { cellsLoader[mission.map] = data })
-    $.each(cellsLoader[mission.map], (key, cellOpts) => drawCell(cellOpts))
-
-    // player
-    const player = new PIXI.Sprite(resources.textures['player.png'])
-    cells[mission.progress.currentCell].addChild(player)
-
-    function drawCell (options) {
+  }
+  function drawCells (mapResources) {
+    $.each(cellsLoader[mission.map], (key, options) => {
       const cellCon = new PIXI.Container()
       cells[options.id] = cellCon
 
@@ -82,8 +112,13 @@
       cellCon.x = options.x
       cellCon.y = options.y
       container.addChild(cellCon)
-    }
+    })
   }
+  function drawPlayer () {
+    const player = new PIXI.Sprite(resources.textures['player.png'])
+    cells[mission.progress.currentCell].addChild(player)
+  }
+
   function showCube (steps) {
     $bar.find('#mapRoll').prop('disabled', true)
     $bar.find('#mapCube').text(steps)
@@ -102,16 +137,5 @@
     const allowed = []
     for (const index in cells) if (Math.abs(mission.progress.currentCell - index) === steps) allowed.push(index)
     return allowed
-  }
-  function move (cellId) {
-    const object = cells[cellId].object
-    $.ajax({ url: '/protected/mission/move/' + cellId, data: object }).done(user => {
-      lib.nav.update(user)
-      if (object) {
-        lib.prompt.object(object)
-        if (object.type === 'enemy') return lib.pixi.showArena(mission, object)
-      }
-      show(user.currentMission)
-    })
   }
 })()

@@ -15,8 +15,9 @@
 
   window[MODULE] = { pixiSetup, show }
 
+  // ----- pre-show: -----
   function barSetup () {
-    $bar.find('#arenaQuit').click(() => window.alert('quit'))
+    $bar.find('#arenaQuit').click(quit)
     // TODO
   }
 
@@ -30,17 +31,30 @@
     barSetup()
     // TODO
   }
+  // ----- actions: -----
+  function quit () {
+    window.alert('quit')
+  }
 
+  // ----- on-show: -----
+  function load (callback) {
+    // TODO
+    callback()
+  }
   function show (newMission, object) {
     mission = newMission
     enemy = object
     // TODO
+    load(drawArena)
   }
   function reset () {
     container.removeChildren()
     // TODO
   }
+
+  // ----- drawings: -----
   function drawArena (arenaResources) {
     reset()
+    // TODO
   }
 })()
