@@ -12,19 +12,32 @@
 ;(function () {
   const MODULE = 'manager'
 
-  window[MODULE] = { start }
+  let userData
+
+  window[MODULE] = { start, getUserData, setData }
 
   function start (lib) {
-    getData(data => {
+    updateData(data => {
       lib.nav.update(data)
       showHome()
     })
-
-    function getData (callback) {
-      $.ajax('/protected').done(callback).fail(() => { window.location.href = '/enter' })
-    }
     function showHome () {
       lib.home.show(lib, mission => lib.pixi.showMap(mission, showHome))
     }
+  }
+  function updateData (callback) {
+    $.ajax('/protected').done(data => {
+      setData(data)
+      callback(data)
+    }).fail(() => { window.location.href = '/enter' })
+  }
+  
+  function setData (data) {
+    userData = data
+  }
+
+  function getUserData(forceUpdate, callback) {
+    if (forceUpdate) updateData(callback)
+    else return userData
   }
 })()

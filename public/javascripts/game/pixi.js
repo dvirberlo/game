@@ -45,10 +45,10 @@
     app.stage.removeChildren()
     $.each(bars, (key, $e) => $e.hide())
   }
-  function exit () {
+  function exit (homeCB) {
     hideAll()
     $pixi.hide()
-    homeCallback()
+    if (homeCB) homeCallback()
   }
 
   function pixiShow (name) {
@@ -63,8 +63,8 @@
     pixiShow('map')
     lib.map.show(mission)
   }
-  function showArena (mission, object) {
+  function showArena (newBattle, mission, enemy, state, moves) {
     pixiShow('arena')
-    lib.arena.show(true, mission, object)
+    lib.arena.show(newBattle, mission, enemy, state, moves)
   }
 })()

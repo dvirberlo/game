@@ -1,6 +1,6 @@
 'use strict'
 
-;(function () {
+// ;(function () {
   const MODULE = 'map'
 
   let lib
@@ -34,7 +34,7 @@
 
   // ----- actions: -----
   function quit () {
-    $.ajax('/protected/mission/quit').done(data => lib.pixi.exit())
+    $.ajax('/protected/mission/quit').done(data => lib.pixi.exit(true))
   }
 
   function move (cellId) {
@@ -43,7 +43,7 @@
       lib.nav.update(user)
       if (object) {
         lib.prompt.object(object)
-        if (object.type === 'enemy') return lib.pixi.showArena(mission, object)
+        if (object.type === 'enemy') return lib.pixi.showArena(true, mission, object)
       }
       show(user.currentMission)
     })
@@ -138,4 +138,4 @@
     for (const index in cells) if (Math.abs(mission.progress.currentCell - index) === steps) allowed.push(index)
     return allowed
   }
-})()
+// })()

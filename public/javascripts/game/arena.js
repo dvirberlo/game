@@ -42,7 +42,7 @@
   // ----- actions: -----
   function quit () {
     window.alert('quit')
-    $.ajax('/protected/mission/quit').done(data => lib.pixi.exit())
+    $.ajax('/protected/mission/quit').done(data => lib.pixi.exit(true))
   }
 
   // ----- on-show: -----
@@ -55,15 +55,15 @@
     })
     Promise.allSettled([loadGraphics()]).then(() => callback(loader.resources[path]))
   }
-  function show (newBattle, newMission, object) {
-    if (newBattle) hardReset(newMission, object)
-    // TODO
-    load(drawArena)
+  function show (newBattle, newMission, newEnemy, newState, moves) {
+    state = newState
+    if (newBattle) hardReset(newMission, newEnemy)
+    load(res => drawArena(res, moves))
   }
-  function hardReset (newMission, object) {
+  function hardReset (newMission, newEnemy) {
     state = { player: { hp: 100, x: 0, y: 1 }, enemy: { hp: 100, x: 3, y: 1 } }
     mission = newMission
-    enemy = object
+    enemy = newEnemy
   }
   function reset () {
     container.removeChildren()
@@ -75,14 +75,17 @@
   }
 
   // ----- drawings: -----
-  function drawArena (arenaResources) {
+  function drawArena (arenaResources, moves) {
     reset()
 
     drawBackground(arenaResources)
     drawGrid(arenaResources)
     drawPlayer()
     drawEnemy()
-    // TODO
+
+    const callback = () => setTimeout(() => lib.playerMove.show(mission, state, enemy), 5000)
+    if (moves) animateMoves(moves, callback)
+    else callback()
   }
   function drawBackground (arenaResources) {
     const background = new PIXI.Sprite(arenaResources.textures['background.png'])
@@ -114,5 +117,9 @@
   function drawEnemy () {
     const enemy = new PIXI.Sprite(resources.textures['enemy.png'])
     grid[state.enemy.y][state.enemy.x].addChild(enemy)
+  }
+  function animateMoves(arenaResources, moves, callback){
+    // TODO
+    callback()
   }
 })()
