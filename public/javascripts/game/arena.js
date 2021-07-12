@@ -19,6 +19,8 @@
   let loader
   let resources
   let container
+  const spellsResource = {}
+
   const grid = []
 
   window[MODULE] = { pixiSetup, show }
@@ -119,7 +121,26 @@
     grid[state.enemy.y][state.enemy.x].addChild(enemy)
   }
   function animateMoves(arenaResources, moves, callback){
+    for (let i = 0; i < moves.player.length; i++) {
+      move('player', moves.player[i])
+      move('enemy', moves.enemy[i])
+      if (i === moves.player.length -1) callback()
+    }
+  }
+  const arrows = { left: -1, down: -2, right: -3, up: -4 }
+  function moveSprite(sprite, moveId){
+    if (moveId > 0) {
+      // arrow move
+      const angle = moveId * 0.5 * Math.PI
+      if (Math.abs(Math.sin(angle))) state[sprite].x = Math.sin(angle)
+      else state[sprite].x = Math.cos(angle)
+    }
+    else loadSpell(moveId, res => {
+      // TODO
+    })
+  }
+  function loadSpell (spellId, callback) {
+    if (spellsResource[spellId]) return callback(spellsResource[spellId])
     // TODO
-    callback()
   }
 })()
