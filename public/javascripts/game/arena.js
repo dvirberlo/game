@@ -135,12 +135,17 @@
       if (Math.abs(Math.sin(angle))) state[sprite].x = Math.sin(angle)
       else state[sprite].x = Math.cos(angle)
     }
-    else loadSpell(moveId, res => {
-      // TODO
+    else loadSpell(moveId, spell => {
+      for (const cell of spell.cells){
+        for (const sprt of state) if (sprt !== sprite && state[sprt].x === cell.x && state[sprt].y === cell.y) state[sprt].hp -= spell.power
+      }
     })
   }
   function loadSpell (spellId, callback) {
     if (spellsResource[spellId]) return callback(spellsResource[spellId])
-    // TODO
+    else $.getJSON(`/images/spell/${spellId}/spell.json`).done(json => {
+      spellsResource[spellId] = json
+      return callback(spellsResource[spellId])
+    })
   }
 })()

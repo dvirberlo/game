@@ -1,6 +1,6 @@
 'use strict'
 
-// ;(function () {
+;(function () {
   const MODULE = 'map'
 
   let lib
@@ -138,4 +138,4 @@
     for (const index in cells) if (Math.abs(mission.progress.currentCell - index) === steps) allowed.push(index)
     return allowed
   }
-// })()
+})()

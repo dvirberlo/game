@@ -4,5 +4,6 @@
         { "x": 1, "y": 0 },
         { "x": 1, "y": 2 }
     ],
-    "damage": 80
+    "type": "damage",
+    "power": 70
 }
