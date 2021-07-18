@@ -120,32 +120,35 @@
     const enemy = new PIXI.Sprite(resources.textures['enemy.png'])
     grid[state.enemy.y][state.enemy.x].addChild(enemy)
   }
-  function animateMoves(arenaResources, moves, callback){
+  function animateMoves (arenaResources, moves, callback) {
     for (let i = 0; i < moves.player.length; i++) {
-      move('player', moves.player[i])
-      move('enemy', moves.enemy[i])
-      if (i === moves.player.length -1) callback()
+      moveSprite('player', moves.player[i])
+      moveSprite('enemy', moves.enemy[i])
+      if (i === moves.player.length - 1) callback()
     }
   }
-  const arrows = { left: -1, down: -2, right: -3, up: -4 }
-  function moveSprite(sprite, moveId){
+  // const arrows = { left: -1, down: -2, right: -3, up: -4 }
+  function moveSprite (sprite, moveId) {
     if (moveId > 0) {
       // arrow move
       const angle = moveId * 0.5 * Math.PI
       if (Math.abs(Math.sin(angle))) state[sprite].x = Math.sin(angle)
       else state[sprite].x = Math.cos(angle)
+    } else {
+      loadSpell(moveId, spell => {
+        for (const cell of spell.cells) {
+          for (const sprt of state) if (sprt !== sprite && state[sprt].x === cell.x && state[sprt].y === cell.y) state[sprt].hp -= spell.power
+        }
+      })
     }
-    else loadSpell(moveId, spell => {
-      for (const cell of spell.cells){
-        for (const sprt of state) if (sprt !== sprite && state[sprt].x === cell.x && state[sprt].y === cell.y) state[sprt].hp -= spell.power
-      }
-    })
   }
   function loadSpell (spellId, callback) {
     if (spellsResource[spellId]) return callback(spellsResource[spellId])
-    else $.getJSON(`/images/spell/${spellId}/spell.json`).done(json => {
-      spellsResource[spellId] = json
-      return callback(spellsResource[spellId])
-    })
+    else {
+      $.getJSON(`/images/spell/${spellId}/spell.json`).done(json => {
+        spellsResource[spellId] = json
+        return callback(spellsResource[spellId])
+      })
+    }
   }
 })()

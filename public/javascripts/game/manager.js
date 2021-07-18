@@ -31,12 +31,12 @@
       callback(data)
     }).fail(() => { window.location.href = '/enter' })
   }
-  
+
   function setData (data) {
     userData = data
   }
 
-  function getUserData(forceUpdate, callback) {
+  function getUserData (forceUpdate, callback) {
     if (forceUpdate) updateData(callback)
     else return userData
   }
