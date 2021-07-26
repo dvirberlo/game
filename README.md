@@ -1,14 +1,11 @@
 # Game
 version 0.8.1
 ## Description
-Adenture game built with JavaScript(Express.js, Mongoose.js, Pixi.js) and Love :heart:.
+Adenture game built with JavaScript(Express.js, Mongoose.js, Pixi.js).
+
+Sorry to announce this that project was abandoned.
 
 Thanks you MDN for [this helpfull guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)!
-## :heart::heart::heart:Contributing:heart::heart::heart:
-**Please help me this project!** I won't last much longer on ny own...
-
-Look at [CONTRIBUTING.md](CONTRIBUTING.md) for more details,
-or [create an issue](https://github.com/dvirberlo/game/issues).
 
 ## Quick start
 [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/downloads) are required.
