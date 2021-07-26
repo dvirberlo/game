@@ -3,7 +3,7 @@ version 0.8.1
 ## Description
 Adenture game built with JavaScript(Express.js, Mongoose.js, Pixi.js).
 
-> # **Sorry to announce this that project was abandoned.**
+> # **Sorry to announce that this project was abandoned.**
 
 Thanks you MDN for [this helpfull guide](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs)!
 
