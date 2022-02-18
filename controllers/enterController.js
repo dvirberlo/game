@@ -12,7 +12,7 @@ function newAuthToken (user, req, res, next) {
   const remember = req.query.remember !== 'false'
   const expires = remember ? new Date(Date.now() + AuthToken.longExpiration) : false
   new AuthToken({ user: user._id, token, remember }).save(error => {
-    if (error) return next(createError(error))
+    if (error) return next(createError(500))
     res.cookie('AuthToken', token, { expires })
     res.cookie('UserId', user._id, { expires })
     res.redirect('/game')
@@ -21,7 +21,7 @@ function newAuthToken (user, req, res, next) {
 exports.username = (req, res, next) => {
   const username = req.query.username
   User.findOne({ username }, (error, user) => {
-    if (error) return next(createError(error))
+    if (error) return next(createError(500))
     res.json(!user)
   })
 }
@@ -29,7 +29,7 @@ exports.signup = (req, res, next) => {
   const username = req.query.username
   const password = req.query.password
   new User({ username, password }).save(error => {
-    if (error) return next(createError(error))
+    if (error) return next(createError(500))
     res.redirect('../login')
   })
 }
@@ -37,7 +37,7 @@ exports.login = (req, res, next) => {
   const username = req.query.username
   const password = req.query.password
   User.findOne({ username, password }, (error, user) => {
-    if (error) return next(createError(error))
+    if (error) return next(createError(500))
     if (!user) return res.redirect('/enter/login?error=Wrong username or password')
     newAuthToken(user, req, res, next)
   })

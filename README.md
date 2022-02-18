@@ -20,6 +20,7 @@ Additionally, create .env file and put your mongoDB uri:
 ```env
 MONGODB_URI = "mongodb+srv://<user>:<pass>@<path>.mongodb.net/<db>?retryWrites=true&w=majority"
 DEBUG = app:*
+MODE = development
 ```
 
 ## Preview

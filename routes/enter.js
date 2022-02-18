@@ -1,4 +1,5 @@
 const express = require('express')
+const mongoSanitize = require('express-mongo-sanitize')
 const router = express.Router()
 
 const enterController = require('../controllers/enterController')
@@ -26,6 +27,8 @@ router.get('/signup', function (req, res, next) {
 })
 
 /* GET enter listing. */
+router.use('/', mongoSanitize())
+
 router.get('/username/', enterController.username)
 router.get('/form/signup', enterController.signup)
 router.get('/form/login', enterController.login)
